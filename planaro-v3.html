@@ -1,0 +1,938 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Planorah Technologies — Websites, Apps &amp; Custom Software</title>
+<meta name="description" content="Planorah Technologies builds websites, mobile apps, TV apps and custom software including CRM. Send your requirement straight to our WhatsApp." />
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+/* ════════ PLANORAH — tokens ════════ */
+:root{
+  --ink:#0E0E11;
+  --ink-60:#5A5C63;
+  --ink-40:#8A8D95;
+  --paper:#F3F2EE;
+  --paper-2:#EAE8E2;
+  --white:#FFFFFF;
+  --line:#E1DFD8;
+
+  --violet:#6248F5;
+  --coral:#FF6B3D;
+  --mint:#0FB981;
+  --sky:#2F7CF6;
+  --sun:#FFC53D;
+  --wa:#25D366;
+
+  --f-dis:"Inter", ui-sans-serif, system-ui, sans-serif;
+  --f-txt:"Inter", ui-sans-serif, system-ui, sans-serif;
+  --f-mono:"IBM Plex Mono", ui-monospace, monospace;
+
+  --gut:clamp(18px,4.5vw,64px);
+  --maxw:1280px;
+  --ease:cubic-bezier(.16,1,.3,1);
+  --r:22px;
+  --shadow:0 2px 4px rgba(14,14,17,.04), 0 12px 28px -12px rgba(14,14,17,.14);
+  --shadow-lg:0 4px 8px rgba(14,14,17,.05), 0 34px 70px -28px rgba(14,14,17,.3);
+}
+*,*::before,*::after{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%; scroll-behavior:smooth}
+body{
+  margin:0; background:var(--paper); color:var(--ink);
+  font-family:var(--f-txt); font-size:16.5px; line-height:1.55;
+  -webkit-font-smoothing:antialiased; overflow-x:hidden;
+}
+img,svg,canvas,iframe{display:block; max-width:100%}
+a{color:inherit; text-decoration:none}
+button,input,select,textarea{font:inherit; color:inherit}
+button{background:none; border:0; cursor:pointer}
+::selection{background:var(--violet); color:#fff}
+:focus-visible{outline:2.5px solid var(--violet); outline-offset:3px; border-radius:8px}
+.wrap{width:100%; max-width:var(--maxw); margin-inline:auto; padding-inline:var(--gut); position:relative}
+
+h1,h2,h3,h4{margin:0; font-family:var(--f-dis); font-weight:600; letter-spacing:-.02em; line-height:1}
+h1{font-size:clamp(44px,6.6vw,92px); font-weight:700; letter-spacing:-.03em}
+h2{font-size:clamp(34px,4.8vw,64px); font-weight:700; letter-spacing:-.028em}
+h3{font-size:clamp(19px,1.7vw,23px); letter-spacing:-.015em; line-height:1.15}
+.lede{color:var(--ink-60); font-size:clamp(16px,1.25vw,19px); line-height:1.6; font-weight:400}
+.mono{font-family:var(--f-mono); font-size:11px; letter-spacing:.13em; text-transform:uppercase; color:var(--ink-40)}
+.hl{position:relative; white-space:nowrap}
+.hl::after{content:""; position:absolute; left:-.06em; right:-.06em; bottom:.06em; height:.34em; background:var(--sun); z-index:-1; border-radius:3px}
+.v{color:var(--violet)} .c{color:var(--coral)} .m{color:var(--mint)}
+
+/* ════ Buttons ════ */
+.btn{
+  display:inline-flex; align-items:center; justify-content:center; gap:10px;
+  height:54px; padding:0 28px; border-radius:999px;
+  font-family:var(--f-txt); font-size:15.5px; font-weight:600; letter-spacing:-.01em; white-space:nowrap;
+  background:var(--ink); color:var(--white); border:1.5px solid var(--ink);
+  transition:transform .35s var(--ease), background .3s, color .3s, box-shadow .35s var(--ease);
+}
+.btn:hover{transform:translateY(-3px); box-shadow:0 16px 30px -14px rgba(14,14,17,.5)}
+.btn:active{transform:translateY(-1px)}
+.btn svg{transition:transform .35s var(--ease)}
+.btn:hover svg{transform:translateX(4px)}
+.btn-line{background:transparent; color:var(--ink); border-color:var(--ink)}
+.btn-line:hover{background:var(--ink); color:var(--white)}
+.btn-wa{background:var(--wa); border-color:var(--wa); color:#06280F}
+.btn-wa:hover{box-shadow:0 16px 32px -14px rgba(37,211,102,.8)}
+.btn-v{background:var(--violet); border-color:var(--violet)}
+.btn-v:hover{box-shadow:0 16px 32px -14px rgba(98,72,245,.8)}
+.btn-sm{height:44px; padding:0 20px; font-size:14px}
+
+/* ════ Nav ════ */
+.nav{position:sticky; top:0; z-index:80; transition:background .35s, border-color .35s; border-bottom:1px solid transparent}
+.nav.stuck{background:rgba(243,242,238,.86); backdrop-filter:blur(16px); -webkit-backdrop-filter:blur(16px); border-bottom-color:var(--line)}
+.nav-in{display:flex; align-items:center; gap:32px; height:80px}
+.logo{display:flex; align-items:center; gap:11px; font-family:var(--f-dis); font-weight:700; font-size:19px; letter-spacing:-.02em}
+.logo .mk{width:32px; height:32px; border-radius:10px; flex:none; position:relative; background:var(--violet); overflow:hidden;
+  box-shadow:0 6px 14px -6px rgba(98,72,245,.8)}
+.logo .mk::before{content:""; position:absolute; inset:6px 6px auto 6px; height:9px; border-radius:3px; background:#fff}
+.logo .mk::after{content:""; position:absolute; left:6px; bottom:6px; width:12px; height:9px; border-radius:3px; background:var(--sun)}
+.nav-links{display:flex; gap:30px; margin-left:auto}
+.nav-links a{font-size:15px; font-weight:500; color:var(--ink-60); transition:color .25s}
+.nav-links a:hover{color:var(--ink)}
+
+/* ════ Hero ════ */
+.hero{position:relative; padding:clamp(28px,5vw,56px) 0 clamp(50px,7vw,92px)}
+.hero-grid{display:grid; grid-template-columns:minmax(0,1.05fr) minmax(0,.95fr); gap:clamp(20px,3vw,40px); align-items:center}
+.tagpill{display:inline-flex; align-items:center; gap:9px; height:36px; padding:0 16px 0 12px; border-radius:999px;
+  background:var(--white); border:1px solid var(--line); font-size:13.5px; font-weight:500; box-shadow:var(--shadow)}
+.tagpill .dot{width:8px; height:8px; border-radius:50%; background:var(--wa); animation:ping 2.2s infinite}
+@keyframes ping{0%{box-shadow:0 0 0 0 rgba(37,211,102,.6)}70%{box-shadow:0 0 0 8px rgba(37,211,102,0)}100%{box-shadow:0 0 0 0 rgba(37,211,102,0)}}
+.hero h1{margin:24px 0 0}
+.hero .lede{margin:22px 0 0; max-width:46ch}
+.hero-cta{display:flex; flex-wrap:wrap; gap:12px; margin-top:32px}
+.stats{display:grid; grid-template-columns:repeat(4,auto); gap:26px; margin-top:44px; padding-top:26px; border-top:1px solid var(--line)}
+.stats b{display:block; font-family:var(--f-dis); font-size:clamp(24px,2.4vw,32px); font-weight:700; letter-spacing:-.02em; line-height:1}
+.stats span{font-size:12.5px; color:var(--ink-40); display:block; margin-top:6px}
+.stats div:nth-child(1) b{color:var(--violet)} .stats div:nth-child(2) b{color:var(--coral)}
+.stats div:nth-child(3) b{color:var(--mint)} .stats div:nth-child(4) b{color:var(--sky)}
+
+/* 3D stage */
+.stage{position:relative; aspect-ratio:1/1; max-height:600px}
+#gl{position:absolute; inset:0; width:100%; height:100%}
+.fallback{position:absolute; inset:0; display:none; place-items:center}
+.no3d .fallback{display:grid}
+.fallback .orb{position:absolute; border-radius:50%; filter:blur(6px); opacity:.9}
+.notif{
+  position:absolute; left:2%; bottom:8%; width:min(310px,84%); z-index:4;
+  background:var(--white); border-radius:18px; padding:15px 17px;
+  box-shadow:var(--shadow-lg); border:1px solid var(--line);
+  display:flex; gap:13px; align-items:center;
+  transform:perspective(900px) rotateY(9deg) rotateX(5deg);
+  animation:floaty 7s ease-in-out infinite;
+}
+@keyframes floaty{0%,100%{translate:0 0}50%{translate:0 -12px}}
+.notif .av{width:42px; height:42px; border-radius:13px; flex:none; display:grid; place-items:center; background:var(--wa)}
+.notif .av svg{width:24px; height:24px; fill:#06280F}
+.notif .t1{font-weight:600; font-size:14.5px; letter-spacing:-.01em}
+.notif .t2{font-family:var(--f-mono); font-size:9.5px; letter-spacing:.11em; text-transform:uppercase; color:var(--mint); margin-top:3px}
+
+/* ════ Ticker ════ */
+.ticker{border-block:1px solid var(--line); background:var(--white); overflow:hidden; padding:15px 0}
+.track{display:flex; gap:0; width:max-content; animation:slide 38s linear infinite}
+.track b{font-family:var(--f-dis); font-weight:600; font-size:15px; letter-spacing:-.02em; color:var(--ink); padding:0 26px; display:flex; align-items:center; gap:26px; white-space:nowrap}
+.track b::after{content:""; width:9px; height:9px; border-radius:50%; background:var(--violet)}
+.track b:nth-child(2n)::after{background:var(--coral)}
+.track b:nth-child(3n)::after{background:var(--mint)}
+.track b:nth-child(5n)::after{background:var(--sky)}
+@keyframes slide{to{transform:translateX(-50%)}}
+
+/* ════ Sections ════ */
+.sec{padding:clamp(66px,8vw,120px) 0}
+.head{max-width:780px; margin-bottom:clamp(34px,4.5vw,58px)}
+.head .mono{display:block; margin-bottom:16px}
+.head .lede{margin-top:20px}
+
+/* Service cards */
+.cards{display:grid; grid-template-columns:repeat(3,1fr); gap:clamp(12px,1.4vw,18px); perspective:1400px}
+.card{
+  position:relative; background:var(--white); border:1px solid var(--line); border-radius:var(--r);
+  padding:clamp(22px,2.2vw,30px); overflow:hidden; transform-style:preserve-3d;
+  transition:transform .5s var(--ease), box-shadow .5s var(--ease), border-color .4s;
+  box-shadow:0 1px 2px rgba(14,14,17,.04);
+}
+.card:hover{box-shadow:var(--shadow-lg); border-color:transparent}
+.card .blobc{
+  position:absolute; width:190px; height:190px; border-radius:50%; top:-90px; right:-70px;
+  background:var(--ac); opacity:.14; transition:transform .6s var(--ease), opacity .5s;
+}
+.card:hover .blobc{transform:scale(1.55); opacity:.2}
+.card .in{position:relative; transform:translateZ(45px); transform-style:preserve-3d}
+.ico{width:56px; height:56px; border-radius:17px; display:grid; place-items:center; margin-bottom:22px;
+  background:var(--ac); box-shadow:0 12px 24px -12px var(--ac); transform:translateZ(30px)}
+.ico svg{width:25px; height:25px; stroke:#fff; fill:none; stroke-width:1.7; stroke-linecap:round; stroke-linejoin:round}
+.card p{margin:11px 0 0; color:var(--ink-60); font-size:15px; line-height:1.58}
+.chips{display:flex; flex-wrap:wrap; gap:6px; margin-top:20px}
+.chip{font-family:var(--f-mono); font-size:10px; letter-spacing:.08em; text-transform:uppercase; color:var(--ink-60);
+  border:1px solid var(--line); border-radius:99px; padding:5px 10px; background:var(--paper)}
+
+/* ════ Platforms: CSS 3D cube ════ */
+.plat{background:var(--ink); color:var(--white); border-radius:clamp(22px,3vw,38px); padding:clamp(34px,5vw,74px) 0; overflow:hidden}
+.plat .lede{color:#A6A9B2}
+.plat .mono{color:#7D808A}
+.plat-grid{display:grid; grid-template-columns:minmax(0,1fr) minmax(0,1fr); gap:clamp(24px,4vw,56px); align-items:center}
+.cube-wrap{perspective:1200px; display:grid; place-items:center; min-height:clamp(280px,34vw,400px); cursor:grab; touch-action:none}
+.cube-wrap:active{cursor:grabbing}
+.cube{
+  position:relative; width:var(--cs,210px); height:var(--cs,210px); transform-style:preserve-3d;
+  transform:rotateX(-22deg) rotateY(var(--sp,0deg));
+}
+.cube.spin{animation:rot 26s linear infinite}
+@keyframes rot{from{transform:rotateX(-22deg) rotateY(0)}to{transform:rotateX(-22deg) rotateY(360deg)}}
+.face{
+  position:absolute; inset:0; border-radius:18px; display:flex; flex-direction:column; justify-content:space-between;
+  padding:18px; border:1.5px solid rgba(255,255,255,.16); backface-visibility:visible;
+  background:rgba(255,255,255,.07); backdrop-filter:blur(4px);
+  box-shadow:0 0 60px -20px rgba(255,255,255,.25) inset;
+}
+.face .fn{font-family:var(--f-dis); font-size:20px; font-weight:700; letter-spacing:-.015em}
+.face .fs{font-family:var(--f-mono); font-size:9.5px; letter-spacing:.12em; text-transform:uppercase; opacity:.6; margin-top:4px}
+.face .fi{width:34px; height:34px; border-radius:11px; display:grid; place-items:center}
+.face .fi svg{width:19px; height:19px; stroke:#fff; fill:none; stroke-width:1.8; stroke-linecap:round; stroke-linejoin:round}
+.f1{transform:translateZ(calc(var(--cs,210px)/2))}
+.f2{transform:rotateY(90deg) translateZ(calc(var(--cs,210px)/2))}
+.f3{transform:rotateY(180deg) translateZ(calc(var(--cs,210px)/2))}
+.f4{transform:rotateY(-90deg) translateZ(calc(var(--cs,210px)/2))}
+.f5{transform:rotateX(90deg) translateZ(calc(var(--cs,210px)/2))}
+.f6{transform:rotateX(-90deg) translateZ(calc(var(--cs,210px)/2))}
+.plist{display:grid; grid-template-columns:repeat(2,1fr); gap:10px; margin-top:30px}
+.pitem{display:flex; align-items:center; gap:11px; padding:13px 15px; border-radius:14px; background:rgba(255,255,255,.06); border:1px solid rgba(255,255,255,.09); font-size:14.5px; font-weight:500; transition:background .3s, transform .3s var(--ease)}
+.pitem:hover{background:rgba(255,255,255,.12); transform:translateX(4px)}
+.pitem em{width:9px; height:9px; border-radius:3px; flex:none; font-style:normal}
+.grab{font-family:var(--f-mono); font-size:10px; letter-spacing:.12em; text-transform:uppercase; color:#7D808A; text-align:center; margin-top:22px}
+
+/* ════ Process ════ */
+.flow{display:grid; grid-template-columns:repeat(4,1fr); gap:clamp(12px,1.4vw,18px)}
+.step{background:var(--white); border:1px solid var(--line); border-radius:var(--r); padding:26px 24px 24px; position:relative; overflow:hidden;
+  transition:transform .45s var(--ease), box-shadow .45s var(--ease)}
+.step:hover{transform:translateY(-7px); box-shadow:var(--shadow-lg)}
+.step .bar{position:absolute; inset:0 0 auto 0; height:5px; background:var(--ac)}
+.step .n{font-family:var(--f-mono); font-size:11px; letter-spacing:.14em; color:var(--ac); display:block; margin:8px 0 16px}
+.step h4{font-size:19px; font-weight:600; letter-spacing:-.03em}
+.step p{margin:9px 0 0; font-size:14.5px; color:var(--ink-60); line-height:1.55}
+.step .tm{display:inline-block; margin-top:16px; font-size:12px; font-weight:600; padding:5px 11px; border-radius:99px; background:var(--paper); color:var(--ink-60)}
+
+/* ════ Enquiry ════ */
+.enq{background:var(--white); border:1px solid var(--line); border-radius:clamp(22px,3vw,34px); overflow:hidden;
+  display:grid; grid-template-columns:minmax(0,.82fr) minmax(0,1.18fr); box-shadow:var(--shadow-lg)}
+.enq-l{padding:clamp(26px,3.2vw,46px); background:var(--ink); color:var(--white); position:relative; overflow:hidden}
+.enq-l::after{content:""; position:absolute; width:340px; height:340px; border-radius:50%; right:-150px; bottom:-160px; background:var(--wa); opacity:.22; filter:blur(30px)}
+.enq-l h2{font-size:clamp(28px,3vw,42px)}
+.enq-l .lede{color:#A6A9B2; margin-top:16px; position:relative}
+.enq-l .mono{color:#7D808A}
+.enq-l ul{list-style:none; margin:26px 0 0; padding:0; display:flex; flex-direction:column; gap:13px; position:relative}
+.enq-l li{display:flex; gap:11px; align-items:flex-start; font-size:14.5px; color:#C6C8CE}
+.enq-l li svg{flex:none; margin-top:4px; width:15px; height:15px; stroke:var(--wa); fill:none; stroke-width:2.4; stroke-linecap:round; stroke-linejoin:round}
+.direct{margin-top:28px; padding-top:22px; border-top:1px solid rgba(255,255,255,.14); display:flex; flex-direction:column; gap:9px; position:relative}
+.direct a{display:flex; gap:12px; align-items:center; font-size:14.5px; color:#C6C8CE; transition:color .25s}
+.direct a:hover{color:var(--sun)}
+.direct a i{font-style:normal; font-family:var(--f-mono); font-size:9.5px; letter-spacing:.12em; text-transform:uppercase; color:#7D808A; width:62px; flex:none}
+.enq-r{padding:clamp(26px,3.2vw,46px)}
+.field{margin-bottom:16px}
+.field label{display:block; font-size:13px; font-weight:600; color:var(--ink); margin-bottom:7px}
+.field label span{font-weight:400; color:var(--ink-40)}
+.field input,.field select,.field textarea{
+  width:100%; padding:14px 16px; border-radius:14px; background:var(--paper);
+  border:1.5px solid transparent; font-size:15.5px; font-family:var(--f-txt);
+  transition:border-color .25s, background .25s, box-shadow .25s;
+}
+.field textarea{min-height:120px; resize:vertical; line-height:1.55}
+.field input::placeholder,.field textarea::placeholder{color:var(--ink-40)}
+.field input:focus,.field select:focus,.field textarea:focus{outline:none; background:var(--white); border-color:var(--violet); box-shadow:0 0 0 4px rgba(98,72,245,.13)}
+.field select{appearance:none; cursor:pointer;
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' fill='none'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%235A5C63' stroke-width='1.8' stroke-linecap='round'/%3E%3C/svg%3E");
+  background-repeat:no-repeat; background-position:right 16px center}
+.two{display:grid; grid-template-columns:1fr 1fr; gap:16px}
+.field.err input,.field.err select,.field.err textarea{border-color:#E5484D; background:#FEF3F3}
+.hint{display:none; margin-top:6px; font-size:12.5px; color:#C62A2F}
+.field.err .hint{display:block}
+.send{width:100%; margin-top:6px}
+.note{margin:14px 0 0; font-size:13px; color:var(--ink-40); text-align:center}
+.note a{color:var(--violet); font-weight:600}
+.ok{display:none; margin-top:14px; padding:14px 16px; border-radius:14px; background:#E9FBF1; border:1px solid #9BE7C0; font-size:13.5px; color:#0A6B44; line-height:1.5}
+.ok.show{display:block}
+
+/* ════ Google ════ */
+.gcard{display:grid; grid-template-columns:minmax(0,1fr) minmax(0,1.02fr); background:var(--white); border:1px solid var(--line); border-radius:clamp(22px,3vw,34px); overflow:hidden; box-shadow:var(--shadow)}
+.gin{padding:clamp(26px,3.2vw,46px)}
+.grow{display:flex; gap:14px; align-items:center; margin-bottom:22px}
+.gdot{width:48px; height:48px; border-radius:15px; display:grid; place-items:center; flex:none; background:var(--paper); border:1px solid var(--line)}
+.stars{display:flex; gap:2px; align-items:center; margin-top:5px}
+.stars svg{width:14px; height:14px; fill:#FFB400}
+.gact{display:flex; flex-wrap:wrap; gap:10px; margin-top:26px}
+.map{min-height:300px; border-left:1px solid var(--line)}
+.map iframe{width:100%; height:100%; min-height:300px; border:0}
+
+/* ════ Footer ════ */
+.foot{padding:clamp(50px,6vw,80px) 0 40px}
+.foot-in{display:grid; grid-template-columns:1.5fr 1fr 1fr 1fr; gap:32px}
+.foot h5{margin:0 0 15px; font-family:var(--f-mono); font-size:10px; letter-spacing:.14em; text-transform:uppercase; color:var(--ink-40); font-weight:400}
+.foot ul{list-style:none; margin:0; padding:0; display:flex; flex-direction:column; gap:10px}
+.foot a{font-size:15px; color:var(--ink-60); transition:color .25s}
+.foot a:hover{color:var(--violet)}
+.foot p{margin:16px 0 0; font-size:15px; color:var(--ink-60); max-width:32ch; line-height:1.6}
+.legal{margin-top:44px; padding-top:24px; border-top:1px solid var(--line); display:flex; flex-wrap:wrap; gap:12px 24px}
+.legal .r{margin-left:auto}
+
+/* ════ FAB ════ */
+.fab{position:fixed; right:clamp(16px,3vw,28px); bottom:clamp(16px,3vw,28px); z-index:90; width:60px; height:60px; border-radius:50%;
+  display:grid; place-items:center; background:var(--wa); box-shadow:0 14px 30px -10px rgba(37,211,102,.75), 0 2px 6px rgba(0,0,0,.16);
+  transition:transform .35s var(--ease)}
+.fab:hover{transform:scale(1.08) translateY(-2px)}
+.fab svg{width:31px; height:31px; fill:#06280F}
+.fab::before{content:""; position:absolute; inset:0; border-radius:50%; border:2px solid var(--wa); animation:halo 2.6s ease-out infinite}
+@keyframes halo{0%{transform:scale(1); opacity:.7}100%{transform:scale(1.65); opacity:0}}
+
+/* ════ Motion ════ */
+.rz{opacity:0; transform:translateY(28px); transition:opacity .85s var(--ease), transform .85s var(--ease)}
+.rz.in{opacity:1; transform:none}
+.ld{opacity:0; transform:translateY(22px); animation:up .95s var(--ease) forwards}
+@keyframes up{to{opacity:1; transform:none}}
+.d1{animation-delay:.05s}.d2{animation-delay:.14s}.d3{animation-delay:.24s}.d4{animation-delay:.34s}.d5{animation-delay:.46s}
+
+/* ════ Responsive ════ */
+@media (max-width:1060px){
+  .nav-links{display:none}
+  .hero-grid{grid-template-columns:1fr}
+  .stage{order:-1; aspect-ratio:1/.82; margin-bottom:6px}
+  .cards{grid-template-columns:repeat(2,1fr)}
+  .flow{grid-template-columns:repeat(2,1fr)}
+  .plat-grid{grid-template-columns:1fr}
+  .enq{grid-template-columns:1fr}
+  .gcard{grid-template-columns:1fr}
+  .map{border-left:0; border-top:1px solid var(--line)}
+  .foot-in{grid-template-columns:1fr 1fr}
+}
+@media (max-width:680px){
+  .cards,.flow{grid-template-columns:1fr}
+  .two{grid-template-columns:1fr}
+  .stats{grid-template-columns:1fr 1fr; gap:20px}
+  .hero-cta .btn{width:100%}
+  .plist{grid-template-columns:1fr}
+  .cube{--cs:160px}
+  .legal .r{margin-left:0}
+}
+@media (prefers-reduced-motion:reduce){
+  html{scroll-behavior:auto}
+  *,*::before,*::after{animation-duration:.001ms !important; animation-iteration-count:1 !important; transition-duration:.001ms !important}
+  .rz{opacity:1; transform:none}.ld{opacity:1; transform:none}
+}
+</style>
+</head>
+<body>
+
+<!-- ════ NAV ════ -->
+<header class="nav" id="nav">
+  <div class="wrap nav-in">
+    <a class="logo" href="#top"><span class="mk"></span>Planorah</a>
+    <nav class="nav-links" aria-label="Primary">
+      <a href="#services">Services</a>
+      <a href="#platforms">Platforms</a>
+      <a href="#process">Process</a>
+      <a href="#google">On Google</a>
+    </nav>
+    <a class="btn btn-wa btn-sm" href="#enquiry">
+      <svg width="17" height="17" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12.04 2C6.58 2 2.13 6.45 2.13 11.91c0 1.75.46 3.45 1.32 4.95L2 22l5.25-1.38a9.9 9.9 0 004.79 1.22c5.46 0 9.91-4.45 9.91-9.91S17.5 2 12.04 2z"/></svg>
+      WhatsApp us
+    </a>
+  </div>
+</header>
+
+<main id="top">
+<!-- ════ HERO ════ -->
+<section class="hero">
+  <div class="wrap hero-grid">
+    <div>
+      <span class="tagpill ld d1"><span class="dot"></span> Replying on WhatsApp — usually within an hour</span>
+      <h1 class="ld d2">Your business,<br>built for <span class="hl">every screen.</span></h1>
+      <p class="lede ld d3">Planorah Technologies designs and ships websites, mobile apps, TV apps and custom systems — CRM included. One studio, from the first message to the day it goes live.</p>
+      <div class="hero-cta ld d4">
+        <a class="btn btn-wa" href="#enquiry">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12.04 2C6.58 2 2.13 6.45 2.13 11.91c0 1.75.46 3.45 1.32 4.95L2 22l5.25-1.38a9.9 9.9 0 004.79 1.22c5.46 0 9.91-4.45 9.91-9.91S17.5 2 12.04 2z"/></svg>
+          Send your requirement
+        </a>
+        <a class="btn btn-line" href="#services">See what we build
+          <svg width="14" height="10" viewBox="0 0 13 10" fill="none" aria-hidden="true"><path d="M8 1l4 4-4 4M12 5H0" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </a>
+      </div>
+      <div class="stats ld d5">
+        <div><b>7</b><span>platforms shipped to</span></div>
+        <div><b>4–6</b><span>weeks to launch</span></div>
+        <div><b>100%</b><span>code handed over</span></div>
+        <div><b>1 day</b><span>quote turnaround</span></div>
+      </div>
+    </div>
+
+    <div class="stage ld d3" id="stage">
+      <canvas id="gl" aria-hidden="true"></canvas>
+      <div class="fallback" aria-hidden="true">
+        <span class="orb" style="width:190px;height:190px;background:#6248F5;top:12%;left:16%"></span>
+        <span class="orb" style="width:130px;height:130px;background:#FF6B3D;top:44%;right:14%"></span>
+        <span class="orb" style="width:110px;height:110px;background:#0FB981;bottom:16%;left:34%"></span>
+      </div>
+      <div class="notif">
+        <span class="av"><svg viewBox="0 0 24 24"><path d="M12.04 2C6.58 2 2.13 6.45 2.13 11.91c0 1.75.46 3.45 1.32 4.95L2 22l5.25-1.38a9.9 9.9 0 004.79 1.22c5.46 0 9.91-4.45 9.91-9.91S17.5 2 12.04 2z"/></svg></span>
+        <span>
+          <span class="t1">New enquiry — Rahul, retail chain</span>
+          <span class="t2">Delivered to your WhatsApp</span>
+        </span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ════ TICKER ════ -->
+<div class="ticker" aria-hidden="true">
+  <div class="track">
+    <b>Websites</b><b>CRM systems</b><b>iOS &amp; Android</b><b>tvOS</b><b>Android TV</b><b>LG webOS</b><b>Google Business Profile</b><b>Payment gateways</b><b>WhatsApp API</b><b>Dashboards</b>
+    <b>Websites</b><b>CRM systems</b><b>iOS &amp; Android</b><b>tvOS</b><b>Android TV</b><b>LG webOS</b><b>Google Business Profile</b><b>Payment gateways</b><b>WhatsApp API</b><b>Dashboards</b>
+  </div>
+</div>
+
+<!-- ════ SERVICES ════ -->
+<section class="sec" id="services">
+  <div class="wrap">
+    <div class="head rz">
+      <span class="mono">What we build</span>
+      <h2>Everything your company needs to <span class="v">run online.</span></h2>
+      <p class="lede">One studio for the website, the app, the internal system and the Google listing — so nothing is left half-connected between three different vendors.</p>
+    </div>
+    <div class="cards">
+      <article class="card rz tilt" style="--ac:#6248F5">
+        <span class="blobc"></span>
+        <div class="ico"><svg viewBox="0 0 24 24"><rect x="2.5" y="4" width="19" height="14" rx="2"/><path d="M2.5 8.5h19M7 21h10"/></svg></div>
+        <div class="in">
+          <h3>Websites &amp; landing pages</h3>
+          <p>Fast, beautiful, mobile-first sites with a CMS your own team can update. Built for search from day one.</p>
+          <div class="chips"><span class="chip">Next.js</span><span class="chip">CMS</span><span class="chip">SEO</span><span class="chip">Hosting</span></div>
+        </div>
+      </article>
+
+      <article class="card rz tilt" style="--ac:#2F7CF6">
+        <span class="blobc"></span>
+        <div class="ico"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3c2.5 2.6 2.5 15.4 0 18-2.5-2.6-2.5-15.4 0-18z"/></svg></div>
+        <div class="in">
+          <h3>Google presence</h3>
+          <p>Business Profile, Maps, Search visibility, Analytics and Workspace email — set up together so customers find the right listing.</p>
+          <div class="chips"><span class="chip">Business Profile</span><span class="chip">Maps</span><span class="chip">Workspace</span></div>
+        </div>
+      </article>
+
+      <article class="card rz tilt" style="--ac:#FF6B3D">
+        <span class="blobc"></span>
+        <div class="ico"><svg viewBox="0 0 24 24"><path d="M3 5.5h18v13H3z"/><path d="M7 10h5M7 14h9M16 8.5l2.5 2.5"/></svg></div>
+        <div class="in">
+          <h3>CRM &amp; custom software</h3>
+          <p>Leads, pipelines, billing, inventory and reporting — shaped around how your team already works, not a rented template.</p>
+          <div class="chips"><span class="chip">Pipelines</span><span class="chip">Billing</span><span class="chip">Roles</span><span class="chip">Reports</span></div>
+        </div>
+      </article>
+
+      <article class="card rz tilt" style="--ac:#0FB981">
+        <span class="blobc"></span>
+        <div class="ico"><svg viewBox="0 0 24 24"><rect x="6.5" y="2.5" width="11" height="19" rx="2.5"/><path d="M10.5 18.5h3"/></svg></div>
+        <div class="in">
+          <h3>Mobile apps</h3>
+          <p>One codebase, both stores. We handle design, native modules, signing, review and the release itself.</p>
+          <div class="chips"><span class="chip">iOS</span><span class="chip">Android</span><span class="chip">Store release</span></div>
+        </div>
+      </article>
+
+      <article class="card rz tilt" style="--ac:#0E0E11">
+        <span class="blobc"></span>
+        <div class="ico"><svg viewBox="0 0 24 24"><rect x="2" y="4.5" width="20" height="13" rx="2"/><path d="M8 21h8M12 17.5V21"/></svg></div>
+        <div class="in">
+          <h3>TV &amp; living-room apps</h3>
+          <p>Apps for the ten-foot screen where the only input is a remote — Apple TV, Android TV, Fire TV and LG webOS.</p>
+          <div class="chips"><span class="chip">tvOS</span><span class="chip">Android TV</span><span class="chip">webOS</span></div>
+        </div>
+      </article>
+
+      <article class="card rz tilt" style="--ac:#FFB400">
+        <span class="blobc"></span>
+        <div class="ico"><svg viewBox="0 0 24 24"><path d="M7 8L3 12l4 4M17 8l4 4-4 4M14 5l-4 14"/></svg></div>
+        <div class="in">
+          <h3>Integrations &amp; automation</h3>
+          <p>Payments, WhatsApp Business API, accounting and ERP wired together so the same data stops being typed three times.</p>
+          <div class="chips"><span class="chip">Payments</span><span class="chip">WhatsApp API</span><span class="chip">ERP</span></div>
+        </div>
+      </article>
+    </div>
+  </div>
+</section>
+
+<!-- ════ PLATFORMS ════ -->
+<section class="sec" id="platforms" style="padding-top:0">
+  <div class="wrap">
+    <div class="plat rz">
+      <div class="wrap plat-grid" style="padding-inline:clamp(20px,3vw,44px); max-width:none">
+        <div>
+          <span class="mono">Platforms</span>
+          <h2 style="margin-top:16px">One team,<br>every screen.</h2>
+          <p class="lede" style="margin-top:18px">Most studios stop at web and mobile. We keep going — the screen your customer picks up was never your decision to make.</p>
+          <div class="plist">
+            <span class="pitem"><em style="background:#6248F5"></em> Web &amp; PWA</span>
+            <span class="pitem"><em style="background:#0FB981"></em> iOS · App Store</span>
+            <span class="pitem"><em style="background:#FF6B3D"></em> Android · Play Store</span>
+            <span class="pitem"><em style="background:#2F7CF6"></em> iPadOS tablets</span>
+            <span class="pitem"><em style="background:#FFB400"></em> tvOS · Apple TV</span>
+            <span class="pitem"><em style="background:#6248F5"></em> Android TV · Fire TV</span>
+            <span class="pitem"><em style="background:#0FB981"></em> LG webOS</span>
+            <span class="pitem"><em style="background:#FF6B3D"></em> macOS · Windows</span>
+            <span class="pitem"><em style="background:#2F7CF6"></em> watchOS · Wear OS</span>
+            <span class="pitem"><em style="background:#FFB400"></em> Kiosk &amp; POS screens</span>
+          </div>
+        </div>
+        <div>
+          <div class="cube-wrap" id="cubeWrap">
+            <div class="cube spin" id="cube">
+              <div class="face f1"><span class="fi" style="background:#6248F5"><svg viewBox="0 0 24 24"><rect x="2.5" y="4" width="19" height="14" rx="2"/><path d="M2.5 8.5h19"/></svg></span><span><span class="fn">Web</span><span class="fs">Responsive · PWA</span></span></div>
+              <div class="face f2"><span class="fi" style="background:#0FB981"><svg viewBox="0 0 24 24"><rect x="6.5" y="2.5" width="11" height="19" rx="2.5"/><path d="M10.5 18.5h3"/></svg></span><span><span class="fn">Mobile</span><span class="fs">iOS · Android</span></span></div>
+              <div class="face f3"><span class="fi" style="background:#FF6B3D"><svg viewBox="0 0 24 24"><rect x="2" y="4.5" width="20" height="13" rx="2"/><path d="M8 21h8M12 17.5V21"/></svg></span><span><span class="fn">TV</span><span class="fs">tvOS · webOS</span></span></div>
+              <div class="face f4"><span class="fi" style="background:#2F7CF6"><svg viewBox="0 0 24 24"><path d="M3 5.5h18v13H3z"/><path d="M7 10h5M7 14h9"/></svg></span><span><span class="fn">CRM</span><span class="fs">Custom software</span></span></div>
+              <div class="face f5"><span class="fi" style="background:#FFB400"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M3 12h18"/></svg></span><span><span class="fn">Google</span><span class="fs">Profile · Maps</span></span></div>
+              <div class="face f6"><span class="fi" style="background:#25D366"><svg viewBox="0 0 24 24"><path d="M21 11.5a8.4 8.4 0 01-9 8.4 8.5 8.5 0 01-3.9-.9L3 20l1.1-4.7A8.4 8.4 0 013 11.5a8.5 8.5 0 018.5-8.5 8.4 8.4 0 019.5 8.5z"/></svg></span><span><span class="fn">WhatsApp</span><span class="fs">Business API</span></span></div>
+            </div>
+          </div>
+          <p class="grab">Drag the cube to spin it</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ════ PROCESS ════ -->
+<section class="sec" id="process" style="padding-top:clamp(50px,6vw,90px)">
+  <div class="wrap">
+    <div class="head rz">
+      <span class="mono">How it works</span>
+      <h2>From your first message to <span class="c">go-live.</span></h2>
+      <p class="lede">No open-ended discovery. You know the price before we write a line of code, and you see working software every week after that.</p>
+    </div>
+    <div class="flow">
+      <div class="step rz" style="--ac:#6248F5"><span class="bar"></span><span class="n">Step 01</span><h4>Send your requirement</h4><p>A WhatsApp message is enough. We reply with the questions that actually matter.</p><span class="tm">Same day</span></div>
+      <div class="step rz" style="--ac:#FF6B3D"><span class="bar"></span><span class="n">Step 02</span><h4>Scope &amp; fixed quote</h4><p>A written scope, the platforms we ship to, a fixed price and a launch date.</p><span class="tm">Within 48 hours</span></div>
+      <div class="step rz" style="--ac:#0FB981"><span class="bar"></span><span class="n">Step 03</span><h4>Design &amp; build</h4><p>Clickable screens first, then weekly builds on a live link you can test as we go.</p><span class="tm">Weeks 1–5</span></div>
+      <div class="step rz" style="--ac:#2F7CF6"><span class="bar"></span><span class="n">Step 04</span><h4>Launch &amp; handover</h4><p>Store release, hosting, code, accounts, training — and 30 days of fixes on us.</p><span class="tm">Launch week</span></div>
+    </div>
+  </div>
+</section>
+
+<!-- ════ ENQUIRY → WHATSAPP ════ -->
+<section class="sec" id="enquiry" style="padding-top:0">
+  <div class="wrap">
+    <div class="enq rz">
+      <div class="enq-l">
+        <span class="mono">Get a quote</span>
+        <h2 style="margin-top:14px">Tell us what you need built.</h2>
+        <p class="lede">Fill this in and it arrives as a formatted message in our WhatsApp. No call centre, no ticket number — you talk to the people who will build it.</p>
+        <ul>
+          <li><svg viewBox="0 0 24 24"><path d="M20 6L9 17l-5-5"/></svg> A fixed quote, not an hourly guess</li>
+          <li><svg viewBox="0 0 24 24"><path d="M20 6L9 17l-5-5"/></svg> Reply within one working day</li>
+          <li><svg viewBox="0 0 24 24"><path d="M20 6L9 17l-5-5"/></svg> Your idea stays yours — NDA on request</li>
+        </ul>
+        <div class="direct">
+          <a href="#" data-wa-link><i>WhatsApp</i> <span data-wa-num>+91 62842 19729</span></a>
+          <a href="mailto:planorahtechnologies@gmail.com"><i>Email</i> planorahtechnologies@gmail.com</a>
+          <a href="#google"><i>Google</i> Find Planorah on Google</a>
+        </div>
+      </div>
+
+      <div class="enq-r">
+        <div class="two">
+          <div class="field" id="f-name">
+            <label for="i-name">Your name</label>
+            <input id="i-name" type="text" placeholder="Rahul Sharma" autocomplete="name">
+            <div class="hint">Add your name so we know who we are replying to.</div>
+          </div>
+          <div class="field" id="f-phone">
+            <label for="i-phone">Phone / WhatsApp</label>
+            <input id="i-phone" type="tel" placeholder="+91 98765 43210" autocomplete="tel">
+            <div class="hint">Add a number we can reach you on.</div>
+          </div>
+        </div>
+        <div class="two">
+          <div class="field" id="f-service">
+            <label for="i-service">What do you need</label>
+            <select id="i-service">
+              <option value="">Choose a service</option>
+              <option>Website or landing page</option>
+              <option>CRM or custom software</option>
+              <option>Mobile app (iOS / Android)</option>
+              <option>TV app (tvOS / Android TV / webOS)</option>
+              <option>Google Business Profile &amp; Workspace</option>
+              <option>Integrations &amp; automation</option>
+              <option>Not sure yet — need advice</option>
+            </select>
+            <div class="hint">Pick the closest option — we will refine it on the call.</div>
+          </div>
+          <div class="field">
+            <label for="i-budget">Budget range <span>(optional)</span></label>
+            <select id="i-budget">
+              <option value="">Prefer not to say</option>
+              <option>Under ₹50,000</option>
+              <option>₹50,000 – ₹2,00,000</option>
+              <option>₹2,00,000 – ₹5,00,000</option>
+              <option>₹5,00,000+</option>
+            </select>
+          </div>
+        </div>
+        <div class="field" id="f-msg">
+          <label for="i-msg">What are you building</label>
+          <textarea id="i-msg" placeholder="A short paragraph about the problem — not a specification. What does it need to do, and by when?"></textarea>
+          <div class="hint">Tell us a little about the project so the quote is accurate.</div>
+        </div>
+        <button class="btn btn-wa send" id="send" type="button">
+          <svg width="19" height="19" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12.04 2C6.58 2 2.13 6.45 2.13 11.91c0 1.75.46 3.45 1.32 4.95L2 22l5.25-1.38a9.9 9.9 0 004.79 1.22c5.46 0 9.91-4.45 9.91-9.91S17.5 2 12.04 2z"/></svg>
+          Send on WhatsApp
+        </button>
+        <div class="ok" id="ok">WhatsApp is opening with your enquiry ready to go — press send there and it lands with us. If nothing opened, <a href="mailto:planorahtechnologies@gmail.com" style="color:#0A6B44; font-weight:600">email it instead</a>.</div>
+        <p class="note">Opens WhatsApp with your details filled in. Prefer email? <a href="mailto:planorahtechnologies@gmail.com">planorahtechnologies@gmail.com</a></p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ════ GOOGLE ════ -->
+<section class="sec" id="google" style="padding-top:0">
+  <div class="wrap">
+    <div class="gcard rz">
+      <div class="gin">
+        <div class="grow">
+          <span class="gdot">
+            <svg width="22" height="22" viewBox="0 0 24 24"><path fill="#4285F4" d="M23 12.27c0-.79-.07-1.54-.2-2.27H12v4.3h6.16a5.3 5.3 0 01-2.29 3.47v2.88h3.7C21.7 18.7 23 15.77 23 12.27z"/><path fill="#34A853" d="M12 23.5c3.1 0 5.7-1.03 7.6-2.8l-3.71-2.87c-1.03.69-2.35 1.1-3.88 1.1-2.99 0-5.52-2.02-6.42-4.73H1.75v2.97A11.49 11.49 0 0012 23.5z"/><path fill="#FBBC05" d="M5.58 14.2a6.9 6.9 0 010-4.4V6.83H1.75a11.5 11.5 0 000 10.34l3.83-2.97z"/><path fill="#EA4335" d="M12 5.07c1.69 0 3.2.58 4.4 1.72l3.28-3.28C17.7 1.62 15.1.5 12 .5A11.49 11.49 0 001.75 6.83L5.58 9.8c.9-2.71 3.43-4.73 6.42-4.73z"/></svg>
+          </span>
+          <div>
+            <h3>Planorah Technologies on Google</h3>
+            <div class="stars" aria-label="Five star rating">
+              <svg viewBox="0 0 24 24"><path d="M12 2l3 6.5 7 .9-5.1 4.8 1.3 7L12 17.8 5.8 21.2l1.3-7L2 9.4l7-.9L12 2z"/></svg>
+              <svg viewBox="0 0 24 24"><path d="M12 2l3 6.5 7 .9-5.1 4.8 1.3 7L12 17.8 5.8 21.2l1.3-7L2 9.4l7-.9L12 2z"/></svg>
+              <svg viewBox="0 0 24 24"><path d="M12 2l3 6.5 7 .9-5.1 4.8 1.3 7L12 17.8 5.8 21.2l1.3-7L2 9.4l7-.9L12 2z"/></svg>
+              <svg viewBox="0 0 24 24"><path d="M12 2l3 6.5 7 .9-5.1 4.8 1.3 7L12 17.8 5.8 21.2l1.3-7L2 9.4l7-.9L12 2z"/></svg>
+              <svg viewBox="0 0 24 24"><path d="M12 2l3 6.5 7 .9-5.1 4.8 1.3 7L12 17.8 5.8 21.2l1.3-7L2 9.4l7-.9L12 2z"/></svg>
+              <span class="mono" style="margin-left:8px; font-size:10px">Google reviews</span>
+            </div>
+          </div>
+        </div>
+        <p class="lede">Our Business Profile carries our hours, location, photos and reviews. Open it to get directions, call us in one tap, or leave a review after we deliver.</p>
+        <div class="gact">
+          <a class="btn btn-line btn-sm" id="g-profile" href="https://www.google.com/search?q=Planorah+Technologies" target="_blank" rel="noopener">View our Google profile</a>
+          <a class="btn btn-line btn-sm" id="g-dir" href="https://www.google.com/maps/dir/?api=1&destination=Planorah+Technologies" target="_blank" rel="noopener">Get directions</a>
+          <a class="btn btn-line btn-sm" id="g-rev" href="https://search.google.com/local/writereview?placeid=YOUR_PLACE_ID" target="_blank" rel="noopener">Write a review</a>
+        </div>
+      </div>
+      <div class="map">
+        <iframe title="Planorah Technologies on Google Maps" loading="lazy" referrerpolicy="no-referrer-when-downgrade"
+          src="https://www.google.com/maps?q=Planorah+Technologies&output=embed"></iframe>
+      </div>
+    </div>
+  </div>
+</section>
+</main>
+
+<!-- ════ FOOTER ════ -->
+<footer class="foot">
+  <div class="wrap">
+    <div class="foot-in">
+      <div>
+        <a class="logo" href="#top"><span class="mk"></span>Planorah Technologies</a>
+        <p>Websites, apps and custom software — built once, built properly, handed over completely.</p>
+      </div>
+      <div><h5>Services</h5><ul>
+        <li><a href="#services">Websites</a></li><li><a href="#services">CRM &amp; software</a></li>
+        <li><a href="#services">Mobile apps</a></li><li><a href="#services">TV apps</a></li></ul></div>
+      <div><h5>Company</h5><ul>
+        <li><a href="#process">Process</a></li><li><a href="#platforms">Platforms</a></li>
+        <li><a href="#google">On Google</a></li><li><a href="#enquiry">Get a quote</a></li></ul></div>
+      <div><h5>Talk to us</h5><ul>
+        <li><a href="#" data-wa-link>WhatsApp <span data-wa-num></span></a></li>
+        <li><a href="mailto:planorahtechnologies@gmail.com">planorahtechnologies@gmail.com</a></li>
+        <li><a href="tel:+916284219729">+91 62842 19729</a></li></ul></div>
+    </div>
+    <div class="legal">
+      <span class="mono">© <span id="yr">2026</span> Planorah Technologies</span>
+      <span class="mono r">Built by Planorah</span>
+    </div>
+  </div>
+</footer>
+
+<a class="fab" id="fab" href="#" aria-label="Chat with Planorah on WhatsApp">
+  <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12.04 2C6.58 2 2.13 6.45 2.13 11.91c0 1.75.46 3.45 1.32 4.95L2 22l5.25-1.38a9.9 9.9 0 004.79 1.22h.01c5.46 0 9.91-4.45 9.91-9.91 0-2.65-1.03-5.14-2.9-7.01A9.82 9.82 0 0012.04 2zm4.52 12.99c-.25-.12-1.47-.72-1.69-.81-.23-.08-.39-.12-.56.13-.16.24-.64.8-.78.97-.15.16-.29.18-.54.06-.25-.13-1.05-.39-1.99-1.23-.74-.66-1.23-1.47-1.38-1.72-.14-.25-.01-.38.11-.5.11-.11.25-.29.37-.44.13-.15.17-.25.25-.41.08-.17.04-.31-.02-.43-.06-.12-.56-1.34-.76-1.84-.2-.48-.4-.42-.56-.43h-.47c-.17 0-.43.06-.66.31-.22.25-.87.85-.87 2.07 0 1.22.89 2.4 1.01 2.56.12.17 1.75 2.67 4.23 3.74.59.26 1.05.41 1.41.52.59.19 1.13.16 1.56.1.48-.07 1.47-.6 1.68-1.18.21-.58.21-1.08.14-1.18-.06-.11-.22-.17-.47-.29z"/></svg>
+</a>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+<script>
+/* ══════════════════════════════════════════════
+   ⚙️  EDIT THIS — your WhatsApp number and email
+   ══════════════════════════════════════════════ */
+var PLANORAH = {
+  whatsapp : "916284219729",         // country code + number, digits only
+  email    : "planorahtechnologies@gmail.com",
+  company  : "Planorah Technologies"
+};
+
+(function(){
+  "use strict";
+  var reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  var fine   = window.matchMedia('(pointer:fine)').matches;
+
+  /* ── Nav ── */
+  var nav = document.getElementById('nav');
+  var sc = function(){ nav.classList.toggle('stuck', window.scrollY > 10); };
+  sc(); window.addEventListener('scroll', sc, {passive:true});
+
+  /* ── Reveals ── */
+  var rz = document.querySelectorAll('.rz');
+  if ('IntersectionObserver' in window && !reduce){
+    var io = new IntersectionObserver(function(en){
+      en.forEach(function(e,i){
+        if (e.isIntersecting){ var el = e.target; setTimeout(function(){ el.classList.add('in'); }, Math.min(i*70,260)); io.unobserve(el); }
+      });
+    }, {rootMargin:'0px 0px -6% 0px', threshold:.1});
+    rz.forEach(function(el){ io.observe(el); });
+  } else { rz.forEach(function(el){ el.classList.add('in'); }); }
+
+  /* ══ WebGL hero — real 3D objects ══ */
+  (function(){
+    var stage = document.getElementById('stage');
+    var cv = document.getElementById('gl');
+    if (!window.THREE || !cv){ stage.classList.add('no3d'); return; }
+
+    var renderer;
+    try{
+      renderer = new THREE.WebGLRenderer({canvas:cv, alpha:true, antialias:true});
+    }catch(e){ stage.classList.add('no3d'); return; }
+    renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+
+    var scene  = new THREE.Scene();
+    var camera = new THREE.PerspectiveCamera(42, 1, .1, 100);
+    camera.position.set(0, 0, 9);
+
+    var group = new THREE.Group();
+    scene.add(group);
+
+    function mat(hex, metal, rough, glow){
+      var o = {color:new THREE.Color(hex), metalness:metal, roughness:rough};
+      if (glow){ o.emissive = new THREE.Color(hex); o.emissiveIntensity = glow; }
+      return new THREE.MeshStandardMaterial(o);
+    }
+
+    /* rounded-rect profile, extruded + beveled — the whole scene is built from these */
+    function roundedRect(w, h, r){
+      var x = -w/2, y = -h/2, s = new THREE.Shape();
+      s.moveTo(x, y + r);
+      s.lineTo(x, y + h - r); s.quadraticCurveTo(x, y + h, x + r, y + h);
+      s.lineTo(x + w - r, y + h); s.quadraticCurveTo(x + w, y + h, x + w, y + h - r);
+      s.lineTo(x + w, y + r); s.quadraticCurveTo(x + w, y, x + w - r, y);
+      s.lineTo(x + r, y); s.quadraticCurveTo(x, y, x, y + r);
+      return s;
+    }
+    function slab(w, h, depth, r, bevel){
+      var g = new THREE.ExtrudeGeometry(roundedRect(w, h, r), {depth:depth, bevelEnabled:true, bevelThickness:bevel, bevelSize:bevel, bevelSegments:4, curveSegments:12});
+      g.center();
+      return g;
+    }
+
+    /* One screen we ship to: shell + lit display, plus a stand or strap where it belongs */
+    function device(c){
+      var g = new THREE.Group();
+      g.add(new THREE.Mesh(slab(c.w, c.h, c.d, c.r, Math.min(.045, c.d * .32)), mat(c.shell, .58, .27)));
+
+      var screen = new THREE.Mesh(
+        slab(c.w - c.bez * 2, c.h - c.bez * 2, .04, Math.max(c.r - c.bez * .7, .03), .012),
+        mat(c.screen, .12, .42, .14)
+      );
+      screen.position.z = c.d / 2 + .05;
+      g.add(screen);
+
+      if (c.stand){
+        var neck = new THREE.Mesh(new THREE.BoxGeometry(.15, c.stand, .13), mat(c.shell, .6, .3));
+        neck.position.y = -c.h / 2 - c.stand / 2 + .03;
+        var foot = new THREE.Mesh(slab(c.w * .40, .11, .17, .05, .02), mat(c.shell, .6, .3));
+        foot.position.y = -c.h / 2 - c.stand;
+        foot.rotation.x = Math.PI / 2;
+        g.add(neck, foot);
+      }
+      if (c.strap){
+        var sm = mat(0x33333D, .4, .52);
+        [1, -1].forEach(function(dir){
+          var b = new THREE.Mesh(slab(.30, .40, .07, .06, .02), sm);
+          b.position.set(0, dir * (c.h / 2 + .17), -.012);
+          g.add(b);
+        });
+      }
+      return g;
+    }
+
+    /* The constellation: every screen Planorah ships to, wired back to one team */
+    var SCREENS = [
+      { w:2.90, h:1.68, d:.16, r:.10, bez:.11, shell:0x14141A, screen:0xFF6B3D, p:[ .88, 1.92,-1.50], rot:[-.05,-.21, .01], stand:.34 },
+      { w:2.02, h:1.30, d:.15, r:.09, bez:.09, shell:0xF2F1EC, screen:0x6248F5, p:[-2.12, .12, -.50], rot:[-.04, .27,-.02], stand:.30 },
+      { w:1.16, h:1.56, d:.11, r:.11, bez:.09, shell:0xE6E4DE, screen:0x2F7CF6, p:[ 2.18,-.38, -.10], rot:[ .06,-.31, .05] },
+      { w:.66,  h:1.28, d:.10, r:.13, bez:.06, shell:0x14141A, screen:0x0FB981, p:[ .78,-2.02,  .90], rot:[ .04, .23,-.08] },
+      { w:.52,  h:.60,  d:.13, r:.16, bez:.05, shell:0x14141A, screen:0xFFC53D, p:[-1.92, 1.86,  .70], rot:[ .05, .31, .10], strap:true }
+    ];
+
+    var screens = [], pulses = [];
+    SCREENS.forEach(function(c, i){
+      var d = device(c);
+      d.position.set(c.p[0], c.p[1], c.p[2]);
+      d.rotation.set(c.rot[0], c.rot[1], c.rot[2]);
+      d.userData.baseY = c.p[1];
+      d.userData.baseRY = c.rot[1];
+      d.userData.ph = i * 1.27;
+      group.add(d); screens.push(d);
+
+      var to = new THREE.Vector3(c.p[0], c.p[1], c.p[2]);
+      group.add(new THREE.Line(
+        new THREE.BufferGeometry().setFromPoints([new THREE.Vector3(0,0,0), to.clone()]),
+        new THREE.LineBasicMaterial({color:0x8A8D95, transparent:true, opacity:.3})
+      ));
+
+      var p = new THREE.Mesh(new THREE.SphereGeometry(.062, 16, 16),
+        new THREE.MeshBasicMaterial({color:c.screen, transparent:true}));
+      group.add(p);
+      pulses.push({m:p, to:to, t:i * .19, sp:.0040 + i * .0005});
+    });
+
+    /* Hub — the Planorah mark, where every screen connects back to */
+    var hub = new THREE.Group();
+    var hubBody = new THREE.Mesh(slab(.88, .88, .34, .27, .055), mat(0x6248F5, .45, .22));
+    var hubBar  = new THREE.Mesh(slab(.53, .155, .06, .065, .02), mat(0xffffff, .1, .45));
+    var hubDot  = new THREE.Mesh(slab(.34, .22, .06, .06, .02),   mat(0xFFC53D, .2, .35));
+    hubBar.position.set(0, .235, .27);
+    hubDot.position.set(-.225, -.255, .27);
+    hub.add(hubBody, hubBar, hubDot);
+    group.add(hub);
+
+    var halo = new THREE.Mesh(new THREE.TorusGeometry(1.06, .011, 8, 90),
+      new THREE.MeshBasicMaterial({color:0x6248F5, transparent:true, opacity:.26}));
+    halo.rotation.x = Math.PI / 2.3;
+    group.add(halo);
+
+    group.scale.setScalar(1.12);
+
+    scene.add(new THREE.HemisphereLight(0xffffff, 0xdedad0, .78));
+    var key = new THREE.DirectionalLight(0xffffff, .95); key.position.set(4, 6, 6); scene.add(key);
+    var p1 = new THREE.PointLight(0x6248F5, .85, 30); p1.position.set(-6, 3, 4); scene.add(p1);
+    var p2 = new THREE.PointLight(0xFFC53D, .6, 30);  p2.position.set(6, -3, 3); scene.add(p2);
+
+    function size(){
+      var r = stage.getBoundingClientRect();
+      var w = Math.max(r.width, 1), h = Math.max(r.height, 1);
+      renderer.setSize(w, h, false);
+      camera.aspect = w / h; camera.updateProjectionMatrix();
+      camera.position.z = w < 520 ? 11.5 : 9.5;
+    }
+    size();
+    window.addEventListener('resize', size);
+
+    var mx = 0, my = 0, tX = 0, tY = 0, t = 0;
+    if (fine && !reduce){
+      window.addEventListener('mousemove', function(e){
+        tX = (e.clientX / window.innerWidth - .5) * 2;
+        tY = (e.clientY / window.innerHeight - .5) * 2;
+      }, {passive:true});
+    }
+
+    function frame(){
+      t += .01;
+      mx += (tX - mx) * .05; my += (tY - my) * .05;
+      /* sway, never far enough to turn a screen edge-on */
+      group.rotation.y = mx * .26 + Math.sin(t * .22) * .15;
+      group.rotation.x = my * .16 + Math.cos(t * .18) * .05;
+
+      screens.forEach(function(d){
+        d.position.y = d.userData.baseY + Math.sin(t * .7 + d.userData.ph) * .13;
+        d.rotation.y = d.userData.baseRY + Math.sin(t * .45 + d.userData.ph) * .07;
+      });
+      hub.rotation.y = Math.sin(t * .3) * .5;
+      halo.rotation.z += .0016;
+
+      pulses.forEach(function(p){
+        p.t += p.sp; if (p.t > 1) p.t = 0;
+        var e = p.t * p.t * (3 - 2 * p.t);
+        p.m.position.set(p.to.x * e, p.to.y * e, p.to.z * e);
+        p.m.material.opacity = Math.sin(p.t * Math.PI);
+      });
+
+      renderer.render(scene, camera);
+      if (!reduce) requestAnimationFrame(frame);
+    }
+    frame();
+  })();
+
+  /* ══ CSS 3D cube — drag to spin ══ */
+  (function(){
+    var wrap = document.getElementById('cubeWrap'), cube = document.getElementById('cube');
+    if (!wrap || !cube) return;
+    var down = false, startX = 0, spin = 0, base = 0;
+    wrap.addEventListener('pointerdown', function(e){
+      down = true; startX = e.clientX; base = spin;
+      cube.classList.remove('spin');
+      var cs = getComputedStyle(cube).transform;
+      wrap.setPointerCapture(e.pointerId);
+    });
+    wrap.addEventListener('pointermove', function(e){
+      if (!down) return;
+      spin = base + (e.clientX - startX) * .55;
+      cube.style.transform = 'rotateX(-22deg) rotateY(' + spin + 'deg)';
+    });
+    ['pointerup','pointercancel','pointerleave'].forEach(function(ev){
+      wrap.addEventListener(ev, function(){ down = false; });
+    });
+  })();
+
+  /* ══ WhatsApp enquiry system ══ */
+  var waBase = 'https://wa.me/' + PLANORAH.whatsapp;
+  var pretty = '+' + PLANORAH.whatsapp.replace(/^(\d{2})(\d{5})(\d{5})$/, '$1 $2 $3');
+
+  document.querySelectorAll('[data-wa-num]').forEach(function(s){ s.textContent = pretty; });
+  document.querySelectorAll('[data-wa-link]').forEach(function(a){
+    a.href = waBase + '?text=' + encodeURIComponent('Hello ' + PLANORAH.company + ', I would like to discuss a project.');
+    a.target = '_blank'; a.rel = 'noopener';
+  });
+  var fab = document.getElementById('fab');
+  fab.href = waBase + '?text=' + encodeURIComponent('Hello ' + PLANORAH.company + ', I have an enquiry.');
+  fab.target = '_blank'; fab.rel = 'noopener';
+
+  function val(id){ return (document.getElementById(id).value || '').trim(); }
+  function flag(fid, bad){ var f = document.getElementById(fid); if (f) f.classList.toggle('err', bad); return bad; }
+
+  document.getElementById('send').addEventListener('click', function(){
+    var name = val('i-name'), phone = val('i-phone'), service = val('i-service'),
+        budget = val('i-budget'), msg = val('i-msg'), bad = false;
+
+    bad = flag('f-name', name.length < 2) || bad;
+    bad = flag('f-phone', phone.replace(/\D/g,'').length < 8) || bad;
+    bad = flag('f-service', !service) || bad;
+    bad = flag('f-msg', msg.length < 10) || bad;
+    if (bad){
+      var first = document.querySelector('.field.err input, .field.err select, .field.err textarea');
+      if (first){ first.focus(); first.scrollIntoView({block:'center', behavior: reduce ? 'auto' : 'smooth'}); }
+      return;
+    }
+    var lines = ['*New enquiry — ' + PLANORAH.company + ' website*','',
+      '*Name:* ' + name, '*Phone:* ' + phone, '*Service:* ' + service];
+    if (budget) lines.push('*Budget:* ' + budget);
+    lines.push('', '*Requirement:*', msg, '', '_Sent from planorah.com_');
+
+    window.open(waBase + '?text=' + encodeURIComponent(lines.join('\n')), '_blank', 'noopener');
+    document.getElementById('ok').classList.add('show');
+  });
+
+  ['i-name','i-phone','i-service','i-msg'].forEach(function(id){
+    var el = document.getElementById(id);
+    el.addEventListener('input', function(){ el.closest('.field').classList.remove('err'); });
+    el.addEventListener('change', function(){ el.closest('.field').classList.remove('err'); });
+  });
+
+  document.getElementById('yr').textContent = new Date().getFullYear();
+})();
+</script>
+</body>
+</html>

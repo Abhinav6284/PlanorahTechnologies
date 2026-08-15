@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://planorah.com/sitemap.xml
