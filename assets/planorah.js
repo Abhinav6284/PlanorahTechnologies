@@ -388,7 +388,7 @@ var PLANORAH = {
       var w = Math.max(r.width, 1), h = Math.max(r.height, 1);
       renderer.setSize(w, h, false);
       camera.aspect = w / h; camera.updateProjectionMatrix();
-      camera.position.z = w < 460 ? 9.2 : 7.4;
+      camera.position.z = w < 460 ? 10.4 : 8.6;   /* pulled back — front devices were clipping */
       camera.lookAt(0, -.1, 0);
     }
     size();
@@ -433,7 +433,7 @@ var PLANORAH = {
         var f = (z + 1) / 2;                          /* 0 at the back, 1 at the front */
         it.m.rotation.y = off * TURN - spin;          /* face the viewer, turned only partway */
         it.m.position.y = (1 - f) * -.10;
-        it.m.scale.setScalar(.72 + f * .30);          /* nearer reads bigger */
+        it.m.scale.setScalar(.70 + f * .22);          /* nearer reads bigger, without leaving frame */
       });
       if (best !== shown){
         shown = best;
@@ -516,7 +516,58 @@ var PLANORAH = {
      as sheets settling on top of one another rather than a hard swap. */
   (function(){
     var slides = Array.prototype.slice.call(document.querySelectorAll('.stack .slide'));
-    if (!slides.length || reduce) return;
+    if (!slides.length) return;
+
+    /* Mark the slide filling the viewport so its copy and mockup animate in.
+       This runs even under reduced motion — the CSS there resolves it to a
+       plain visible state rather than a transition. */
+    if ('IntersectionObserver' in window){
+      /* Opt into the entrance animation only once we can actually drive it.
+         Until this class lands the slides render plainly visible, so a JS
+         failure degrades to readable content rather than a blank section. */
+      var stackEl = document.querySelector('.stack');
+      if (stackEl) stackEl.classList.add('anim');
+
+      var delivered = false;
+      var seen = new IntersectionObserver(function(entries){
+        delivered = true;
+        entries.forEach(function(en){
+          en.target.classList.toggle('is-active', en.intersectionRatio > .45);
+        });
+      }, {threshold:[0, .45, .75]});
+      slides.forEach(function(s){ seen.observe(s); });
+
+      /* If the observer never reports — throttled tab, background render, an engine
+         that defers it — the slides would sit at opacity 0 forever. Reveal them. */
+      setTimeout(function(){
+        if (!delivered) slides.forEach(function(s){ s.classList.add('is-active'); });
+      }, 1500);
+    } else {
+      slides.forEach(function(s){ s.classList.add('is-active'); });
+    }
+
+    if (reduce) return;
+
+    /* Slow parallax on the visual — the only continuous motion in this section.
+       The panel drifts a little slower than the page, nothing more. */
+    var arts = slides.map(function(s){ return s.querySelector('.slide-art'); });
+    var pTick = false;
+    function parallax(){
+      pTick = false;
+      for (var i = 0; i < slides.length; i++){
+        if (!arts[i]) continue;
+        var r = slides[i].getBoundingClientRect();
+        if (r.bottom < 0 || r.top > window.innerHeight) continue;
+        var mid = (r.top + r.height / 2 - window.innerHeight / 2) / window.innerHeight;
+        arts[i].style.transform = 'translateY(' + (mid * -34).toFixed(1) + 'px)';
+      }
+    }
+    window.addEventListener('scroll', function(){
+      if (pTick) return;
+      pTick = true;
+      requestAnimationFrame(parallax);
+    }, {passive:true});
+    parallax();
 
     var SCALE = .07, DIM = .30, ticking = false;
 
@@ -549,6 +600,7 @@ var PLANORAH = {
     window.addEventListener('resize', onScroll);
     apply();
   })();
+
 
   /* ══ WhatsApp enquiry system ══ */
   var waBase = 'https://wa.me/' + PLANORAH.whatsapp;

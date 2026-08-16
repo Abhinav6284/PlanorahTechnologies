@@ -48,7 +48,8 @@ h3{font-size:clamp(19px,1.7vw,23px); letter-spacing:-.015em; line-height:1.15}
 .lede{color:var(--ink-60); font-size:clamp(16px,1.25vw,19px); line-height:1.6; font-weight:400}
 .mono{font-family:var(--f-mono); font-size:11px; letter-spacing:.13em; text-transform:uppercase; color:var(--ink-40)}
 .hl{position:relative; white-space:nowrap}
-.hl::after{content:""; position:absolute; left:-.06em; right:-.06em; bottom:.06em; height:.34em; background:var(--sun); z-index:-1; border-radius:3px}
+.hl::after{content:""; position:absolute; left:-.05em; right:-.05em; bottom:-.02em; height:.30em;
+  background:var(--sun); z-index:-1; border-radius:.15em}
 .v{color:var(--violet)} .c{color:var(--coral)} .m{color:var(--mint)}
 
 /* ════ Buttons ════ */
@@ -117,8 +118,8 @@ h3{font-size:clamp(19px,1.7vw,23px); letter-spacing:-.015em; line-height:1.15}
 @keyframes floaty{0%,100%{translate:0 0}50%{translate:0 -12px}}
 .notif .av{width:42px; height:42px; border-radius:13px; flex:none; display:grid; place-items:center; background:var(--wa)}
 .notif .av svg{width:24px; height:24px; fill:#06280F}
-.notif .t1{font-weight:600; font-size:14.5px; letter-spacing:-.01em}
-.notif .t2{font-family:var(--f-mono); font-size:9.5px; letter-spacing:.11em; text-transform:uppercase; color:var(--mint); margin-top:3px}
+.notif .t1{display:block; font-weight:600; font-size:14.5px; letter-spacing:-.01em; line-height:1.3}
+.notif .t2{display:block; font-family:var(--f-mono); font-size:9.5px; letter-spacing:.11em; text-transform:uppercase; color:var(--mint); margin-top:4px}
 
 /* ════ Ticker ════ */
 .ticker{border-block:1px solid var(--line); background:var(--white); overflow:hidden; padding:15px 0}
@@ -628,69 +629,421 @@ html.tilt3d .stat-card span{transform:translateZ(20px)}
 html.tilt3d .tilt3d.is-tilting{box-shadow:0 30px 60px -28px rgba(14,14,17,.42), 0 4px 10px rgba(14,14,17,.06)}
 
 /* ══════════════════════════════════════════════════════════
-   STACKED SLIDES — each panel sticks, the next rises from the
-   bottom and covers it. The panel below scales back and dims,
-   so the stack reads as sheets laid over one another.
+   FULL-SCREEN STACKED SLIDES
+   Each slide fills the viewport and sticks at the top; the next
+   rises from below and covers it completely.
    ══════════════════════════════════════════════════════════ */
-.stack{position:relative; display:flex; flex-direction:column; gap:clamp(20px,3vw,38px)}
+.stack{position:relative; display:block}
 
 .slide{
-  position:sticky;
-  min-height:clamp(420px,58vh,540px);
-  background:var(--white);
-  border:1px solid var(--line);
-  border-radius:clamp(20px,2.6vw,32px);
+  position:sticky; top:0;
+  height:100svh; min-height:560px;
   overflow:hidden;
+  background:var(--white);
+  border-radius:clamp(18px,2vw,30px) clamp(18px,2vw,30px) 0 0;
   transform-origin:center top;
   will-change:transform;
-  box-shadow:0 -1px 0 rgba(14,14,17,.04), 0 -18px 40px -30px rgba(14,14,17,.45);
+  box-shadow:0 -20px 50px -26px rgba(14,14,17,.5);
 }
-/* Each sticks a little lower than the last, so the covered edges stay visible */
-.slide:nth-child(1){top:100px}
-.slide:nth-child(2){top:116px}
-.slide:nth-child(3){top:132px}
-.slide:nth-child(4){top:148px}
-.slide:nth-child(5){top:164px}
-.slide:nth-child(6){top:180px}
+@supports not (height:100svh){ .slide{height:100vh} }
 
-.slide-in{display:grid; grid-template-columns:minmax(0,1.05fr) minmax(0,.95fr); height:100%; min-height:inherit}
+.slide-in{
+  display:grid; grid-template-columns:minmax(0,.95fr) minmax(0,1.05fr);
+  align-items:center; height:100%;
+  max-width:var(--maxw); margin-inline:auto; padding-inline:var(--gut);
+  gap:clamp(24px,4vw,64px);
+}
 
-.slide-txt{padding:clamp(28px,3.4vw,54px); display:flex; flex-direction:column; align-items:flex-start; justify-content:center}
+.slide-txt{display:flex; flex-direction:column; align-items:flex-start; justify-content:center; max-width:36rem}
 .slide-txt .mono{display:flex; align-items:center; gap:9px}
 .slide-txt .mono::before{content:""; width:8px; height:8px; border-radius:50%; background:var(--ac)}
-.slide-txt h3{margin-top:16px; font-size:clamp(26px,3.2vw,42px); letter-spacing:-.03em; line-height:1.06}
-.slide-txt p{margin:16px 0 0; color:var(--ink-60); font-size:clamp(15px,1.15vw,17px); line-height:1.6; max-width:44ch}
-.slide-txt .chips{margin-top:22px}
-.slide-txt .btn{margin-top:26px}
+.slide-txt h3{margin-top:18px; font-size:clamp(30px,4vw,58px); letter-spacing:-.035em; line-height:1.02}
+.slide-txt p{margin:20px 0 0; color:var(--ink-60); font-size:clamp(15.5px,1.25vw,19px); line-height:1.6; max-width:42ch}
+.slide-txt .chips{margin-top:26px}
+.slide-txt .btn{margin-top:30px}
+.slide-count{position:absolute; left:var(--gut); bottom:clamp(22px,3vw,40px);
+  font-family:var(--f-mono); font-size:11px; letter-spacing:.16em; color:var(--ink-40)}
+.slide-count b{color:var(--ac); font-weight:500}
 
-/* Right half: the accent, carrying an oversized mark and a mock interface */
-.slide-art{position:relative; overflow:hidden; background:var(--ac); display:grid; place-items:center}
-.slide-art::before{content:""; position:absolute; inset:0;
-  background:radial-gradient(120% 90% at 78% 8%, rgba(255,255,255,.34), transparent 58%)}
-.slide-art::after{content:""; position:absolute; width:min(74%,340px); aspect-ratio:1; border-radius:50%;
-  right:-14%; bottom:-26%; background:rgba(255,255,255,.16)}
-.slide-mark{position:relative; z-index:2; width:clamp(84px,9vw,128px); height:clamp(84px,9vw,128px);
-  border-radius:clamp(24px,2.6vw,34px); display:grid; place-items:center;
-  background:rgba(255,255,255,.18); border:1px solid rgba(255,255,255,.34);
-  backdrop-filter:blur(6px); -webkit-backdrop-filter:blur(6px);
-  box-shadow:0 30px 60px -26px rgba(0,0,0,.4)}
-.slide-mark svg{width:44%; height:44%; stroke:#fff; fill:none; stroke-width:1.6;
-  stroke-linecap:round; stroke-linejoin:round}
-.slide-no{position:absolute; z-index:2; right:clamp(18px,2vw,28px); top:clamp(14px,1.6vw,22px);
-  font-family:var(--f-mono); font-size:11px; letter-spacing:.16em; color:rgba(255,255,255,.72)}
+/* ── The visual half ── */
+.slide-art{position:relative; height:100%; display:grid; place-items:center; will-change:transform}
 
-/* Dim veil applied as the next slide rises over this one */
-.slide-veil{position:absolute; inset:0; z-index:5; pointer-events:none;
-  background:var(--ink); opacity:0}
+/* ── Entrance: one quiet fade-up. No loops, no spin, no bounce. ── */
+.stack.anim .slide-txt > *{opacity:0; transform:translateY(18px);
+  transition:opacity .55s var(--ease), transform .55s var(--ease)}
+.stack.anim .slide.is-active .slide-txt > *{opacity:1; transform:none}
+.stack.anim .slide.is-active .slide-txt > *:nth-child(1){transition-delay:.04s}
+.stack.anim .slide.is-active .slide-txt > *:nth-child(2){transition-delay:.09s}
+.stack.anim .slide.is-active .slide-txt > *:nth-child(3){transition-delay:.14s}
+.stack.anim .slide.is-active .slide-txt > *:nth-child(4){transition-delay:.19s}
+.stack.anim .slide.is-active .slide-txt > *:nth-child(5){transition-delay:.24s}
+.stack.anim .ui{opacity:0; transform:translateY(22px); transition:opacity .7s var(--ease), transform .7s var(--ease)}
+.stack.anim .slide.is-active .ui{opacity:1; transform:none; transition-delay:.10s}
 
-@media (max-width:860px){
-  .slide-in{grid-template-columns:1fr; grid-template-rows:auto 1fr}
-  .slide{min-height:0}
-  .slide-art{min-height:190px; order:-1}
-  .slide-txt{padding:clamp(24px,5vw,34px)}
-  .slide:nth-child(n){top:88px}
+.slide-veil{position:absolute; inset:0; z-index:6; pointer-events:none; background:var(--ink); opacity:0}
+
+@media (max-width:900px){
+  .slide{height:auto; min-height:0; border-radius:clamp(16px,4vw,24px) clamp(16px,4vw,24px) 0 0}
+  .slide-in{grid-template-columns:1fr; padding-block:clamp(34px,7vw,56px); gap:clamp(26px,6vw,40px)}
+  .slide-txt{max-width:none}
+  .slide-art{min-height:300px}
+  .slide-count{position:static; margin-top:24px}
 }
 @media (prefers-reduced-motion:reduce){
-  .slide{position:relative; top:auto !important; transform:none !important}
+  .slide{position:relative; height:auto; transform:none !important}
+  .slide-txt > *,.ui{opacity:1 !important; transform:none !important}
+  .slide-art{transform:none !important}
+  .slide-art::before{opacity:.13 !important; transform:none !important}
+  .slide-art::after{opacity:.16 !important; transform:none !important}
   .slide-veil{display:none}
 }
+
+
+
+/* ══════════════════════════════════════════════════════════
+   PRODUCT INTERFACES — the visual half of each slide.
+   Real labels, real numbers, real density. These are meant to
+   look like software that has shipped, not like decoration.
+   ══════════════════════════════════════════════════════════ */
+.ui{width:100%; max-width:560px; background:var(--white); border:1px solid var(--line);
+  border-radius:14px; overflow:hidden; font-size:12px; line-height:1.35;
+  box-shadow:0 32px 64px -34px rgba(14,14,17,.42), 0 2px 6px rgba(14,14,17,.05)}
+.ui *{box-sizing:border-box}
+.ui-head{display:flex; align-items:center; gap:8px; padding:10px 13px;
+  border-bottom:1px solid var(--line); background:var(--paper)}
+.ui-head .dots{display:flex; gap:5px}
+.ui-head .dots i{width:8px; height:8px; border-radius:50%; background:#D6D3CB; display:block}
+.ui-head .addr{flex:1; height:22px; border-radius:99px; background:var(--white); border:1px solid var(--line);
+  display:flex; align-items:center; padding:0 10px; font-family:var(--f-mono); font-size:9.5px;
+  color:var(--ink-40); letter-spacing:.02em; overflow:hidden; white-space:nowrap}
+.ui-title{font-weight:600; font-size:12.5px; color:var(--ink); letter-spacing:-.01em}
+.ui-sub{font-family:var(--f-mono); font-size:9px; letter-spacing:.12em; text-transform:uppercase; color:var(--ink-40)}
+.ui-body{padding:14px}
+.ui-row{display:flex; align-items:center; gap:10px}
+.ui-between{justify-content:space-between}
+.ui-sep{border-top:1px solid var(--line)}
+
+/* stat tiles */
+.ui-stats{display:grid; grid-template-columns:repeat(4,1fr); gap:9px}
+.ui-stat{border:1px solid var(--line); border-radius:9px; padding:9px 10px; background:var(--white)}
+.ui-stat b{display:block; font-family:var(--f-dis); font-size:17px; font-weight:700; letter-spacing:-.03em; line-height:1}
+.ui-stat span{display:block; margin-top:5px; font-size:9.5px; color:var(--ink-40); letter-spacing:.01em}
+.ui-stat.lead{background:var(--ac); border-color:transparent}
+.ui-stat.lead b,.ui-stat.lead span{color:#fff}
+.ui-stat.lead span{opacity:.82}
+
+/* table */
+.ui-table{width:100%; border-collapse:collapse; margin-top:12px}
+.ui-table th{text-align:left; font-family:var(--f-mono); font-size:8.5px; letter-spacing:.12em;
+  text-transform:uppercase; color:var(--ink-40); font-weight:400; padding:0 8px 7px 0}
+.ui-table td{padding:8px 8px 8px 0; border-top:1px solid var(--line); color:var(--ink-60); font-size:11.5px}
+.ui-table td:first-child{color:var(--ink); font-weight:500}
+.ui-table td.num{text-align:right; font-family:var(--f-mono); font-size:11px; color:var(--ink)}
+.pill{display:inline-flex; align-items:center; gap:5px; padding:3px 8px; border-radius:99px;
+  font-size:10px; font-weight:500; background:var(--paper); color:var(--ink-60)}
+.pill i{width:6px; height:6px; border-radius:50%; background:currentColor; display:block}
+.pill.ok{background:#E7F8F0; color:#0A7A4E}
+.pill.warn{background:#FFF3E6; color:#A65A16}
+.pill.new{background:#EEEBFF; color:#4A34C7}
+
+/* bar chart */
+.ui-chart{display:flex; align-items:flex-end; gap:7px; height:76px; margin-top:12px; padding:10px 2px 0;
+  border-top:1px solid var(--line)}
+.ui-chart i{flex:1; border-radius:3px 3px 0 0; background:var(--ac); opacity:.85; display:block}
+
+/* website preview */
+.ui-site{padding:0}
+.ui-site .nav{display:flex; align-items:center; gap:14px; padding:11px 14px; border-bottom:1px solid var(--line)}
+.ui-site .nav b{font-size:12px; font-weight:700; letter-spacing:-.02em}
+.ui-site .nav span{font-size:10px; color:var(--ink-40)}
+.ui-site .nav em{margin-left:auto; font-style:normal; font-size:9.5px; font-weight:600; color:#fff;
+  background:var(--ac); padding:5px 10px; border-radius:99px}
+.ui-site .hero{padding:18px 14px; border-bottom:1px solid var(--line)}
+.ui-site .hero h6{margin:0; font-family:var(--f-dis); font-size:19px; font-weight:700; letter-spacing:-.03em; line-height:1.1}
+.ui-site .hero p{margin:7px 0 0; font-size:10.5px; color:var(--ink-60); max-width:34ch}
+.ui-site .cards{display:grid; grid-template-columns:repeat(3,1fr); gap:9px; padding:13px 14px; border-radius:0}
+.ui-site .cards div{border:1px solid var(--line); border-radius:8px; overflow:hidden}
+.ui-site .cards u{display:block; height:38px; background:var(--paper-2); text-decoration:none}
+.ui-site .cards div:first-child u{background:var(--ac); opacity:.85}
+.ui-site .cards p{margin:0; padding:7px 8px; font-size:9.5px; color:var(--ink-60)}
+.ui-score{display:flex; align-items:center; gap:8px; padding:9px 14px; border-top:1px solid var(--line);
+  background:var(--paper); font-family:var(--f-mono); font-size:9px; letter-spacing:.1em;
+  text-transform:uppercase; color:var(--ink-40)}
+.ui-score b{width:26px; height:26px; border-radius:50%; display:grid; place-items:center;
+  background:#E7F8F0; color:#0A7A4E; font-family:var(--f-txt); font-size:10.5px; font-weight:700; letter-spacing:0}
+
+/* phone */
+.ui-phone{max-width:250px; border-radius:30px; padding:8px; background:#14141A; border:0;
+  box-shadow:0 40px 70px -30px rgba(0,0,0,.55)}
+.ui-phone .scr{background:var(--white); border-radius:23px; overflow:hidden}
+.ui-phone .status{display:flex; align-items:center; justify-content:space-between; padding:8px 14px 4px;
+  font-family:var(--f-mono); font-size:8.5px; color:var(--ink-40)}
+.ui-phone .apphead{padding:6px 14px 12px; border-bottom:1px solid var(--line)}
+.ui-phone .apphead b{display:block; font-family:var(--f-dis); font-size:15px; font-weight:700; letter-spacing:-.025em}
+.ui-phone .apphead span{display:block; margin-top:3px; font-size:10px; color:var(--ink-40)}
+.ui-phone .order{margin:12px 14px; border:1px solid var(--line); border-radius:11px; padding:11px}
+.ui-phone .order .t{display:flex; justify-content:space-between; align-items:center; font-size:11px; font-weight:600}
+.ui-phone .order .m{margin-top:6px; font-size:10px; color:var(--ink-40)}
+.ui-phone .track{display:flex; align-items:center; gap:5px; margin-top:10px}
+.ui-phone .track i{height:4px; flex:1; border-radius:99px; background:var(--paper-2); display:block}
+.ui-phone .track i.on{background:var(--ac)}
+.ui-phone .list{padding:0 14px}
+.ui-phone .list div{display:flex; align-items:center; gap:9px; padding:9px 0; border-top:1px solid var(--line); font-size:10.5px}
+.ui-phone .list u{width:26px; height:26px; border-radius:8px; background:var(--paper-2); flex:none; text-decoration:none}
+.ui-phone .list span{margin-left:auto; font-family:var(--f-mono); font-size:10px; color:var(--ink)}
+.ui-phone .tabs{display:flex; margin-top:10px; border-top:1px solid var(--line); padding:9px 14px 12px}
+.ui-phone .tabs i{flex:1; height:3px; border-radius:99px; background:var(--paper-2); display:block; margin:0 4px}
+.ui-phone .tabs i.on{background:var(--ac)}
+
+/* tv */
+.ui-tv{max-width:560px; background:#0E0E14; border-color:#23232C}
+.ui-tv .tvhead{display:flex; align-items:center; gap:12px; padding:11px 14px; border-bottom:1px solid #1E1E27}
+.ui-tv .tvhead b{color:#fff; font-size:12px; font-weight:700; letter-spacing:-.02em}
+.ui-tv .tvhead span{font-size:10px; color:#7E8290}
+.ui-tv .feature{margin:12px 14px; border-radius:10px; padding:14px; background:linear-gradient(120deg,var(--ac),rgba(0,0,0,.35))}
+.ui-tv .feature b{display:block; color:#fff; font-family:var(--f-dis); font-size:17px; font-weight:700; letter-spacing:-.03em}
+.ui-tv .feature span{display:block; margin-top:5px; color:rgba(255,255,255,.85); font-size:10px}
+.ui-tv .feature em{display:inline-block; margin-top:10px; font-style:normal; font-size:9.5px; font-weight:600;
+  color:#111; background:#fff; padding:5px 11px; border-radius:99px}
+.ui-tv .rowh{padding:2px 14px 8px; font-size:10px; color:#9A9EAC}
+.ui-tv .rail{display:grid; grid-template-columns:repeat(4,1fr); gap:9px; padding:0 14px 14px}
+.ui-tv .rail div{border-radius:7px; overflow:hidden; background:#191921}
+.ui-tv .rail u{display:block; height:44px; background:#22222D; text-decoration:none}
+.ui-tv .rail p{margin:0; padding:6px 7px; font-size:9px; color:#8C909E}
+.ui-tv .rail div.focus{outline:2px solid var(--ac); outline-offset:2px}
+.ui-tv .rail div.focus u{background:#2B2B38}
+.ui-tv .hint{display:flex; align-items:center; gap:7px; padding:9px 14px; border-top:1px solid #1E1E27;
+  font-family:var(--f-mono); font-size:8.5px; letter-spacing:.1em; text-transform:uppercase; color:#6E7280}
+
+/* google business profile */
+.ui-gmap{height:118px; position:relative; background:
+  repeating-linear-gradient(90deg,#E9E7E0 0 38px,#F3F2EE 38px 76px),
+  repeating-linear-gradient(0deg,#E9E7E0 0 34px,#F3F2EE 34px 68px)}
+.ui-gmap::after{content:""; position:absolute; left:0; right:0; top:52%; height:7px; background:#DEDBD2}
+.ui-gpin{position:absolute; left:46%; top:44%; width:18px; height:18px; margin:-9px 0 0 -9px;
+  border-radius:50% 50% 50% 0; transform:rotate(-45deg); background:var(--ac);
+  box-shadow:0 5px 12px -3px rgba(0,0,0,.45)}
+.ui-gpin::after{content:""; position:absolute; inset:5px; border-radius:50%; background:#fff}
+.ui-stars{display:flex; align-items:center; gap:3px}
+.ui-stars i{width:11px; height:11px; background:#FFB400; display:block;
+  clip-path:polygon(50% 0,61% 35%,98% 35%,68% 57%,79% 91%,50% 70%,21% 91%,32% 57%,2% 35%,39% 35%)}
+.ui-gact{display:flex; gap:7px; margin-top:12px}
+.ui-gact span{flex:1; text-align:center; padding:7px 0; border:1px solid var(--line); border-radius:99px;
+  font-size:10px; font-weight:600; color:var(--ink)}
+.ui-gact span:first-child{background:var(--ac); border-color:transparent; color:#fff}
+
+/* integrations log */
+.ui-conn{display:flex; align-items:center; gap:10px; padding:10px 0; border-top:1px solid var(--line)}
+.ui-conn:first-of-type{border-top:0}
+.ui-conn u{width:28px; height:28px; border-radius:8px; flex:none; background:var(--paper-2); text-decoration:none;
+  display:grid; place-items:center; font-family:var(--f-dis); font-size:11px; font-weight:700; color:var(--ink-60)}
+.ui-conn u.on{background:var(--ac); color:#fff}
+.ui-conn .nm{font-size:11.5px; font-weight:500; color:var(--ink)}
+.ui-conn .mt{font-size:9.5px; color:var(--ink-40); margin-top:2px}
+.ui-conn .rt{margin-left:auto; text-align:right}
+
+@media (max-width:900px){
+  .ui{max-width:none}
+  .ui-phone{max-width:238px; margin-inline:auto}
+}
+
+/* ══════════════════════════════════════════════════════════
+   SLIDES — dark register.
+   Six blazing-white full-height panels made the empty space
+   shout. On ink the white interface panel becomes the subject.
+   ══════════════════════════════════════════════════════════ */
+.slide{background:var(--ink); border-color:transparent;
+  box-shadow:0 -24px 60px -30px rgba(0,0,0,.75)}
+.slide-txt h3{color:var(--white)}
+.slide-txt p{color:#A6A9B2}
+.slide-txt .mono{color:#8D909A}
+.slide-txt .chip{background:rgba(255,255,255,.06); border-color:rgba(255,255,255,.14); color:#C6C8CE}
+.slide-txt .btn-line{color:var(--white); border-color:rgba(255,255,255,.4)}
+.slide-txt .btn-line:hover{background:var(--white); color:var(--ink); border-color:var(--white)}
+.slide-count{color:#6E7280}
+.slide-count b{color:var(--ac)}
+
+/* Bigger, right-weighted, running toward the panel edge instead of floating
+   with air on all four sides. */
+.slide-in{grid-template-columns:minmax(0,.88fr) minmax(0,1.12fr)}
+.slide-art{justify-items:end}
+.ui{max-width:none; width:100%; font-size:13px;
+  margin-right:calc(var(--gut) * -0.6);
+  box-shadow:0 44px 90px -34px rgba(0,0,0,.72), 0 3px 10px rgba(0,0,0,.3)}
+.ui-body{padding:16px}
+.ui-stat b{font-size:19px}
+.ui-stat span{font-size:10px}
+.ui-table td{font-size:12.5px; padding:9px 9px 9px 0}
+.ui-table th{font-size:9px}
+.ui-phone{max-width:300px; margin-right:0; margin-left:auto}
+.ui-tv{max-width:none}
+
+/* The stat row read as one screaming tile beside three quiet ones. Same frame
+   for all four; the accent lives in the number. */
+.ui-stat.lead{background:var(--white); border-color:var(--line)}
+.ui-stat.lead b{color:var(--ac)}
+.ui-stat.lead span{color:var(--ink-40); opacity:1}
+
+/* An unlabelled row of identical bars is the classic fake-dashboard tell.
+   Give it a baseline, a scale and months. */
+.ui-chart{align-items:flex-end; height:88px; padding:12px 2px 0; position:relative}
+.ui-chart i{opacity:.28}
+.ui-chart i:last-child{opacity:1}
+.ui-xaxis{display:flex; gap:7px; margin-top:6px; padding-top:7px; border-top:1px solid var(--line)}
+.ui-xaxis span{flex:1; text-align:center; font-family:var(--f-mono); font-size:8.5px;
+  letter-spacing:.06em; color:var(--ink-40)}
+.ui-caption{display:flex; justify-content:space-between; align-items:baseline; margin-top:14px}
+.ui-caption b{font-size:12px; font-weight:600; color:var(--ink)}
+.ui-caption span{font-family:var(--f-mono); font-size:9px; letter-spacing:.1em;
+  text-transform:uppercase; color:var(--ink-40)}
+
+@media (max-width:900px){
+  .slide-in{grid-template-columns:1fr}
+  .ui{margin-right:0}
+  .ui-phone{margin-inline:auto}
+}
+
+/* ── Layered panels ──
+   One centred card leaves air on all four sides and reads as a placeholder.
+   A main panel with a second card breaking its edge reads as a live product. */
+.ui-wrap{position:relative; width:100%; display:flex; justify-content:flex-end; align-items:center}
+.ui-float{position:absolute; left:-4%; bottom:-9%; z-index:4;
+  width:min(62%,300px); background:var(--white); border:1px solid var(--line);
+  border-radius:13px; padding:13px 15px;
+  box-shadow:0 34px 70px -26px rgba(0,0,0,.7), 0 2px 8px rgba(0,0,0,.25)}
+.ui-float .fh{display:flex; align-items:center; gap:9px}
+.ui-float .fi{width:30px; height:30px; border-radius:9px; flex:none; display:grid; place-items:center;
+  background:var(--ac); color:#fff; font-family:var(--f-dis); font-size:12px; font-weight:700}
+.ui-float .ft{font-size:12px; font-weight:600; color:var(--ink); letter-spacing:-.01em; line-height:1.3}
+.ui-float .fs{font-family:var(--f-mono); font-size:8.5px; letter-spacing:.11em; text-transform:uppercase;
+  color:var(--ink-40); margin-top:3px; display:block}
+.ui-float .fm{margin:11px 0 0; font-size:11.5px; color:var(--ink-60); line-height:1.5}
+.ui-float .fr{display:flex; justify-content:space-between; align-items:baseline; margin-top:11px;
+  padding-top:10px; border-top:1px solid var(--line)}
+.ui-float .fr b{font-family:var(--f-dis); font-size:17px; font-weight:700; letter-spacing:-.03em; color:var(--ink)}
+.ui-float .fr span{font-family:var(--f-mono); font-size:9px; letter-spacing:.1em; text-transform:uppercase; color:var(--ink-40)}
+
+/* more presence overall */
+.ui{font-size:13.5px}
+.ui-body{padding:18px}
+.ui-stat b{font-size:21px}
+.ui-table td{font-size:13px; padding:10px 10px 10px 0}
+.ui-site .hero{padding:22px 16px}
+.ui-site .hero h6{font-size:22px}
+.ui-site .cards u{height:46px}
+.ui-tv .feature{padding:18px}
+.ui-tv .feature b{font-size:19px}
+.ui-tv .rail u{height:52px}
+.ui-gmap{height:140px}
+.ui-phone{max-width:310px}
+
+@media (max-width:900px){
+  .ui-float{position:static; width:100%; margin-top:16px}
+  .ui-wrap{flex-direction:column}
+}
+
+/* ══════════════════════════════════════════════════════════
+   SNAP — a cropped slice of a real interface, sitting flush to
+   the top of a card. Same idea as the slide panels, a different
+   structure: small, cut off at the fold, evidence not decoration.
+   ══════════════════════════════════════════════════════════ */
+.snap{position:relative; height:172px; overflow:hidden; background:var(--paper);
+  border-bottom:1px solid var(--line); font-size:11px; line-height:1.3; color:var(--ink)}
+.snap *{box-sizing:border-box}
+.snap::after{content:""; position:absolute; inset:auto 0 0 0; height:46px;
+  background:linear-gradient(to bottom, transparent, var(--white)); pointer-events:none}
+.card:hover .snap{background:var(--paper-2)}
+.snap-in{position:absolute; inset:14px 14px auto 14px; background:var(--white);
+  border:1px solid var(--line); border-radius:10px; overflow:hidden;
+  box-shadow:0 14px 30px -18px rgba(14,14,17,.35)}
+.snap-bar{display:flex; align-items:center; gap:5px; padding:7px 9px;
+  border-bottom:1px solid var(--line); background:var(--paper)}
+.snap-bar i{width:6px; height:6px; border-radius:50%; background:#D6D3CB; display:block}
+.snap-bar u{flex:1; height:15px; border-radius:99px; background:var(--white); border:1px solid var(--line);
+  display:flex; align-items:center; padding:0 8px; font-family:var(--f-mono); font-size:8px;
+  color:var(--ink-40); text-decoration:none; overflow:hidden; white-space:nowrap}
+.snap-t{display:flex; align-items:center; justify-content:space-between; gap:8px;
+  padding:9px 11px; border-bottom:1px solid var(--line)}
+.snap-t b{font-size:11.5px; font-weight:600; letter-spacing:-.01em}
+.snap-t span{font-family:var(--f-mono); font-size:8px; letter-spacing:.11em;
+  text-transform:uppercase; color:var(--ink-40)}
+.snap-body{padding:10px 11px}
+.snap-tiles{display:grid; grid-template-columns:repeat(3,1fr); gap:7px}
+.snap-tiles div{border:1px solid var(--line); border-radius:7px; padding:7px 8px}
+.snap-tiles b{display:block; font-family:var(--f-dis); font-size:15px; font-weight:700; letter-spacing:-.03em; line-height:1}
+.snap-tiles b.ac{color:var(--ac)}
+.snap-tiles span{display:block; margin-top:3px; font-size:8.5px; color:var(--ink-40)}
+.snap-rows{margin-top:9px}
+.snap-row{display:flex; align-items:center; gap:8px; padding:7px 0; border-top:1px solid var(--line)}
+.snap-row u{width:20px; height:20px; border-radius:6px; background:var(--paper-2); flex:none; text-decoration:none;
+  display:grid; place-items:center; font-family:var(--f-dis); font-size:9px; font-weight:700; color:var(--ink-60)}
+.snap-row u.ac{background:var(--ac); color:#fff}
+.snap-row .n{font-size:10.5px; font-weight:500}
+.snap-row .v{margin-left:auto; font-family:var(--f-mono); font-size:9.5px; color:var(--ink-60)}
+.snap-chip{display:inline-flex; align-items:center; gap:4px; padding:2px 7px; border-radius:99px;
+  font-size:8.5px; font-weight:500; background:var(--paper); color:var(--ink-60)}
+.snap-chip i{width:5px; height:5px; border-radius:50%; background:currentColor; display:block}
+.snap-chip.ok{background:#E7F8F0; color:#0A7A4E}
+.snap-chip.warn{background:#FFF3E6; color:#A65A16}
+.snap-hero{padding:11px}
+.snap-hero h6{margin:0; font-family:var(--f-dis); font-size:14px; font-weight:700; letter-spacing:-.028em; line-height:1.1}
+.snap-hero p{margin:5px 0 0; font-size:9.5px; color:var(--ink-60)}
+.snap-thumbs{display:grid; grid-template-columns:repeat(3,1fr); gap:6px; padding:0 11px 11px}
+.snap-thumbs u{display:block; height:28px; border-radius:6px; background:var(--paper-2); text-decoration:none}
+.snap-thumbs u.ac{background:var(--ac); opacity:.85}
+.snap-stars{display:flex; gap:2px; align-items:center}
+.snap-stars i{width:9px; height:9px; background:#FFB400; display:block;
+  clip-path:polygon(50% 0,61% 35%,98% 35%,68% 57%,79% 91%,50% 70%,21% 91%,32% 57%,2% 35%,39% 35%)}
+
+/* dark variant for the TV card */
+.snap.dark{background:#141419}
+.snap.dark::after{background:linear-gradient(to bottom, transparent, var(--white))}
+.snap.dark .snap-in{background:#0E0E14; border-color:#242430}
+.snap.dark .snap-t{border-color:#1F1F29}
+.snap.dark .snap-t b{color:#fff}
+.snap.dark .snap-feature{margin:9px 11px; border-radius:8px; padding:10px;
+  background:linear-gradient(120deg,var(--ac),rgba(0,0,0,.4))}
+.snap.dark .snap-feature b{display:block; color:#fff; font-family:var(--f-dis); font-size:13px; font-weight:700; letter-spacing:-.03em}
+.snap.dark .snap-feature span{display:block; margin-top:3px; color:rgba(255,255,255,.85); font-size:8.5px}
+.snap.dark .snap-rail{display:grid; grid-template-columns:repeat(4,1fr); gap:6px; padding:0 11px}
+.snap.dark .snap-rail u{display:block; height:26px; border-radius:5px; background:#22222D; text-decoration:none}
+.snap.dark .snap-rail u.focus{outline:2px solid var(--ac); outline-offset:2px; background:#2C2C39}
+
+/* card layout adjusts when it carries a snap */
+.card.has-snap{padding:0; display:flex; flex-direction:column}
+.card.has-snap .in{padding:clamp(18px,1.9vw,24px); padding-top:14px}
+.card.has-snap .ico{display:none}
+.card.has-snap .blobc{z-index:4}
+a.card.has-snap{padding-right:0}
+a.card.has-snap::after{top:auto; bottom:clamp(20px,2vw,26px); right:clamp(18px,1.9vw,24px); z-index:5}
+.card.has-snap h3{margin-top:2px}
+
+@media (max-width:680px){ .snap{height:158px} }
+
+/* ══════════════════════════════════════════════════════════
+   PROOF — the header of a case-study card. Not a cropped app
+   window like `.snap`; a before/after readout, because what a
+   case study has to show is what changed.
+   ══════════════════════════════════════════════════════════ */
+.work .top{display:block; min-height:0; padding:clamp(20px,2.2vw,26px)}
+.work .top::after{display:none}
+.proof{margin-top:16px; background:rgba(255,255,255,.14); border:1px solid rgba(255,255,255,.22);
+  border-radius:11px; padding:12px 13px; backdrop-filter:blur(3px); -webkit-backdrop-filter:blur(3px)}
+.proof-row{display:flex; align-items:center; gap:10px}
+.proof-row + .proof-row{margin-top:9px; padding-top:9px; border-top:1px solid rgba(255,255,255,.2)}
+.proof-k{font-family:var(--f-mono); font-size:8.5px; letter-spacing:.12em; text-transform:uppercase;
+  color:rgba(255,255,255,.7); width:52px; flex:none}
+.proof-v{font-size:11.5px; color:rgba(255,255,255,.95); line-height:1.35}
+.proof-v s{text-decoration:line-through; opacity:.6}
+.proof-arrow{margin-left:auto; font-family:var(--f-mono); font-size:11px; color:#fff; opacity:.8}
+.proof-tag{display:inline-flex; align-items:center; gap:5px; margin-left:auto; padding:3px 9px;
+  border-radius:99px; background:rgba(255,255,255,.9); color:var(--ink);
+  font-size:9.5px; font-weight:600; flex:none}
+.proof-tag i{width:5px; height:5px; border-radius:50%; background:#0A7A4E; display:block}
+/* the yellow card needs ink text, white-on-sun fails contrast */
+.work[style*="FFC53D"] .top .mono,
+.work[style*="FFC53D"] .top h3{color:var(--ink)}
+.work[style*="FFC53D"] .proof{background:rgba(0,0,0,.10); border-color:rgba(0,0,0,.16)}
+.work[style*="FFC53D"] .proof-k{color:rgba(14,14,17,.65)}
+.work[style*="FFC53D"] .proof-v{color:rgba(14,14,17,.92)}
+.work[style*="FFC53D"] .proof-arrow{color:var(--ink)}
