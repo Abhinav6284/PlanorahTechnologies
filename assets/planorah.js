@@ -1,31 +1,34 @@
 /* ══════════════════════════════════════════════
-   ⚙️  EDIT THIS — your WhatsApp number and email
+   EDIT THIS — your WhatsApp number and email
    ══════════════════════════════════════════════ */
 var PLANORAH = {
   whatsapp : "916284219729",         // country code + number, digits only
   email    : "planorahtechnologies@gmail.com",
-  company  : "Planorah Technologies"
+  company  : "Planorah Technologies",
+  /* true = switch motion off for visitors whose device asks for reduced motion */
+  respectReducedMotion : false
 };
 
 (function(){
-  "use strict";
-  var reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-  var fine   = window.matchMedia('(pointer:fine)').matches;
+  'use strict';
+  var doc = document.documentElement;
+  doc.classList.add('js');
+  var reduce = PLANORAH.respectReducedMotion && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  if (!reduce) doc.classList.add('motion');
 
-  /* ── Nav ── */
-  var nav = document.getElementById('nav');
-  if (nav){
-    var sc = function(){ nav.classList.toggle('stuck', window.scrollY > 10); };
-    sc(); window.addEventListener('scroll', sc, {passive:true});
-  }
+  /* ── Header turns solid once the page scrolls ── */
+  var hd = document.getElementById('hd');
+  function stick(){ if (hd) hd.classList.toggle('stuck', window.scrollY > 24); }
+  stick(); window.addEventListener('scroll', stick, {passive:true});
 
-  /* ── Mobile menu — the nav links are hidden under 1060px, so they need a way in ── */
+  /* ── Mobile menu ── */
   (function(){
-    var btn = document.getElementById('burger'), panel = document.getElementById('mobnav');
+    var btn = document.getElementById('burger'), panel = document.getElementById('mob');
     if (!btn || !panel) return;
     function set(open){
       panel.classList.toggle('open', open);
       btn.setAttribute('aria-expanded', open ? 'true' : 'false');
+      btn.textContent = open ? 'Close' : 'Menu';
       document.body.style.overflow = open ? 'hidden' : '';
     }
     btn.addEventListener('click', function(){ set(!panel.classList.contains('open')); });
@@ -33,574 +36,37 @@ var PLANORAH = {
     document.addEventListener('keydown', function(e){ if (e.key === 'Escape') set(false); });
   })();
 
-  /* ── Mark the current page in the nav ── */
+  /* ── Mark the current page in the navigation ── */
   (function(){
-    var here = location.pathname.replace(/index\.html$/, '').replace(/\/$/, '') || '/';
-    document.querySelectorAll('.nav-links a, .mobnav a').forEach(function(a){
-      var href = a.getAttribute('href') || '';
-      if (href.charAt(0) === '#' || /^https?:/.test(href)) return;
-      var path = new URL(a.href, location.href).pathname.replace(/index\.html$/, '').replace(/\/$/, '') || '/';
-      if (path === here) a.setAttribute('aria-current', 'page');
+    var here = location.pathname.replace(/index\.html$/, '');
+    document.querySelectorAll('.hd-nav a, .mob a').forEach(function(a){
+      var p = new URL(a.href, location.href).pathname.replace(/index\.html$/, '');
+      if (p !== '/' && here.indexOf(p) === 0 && p.length > 1) a.setAttribute('aria-current', 'page');
     });
   })();
 
-  /* ── Reveals ── */
-  var rz = document.querySelectorAll('.rz');
-  if ('IntersectionObserver' in window && !reduce){
+  /* ── Entrances: the parts of each section rise in, staggered ── */
+  (function(){
+    var groups = document.querySelectorAll('[data-in-group]');
+    groups.forEach(function(g){
+      g.querySelectorAll('[data-in]').forEach(function(el, i){ el.style.setProperty('--i', i); });
+      g.querySelectorAll('.bar-seg').forEach(function(el, i){ el.style.setProperty('--i', i); });
+    });
+    if (!('IntersectionObserver' in window) || reduce){
+      groups.forEach(function(g){ g.classList.add('is-in'); });
+      return;
+    }
     var io = new IntersectionObserver(function(en){
-      en.forEach(function(e,i){
-        if (e.isIntersecting){ var el = e.target; setTimeout(function(){ el.classList.add('in'); }, Math.min(i*70,260)); io.unobserve(el); }
+      en.forEach(function(e){ if (e.isIntersecting){ e.target.classList.add('is-in'); io.unobserve(e.target); } });
+    }, {rootMargin: '0px 0px -12% 0px', threshold: 0.01});
+    groups.forEach(function(g){ io.observe(g); });
+    /* never leave content hidden: anything still waiting after 2.5s is shown */
+    setTimeout(function(){
+      groups.forEach(function(g){
+        if (g.getBoundingClientRect().top < innerHeight) g.classList.add('is-in');
       });
-    }, {rootMargin:'0px 0px -6% 0px', threshold:.1});
-    rz.forEach(function(el){ io.observe(el); });
-  } else { rz.forEach(function(el){ el.classList.add('in'); }); }
-
-  /* ══════════════════════════════════════════════════════════
-     3D toolkit — shared by the hero constellation and the
-     platforms carousel. Every object on the site is built from
-     an extruded, beveled rounded rectangle.
-     ══════════════════════════════════════════════════════════ */
-  function mat(hex, metal, rough, glow){
-    var o = {color:new THREE.Color(hex), metalness:metal, roughness:rough};
-    if (glow){ o.emissive = new THREE.Color(hex); o.emissiveIntensity = glow; }
-    return new THREE.MeshStandardMaterial(o);
-  }
-
-  function roundedRect(w, h, r){
-    var x = -w/2, y = -h/2, s = new THREE.Shape();
-    s.moveTo(x, y + r);
-    s.lineTo(x, y + h - r); s.quadraticCurveTo(x, y + h, x + r, y + h);
-    s.lineTo(x + w - r, y + h); s.quadraticCurveTo(x + w, y + h, x + w, y + h - r);
-    s.lineTo(x + w, y + r); s.quadraticCurveTo(x + w, y, x + w - r, y);
-    s.lineTo(x + r, y); s.quadraticCurveTo(x, y, x, y + r);
-    return s;
-  }
-
-  function slab(w, h, depth, r, bevel){
-    var g = new THREE.ExtrudeGeometry(roundedRect(w, h, r), {depth:depth, bevelEnabled:true, bevelThickness:bevel, bevelSize:bevel, bevelSegments:4, curveSegments:12});
-    g.center();
-    return g;
-  }
-
-  /* Interface furniture drawn on a lit screen — without it every device is just a
-     coloured rectangle and a phone is indistinguishable from a tablet. */
-  function screenUI(sw, sh, z, kind){
-    var g = new THREE.Group();
-    var ink = new THREE.MeshStandardMaterial({
-      color:0xffffff, metalness:.05, roughness:.5,
-      emissive:0xffffff, emissiveIntensity:.3, transparent:true, opacity:.9
-    });
-    function bar(w, h, x, y, r){
-      var m = new THREE.Mesh(slab(w, h, .015, r || Math.min(w, h) * .42, .004), ink);
-      m.position.set(x, y, z);
-      g.add(m);
-      return m;
-    }
-    if (kind === 'wide'){                       /* TV / monitor: a hero tile and a shelf */
-      bar(sw * .40, sh * .40, -sw * .26,  sh * .12, .05);
-      bar(sw * .22, sh * .10,  sw * .16,  sh * .26, .03);
-      bar(sw * .30, sh * .07,  sw * .20,  sh * .10, .025);
-      [0, 1, 2].forEach(function(i){ bar(sw * .17, sh * .20, -sw * .30 + i * sw * .22, -sh * .30, .03); });
-    } else {                                    /* phone / tablet / kiosk: header + list */
-      bar(sw * .46, sh * .045, -sw * .24,  sh * .42, .02);
-      bar(sw * .84, sh * .16,   0,         sh * .26, .04);
-      [0, 1, 2].forEach(function(i){ bar(sw * .84, sh * .075, 0, sh * (.06 - i * .13), .025); });
-      bar(sw * .40, sh * .06,  -sw * .21, -sh * .30, .02);
-    }
-    return g;
-  }
-
-  /* One screen we ship to: shell, lit display, interface, and whatever physical
-     detail identifies it — a stand, a strap, a notch, side buttons. */
-  function device(c){
-    var g = new THREE.Group();
-    var shellMat = mat(c.shell, .58, .27);
-    g.add(new THREE.Mesh(slab(c.w, c.h, c.d, c.r, Math.min(.045, c.d * .32)), shellMat));
-
-    var sw = c.w - c.bez * 2, sh = c.h - c.bez * 2;
-    var screen = new THREE.Mesh(
-      slab(sw, sh, .04, Math.max(c.r - c.bez * .7, .03), .012),
-      mat(c.screen, .12, .42, c.glow || .14)
-    );
-    var sz = c.d / 2 + .05;
-    screen.position.z = sz;
-    g.add(screen);
-
-    if (c.ui !== false) g.add(screenUI(sw, sh, sz + .035, c.ui));
-
-    /* Dark furniture — notch, camera, home indicator, buttons */
-    var dark = mat(0x0B0B10, .3, .5);
-    if (c.notch){                                  /* phone: camera pill in the top bezel */
-      var n = new THREE.Mesh(slab(sw * .30, sh * .045, .03, .018, .006), dark);
-      n.position.set(0, sh * .47, sz + .04);
-      g.add(n);
-    }
-    if (c.cam){                                    /* tablet: single lens above the screen */
-      var cam = new THREE.Mesh(new THREE.CylinderGeometry(.022, .022, .03, 16), dark);
-      cam.rotation.x = Math.PI / 2;
-      cam.position.set(0, c.h / 2 - c.bez * .5, c.d / 2 + .03);
-      g.add(cam);
-    }
-    if (c.home){                                   /* phone: home indicator */
-      var hm = new THREE.Mesh(slab(sw * .38, sh * .012, .02, .006, .003),
-        new THREE.MeshStandardMaterial({color:0xffffff, emissive:0xffffff, emissiveIntensity:.4,
-          metalness:.05, roughness:.5, transparent:true, opacity:.85}));
-      hm.position.set(0, -sh * .46, sz + .04);
-      g.add(hm);
-    }
-    if (c.buttons){                                /* side keys, so the slab reads as hardware */
-      var side = mat(c.shell, .7, .22);
-      var vol = new THREE.Mesh(new THREE.BoxGeometry(.022, c.h * .16, c.d * .62), side);
-      vol.position.set(-c.w / 2 - .008, c.h * .16, 0);
-      var pwr = new THREE.Mesh(new THREE.BoxGeometry(.022, c.h * .11, c.d * .62), side);
-      pwr.position.set(c.w / 2 + .008, c.h * .18, 0);
-      g.add(vol, pwr);
-    }
-    if (c.crown){                                  /* watch: digital crown */
-      var cr = new THREE.Mesh(new THREE.CylinderGeometry(.045, .045, .05, 18), mat(0x9A9AA6, .8, .28));
-      cr.rotation.z = Math.PI / 2;
-      cr.position.set(c.w / 2 + .03, c.h * .10, 0);
-      g.add(cr);
-    }
-
-    if (c.stand){
-      var neck = new THREE.Mesh(new THREE.BoxGeometry(.15, c.stand, .13), mat(c.shell, .6, .3));
-      neck.position.y = -c.h / 2 - c.stand / 2 + .03;
-      var foot = new THREE.Mesh(slab(c.w * .40, .11, .17, .05, .02), mat(c.shell, .6, .3));
-      foot.position.y = -c.h / 2 - c.stand;
-      foot.rotation.x = Math.PI / 2;
-      g.add(neck, foot);
-    }
-    if (c.strap){
-      var sm = mat(0x33333D, .4, .52);
-      [1, -1].forEach(function(dir){
-        var b = new THREE.Mesh(slab(.30, .40, .07, .06, .02), sm);
-        b.position.set(0, dir * (c.h / 2 + .17), -.012);
-        g.add(b);
-      });
-    }
-    if (c.base){                                   /* floor-standing kiosk */
-      var post = new THREE.Mesh(new THREE.BoxGeometry(.20, c.base, .16), mat(c.shell, .6, .3));
-      post.position.y = -c.h / 2 - c.base / 2 + .03;
-      var pad = new THREE.Mesh(slab(c.w * .82, .13, .30, .06, .025), mat(c.shell, .6, .3));
-      pad.position.y = -c.h / 2 - c.base;
-      pad.rotation.x = Math.PI / 2;
-      g.add(post, pad);
-    }
-    return g;
-  }
-
-  /* ══ WebGL hero — real 3D objects ══ */
-  (function(){
-    var stage = document.getElementById('stage');
-    var cv = document.getElementById('gl');
-    if (!stage || !cv) return;                       /* interior pages have no hero stage */
-    if (!window.THREE){ stage.classList.add('no3d'); return; }
-
-    var renderer;
-    try{
-      renderer = new THREE.WebGLRenderer({canvas:cv, alpha:true, antialias:true});
-    }catch(e){ stage.classList.add('no3d'); return; }
-    renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
-
-    var scene  = new THREE.Scene();
-    var camera = new THREE.PerspectiveCamera(42, 1, .1, 100);
-    camera.position.set(0, 0, 9);
-
-    var group = new THREE.Group();
-    scene.add(group);
-
-    /* The constellation: every screen Planorah ships to, wired back to one team */
-    var SCREENS = [
-      /* TV */     { w:2.90, h:1.66, d:.13, r:.05, bez:.07, shell:0x14141A, screen:0xFF6B3D, ui:'wide',
-                     p:[ .88, 1.92,-1.50], rot:[-.05,-.21, .01], stand:.34 },
-      /* monitor */{ w:2.02, h:1.30, d:.12, r:.05, bez:.06, shell:0xF2F1EC, screen:0x6248F5, ui:'wide',
-                     p:[-2.12, .12, -.50], rot:[-.04, .27,-.02], stand:.30 },
-      /* tablet */ { w:1.18, h:1.62, d:.09, r:.09, bez:.08, shell:0xE6E4DE, screen:0x2F7CF6,
-                     cam:true, buttons:true, p:[ 2.18,-.38, -.10], rot:[ .06,-.31, .05] },
-      /* phone */  { w:.66,  h:1.36, d:.09, r:.12, bez:.045, shell:0x14141A, screen:0x0FB981,
-                     notch:true, home:true, buttons:true, p:[ .78,-2.02,  .90], rot:[ .04, .23,-.08] },
-      /* watch */  { w:.58,  h:.68,  d:.15, r:.19, bez:.055, shell:0x14141A, screen:0xFFC53D,
-                     ui:false, crown:true, strap:true, p:[-1.92, 1.86,  .70], rot:[ .05, .31, .10] }
-    ];
-
-    var screens = [], pulses = [];
-    SCREENS.forEach(function(c, i){
-      var d = device(c);
-      d.position.set(c.p[0], c.p[1], c.p[2]);
-      d.rotation.set(c.rot[0], c.rot[1], c.rot[2]);
-      d.userData.baseY = c.p[1];
-      d.userData.baseRY = c.rot[1];
-      d.userData.ph = i * 1.27;
-      group.add(d); screens.push(d);
-
-      var to = new THREE.Vector3(c.p[0], c.p[1], c.p[2]);
-      group.add(new THREE.Line(
-        new THREE.BufferGeometry().setFromPoints([new THREE.Vector3(0,0,0), to.clone()]),
-        new THREE.LineBasicMaterial({color:0x8A8D95, transparent:true, opacity:.3})
-      ));
-
-      var p = new THREE.Mesh(new THREE.SphereGeometry(.062, 16, 16),
-        new THREE.MeshBasicMaterial({color:c.screen, transparent:true}));
-      group.add(p);
-      pulses.push({m:p, to:to, t:i * .19, sp:.0040 + i * .0005});
-    });
-
-    /* Hub — the Planorah mark, where every screen connects back to */
-    var hub = new THREE.Group();
-    var hubBody = new THREE.Mesh(slab(.88, .88, .34, .27, .055), mat(0x6248F5, .45, .22));
-    var hubBar  = new THREE.Mesh(slab(.53, .155, .06, .065, .02), mat(0xffffff, .1, .45));
-    var hubDot  = new THREE.Mesh(slab(.34, .22, .06, .06, .02),   mat(0xFFC53D, .2, .35));
-    hubBar.position.set(0, .235, .27);
-    hubDot.position.set(-.225, -.255, .27);
-    hub.add(hubBody, hubBar, hubDot);
-    group.add(hub);
-
-    var halo = new THREE.Mesh(new THREE.TorusGeometry(1.06, .011, 8, 90),
-      new THREE.MeshBasicMaterial({color:0x6248F5, transparent:true, opacity:.26}));
-    halo.rotation.x = Math.PI / 2.3;
-    group.add(halo);
-
-    group.scale.setScalar(1.12);
-
-    scene.add(new THREE.HemisphereLight(0xffffff, 0xdedad0, .78));
-    var key = new THREE.DirectionalLight(0xffffff, .95); key.position.set(4, 6, 6); scene.add(key);
-    var p1 = new THREE.PointLight(0x6248F5, .85, 30); p1.position.set(-6, 3, 4); scene.add(p1);
-    var p2 = new THREE.PointLight(0xFFC53D, .6, 30);  p2.position.set(6, -3, 3); scene.add(p2);
-
-    function size(){
-      var r = stage.getBoundingClientRect();
-      var w = Math.max(r.width, 1), h = Math.max(r.height, 1);
-      renderer.setSize(w, h, false);
-      camera.aspect = w / h; camera.updateProjectionMatrix();
-      camera.position.z = w < 520 ? 11.5 : 9.5;
-    }
-    size();
-    window.addEventListener('resize', size);
-
-    var mx = 0, my = 0, tX = 0, tY = 0, t = 0;
-    if (fine && !reduce){
-      window.addEventListener('mousemove', function(e){
-        tX = (e.clientX / window.innerWidth - .5) * 2;
-        tY = (e.clientY / window.innerHeight - .5) * 2;
-      }, {passive:true});
-    }
-
-    function frame(){
-      t += .01;
-      mx += (tX - mx) * .05; my += (tY - my) * .05;
-      /* sway, never far enough to turn a screen edge-on */
-      group.rotation.y = mx * .26 + Math.sin(t * .22) * .15;
-      group.rotation.x = my * .16 + Math.cos(t * .18) * .05;
-
-      screens.forEach(function(d){
-        d.position.y = d.userData.baseY + Math.sin(t * .7 + d.userData.ph) * .13;
-        d.rotation.y = d.userData.baseRY + Math.sin(t * .45 + d.userData.ph) * .07;
-      });
-      hub.rotation.y = Math.sin(t * .3) * .5;
-      halo.rotation.z += .0016;
-
-      pulses.forEach(function(p){
-        p.t += p.sp; if (p.t > 1) p.t = 0;
-        var e = p.t * p.t * (3 - 2 * p.t);
-        p.m.position.set(p.to.x * e, p.to.y * e, p.to.z * e);
-        p.m.material.opacity = Math.sin(p.t * Math.PI);
-      });
-
-      renderer.render(scene, camera);
-      if (!reduce) requestAnimationFrame(frame);
-    }
-    frame();
+    }, 2500);
   })();
-
-  /* ══ Platforms carousel — the six screens, as real objects on a turntable ══
-     Replaces a CSS cube whose translucent faces let the back labels bleed
-     through and render mirrored. Here each platform is a solid object and the
-     name is read from HTML underneath, so it is always legible. */
-  (function(){
-    var stage = document.getElementById('platStage');
-    var cv    = document.getElementById('gl2');
-    var label = document.getElementById('platName');
-    var sub   = document.getElementById('platSub');
-    if (!stage || !cv || !window.THREE) return;
-
-    var renderer;
-    try{
-      renderer = new THREE.WebGLRenderer({canvas:cv, alpha:true, antialias:true});
-    }catch(e){ return; }
-    renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
-
-    var scene  = new THREE.Scene();
-    var camera = new THREE.PerspectiveCamera(40, 1, .1, 100);
-    camera.position.set(0, .55, 7.4);
-    camera.lookAt(0, -.1, 0);
-
-    var ring = new THREE.Group();
-    scene.add(ring);
-
-    /* Dark shells with lit screens — this section sits on --ink */
-    var PLATFORMS = [
-      { name:'Web',    sub:'Responsive · PWA',   w:2.00, h:1.26, d:.11, r:.05, bez:.055, shell:0x2A2A36,
-        screen:0x6248F5, glow:.5, ui:'wide', stand:.30 },
-      { name:'Mobile', sub:'iOS · Android',      w:.72,  h:1.48, d:.09, r:.13, bez:.048, shell:0x2A2A36,
-        screen:0x0FB981, glow:.5, notch:true, home:true, buttons:true },
-      { name:'TV',     sub:'tvOS · Android TV',  w:2.35, h:1.34, d:.11, r:.04, bez:.05, shell:0x2A2A36,
-        screen:0xFF6B3D, glow:.5, ui:'wide', stand:.30 },
-      { name:'Tablet', sub:'iPadOS · Android',   w:1.24, h:1.70, d:.08, r:.09, bez:.075, shell:0x2A2A36,
-        screen:0x2F7CF6, glow:.5, cam:true, buttons:true },
-      { name:'Watch',  sub:'watchOS · Wear OS',  w:.66,  h:.78,  d:.16, r:.21, bez:.06, shell:0x2A2A36,
-        screen:0xFFC53D, glow:.5, ui:false, crown:true, strap:true },
-      { name:'Kiosk',  sub:'POS · Self-service', w:1.08, h:1.66, d:.12, r:.06, bez:.07, shell:0x2A2A36,
-        screen:0x25D366, glow:.5, base:.42 }
-    ];
-
-    var R = 3.05, STEP = Math.PI * 2 / PLATFORMS.length, items = [];
-    PLATFORMS.forEach(function(c, i){
-      var a = i * STEP;
-      var d = device(c);
-      d.position.set(Math.sin(a) * R, 0, Math.cos(a) * R);
-      ring.add(d);
-      items.push({m:d, a:a, c:c});
-    });
-
-    /* Cover-flow turn: a device facing strictly outward goes edge-on at the sides and
-       renders as a bright sliver. Turning only a fraction of the way keeps every screen
-       readable while still reading as a ring in space. */
-    var TURN = .32;
-
-    /* A disc under the ring so the objects read as standing on something */
-    var disc = new THREE.Mesh(
-      new THREE.TorusGeometry(R, .012, 8, 120),
-      new THREE.MeshBasicMaterial({color:0x6248F5, transparent:true, opacity:.35})
-    );
-    disc.rotation.x = Math.PI / 2;
-    disc.position.y = -1.35;
-    scene.add(disc);
-
-    scene.add(new THREE.HemisphereLight(0x9aa0ff, 0x101014, .55));
-    var key = new THREE.DirectionalLight(0xffffff, .85); key.position.set(2, 5, 6); scene.add(key);
-    var rimL = new THREE.PointLight(0x6248F5, 1.5, 22); rimL.position.set(-5, 1.5, 2); scene.add(rimL);
-    var rimR = new THREE.PointLight(0xFF6B3D, 1.1, 22); rimR.position.set(5, -1, 2);  scene.add(rimR);
-    var fill = new THREE.PointLight(0xffffff, .5, 18);  fill.position.set(0, 1, 5);   scene.add(fill);
-
-    function size(){
-      var r = stage.getBoundingClientRect();
-      var w = Math.max(r.width, 1), h = Math.max(r.height, 1);
-      renderer.setSize(w, h, false);
-      camera.aspect = w / h; camera.updateProjectionMatrix();
-      camera.position.z = w < 460 ? 10.4 : 8.6;   /* pulled back — front devices were clipping */
-      camera.lookAt(0, -.1, 0);
-    }
-    size();
-    window.addEventListener('resize', size);
-
-    /* Drag to spin, with momentum; otherwise it drifts on its own */
-    var spin = 0, vel = .0022, down = false, lastX = 0, dragged = 0, shown = -1;
-
-    stage.addEventListener('pointerdown', function(e){
-      down = true; lastX = e.clientX; dragged = 0; vel = 0;
-      stage.setPointerCapture(e.pointerId);
-    });
-    stage.addEventListener('pointermove', function(e){
-      if (!down) return;
-      var dx = e.clientX - lastX; lastX = e.clientX; dragged += Math.abs(dx);
-      spin += dx * .008; vel = dx * .008;
-    });
-    ['pointerup','pointercancel','pointerleave'].forEach(function(ev){
-      stage.addEventListener(ev, function(){ down = false; });
-    });
-
-    function frame(){
-      if (!down){
-        spin += vel;
-        vel += (.0022 - vel) * .02;                  /* ease back to the idle drift */
-      }
-      if (spin > Math.PI * 2) spin -= Math.PI * 2;   /* keep it bounded, forever */
-      if (spin < -Math.PI * 2) spin += Math.PI * 2;
-      ring.rotation.y = spin;
-      disc.rotation.z = -spin;
-
-      /* Name whichever platform is currently facing the viewer */
-      var best = 0, bestZ = -Infinity;
-      items.forEach(function(it, i){
-        var world = it.a + spin;                      /* where it sits on the ring right now */
-        /* Wrap to [-PI, PI]. Without this the turn below grows with `spin`, the device
-           eventually rotates past 90 degrees, and you read its back with the interface
-           mirrored — exactly the fault the old CSS cube had. */
-        var off = Math.atan2(Math.sin(world), Math.cos(world));
-        var z = Math.cos(off);
-        if (z > bestZ){ bestZ = z; best = i; }
-        var f = (z + 1) / 2;                          /* 0 at the back, 1 at the front */
-        it.m.rotation.y = off * TURN - spin;          /* face the viewer, turned only partway */
-        it.m.position.y = (1 - f) * -.10;
-        it.m.scale.setScalar(.70 + f * .22);          /* nearer reads bigger, without leaving frame */
-      });
-      if (best !== shown){
-        shown = best;
-        if (label) label.textContent = items[best].c.name;
-        if (sub) sub.textContent = items[best].c.sub;
-      }
-
-      renderer.render(scene, camera);
-      if (!reduce) requestAnimationFrame(frame);
-    }
-    frame();
-  })();
-
-
-  /* ══ 3D cards — the card turns toward the cursor and its layers separate ══
-     Skipped entirely on touch and under reduced motion, where a tilting card is
-     either impossible to drive or actively unpleasant. */
-  (function(){
-    if (reduce || !fine) return;
-
-    var cards = document.querySelectorAll('.card, .work, .mate, .step, .stat-card');
-    if (!cards.length) return;
-
-    document.documentElement.classList.add('tilt3d');
-
-    var MAX = 9;                                    /* degrees of turn at the card edge */
-
-    cards.forEach(function(card){
-      card.classList.add('tilt3d');
-
-      var sheen = document.createElement('span');
-      sheen.className = 'sheen';
-      sheen.setAttribute('aria-hidden', 'true');
-      card.appendChild(sheen);
-
-      var rect = null;
-
-      function measure(){ rect = card.getBoundingClientRect(); }
-
-      card.addEventListener('pointerenter', function(e){
-        if (e.pointerType !== 'mouse') return;
-        measure();
-        card.classList.add('is-tilting');
-      });
-
-      card.addEventListener('pointermove', function(e){
-        if (!card.classList.contains('is-tilting')) return;
-        if (!rect) measure();
-        var px = (e.clientX - rect.left) / rect.width;
-        var py = (e.clientY - rect.top) / rect.height;
-        px = Math.min(Math.max(px, 0), 1);
-        py = Math.min(Math.max(py, 0), 1);
-
-        card.style.setProperty('--mx', (px * 100).toFixed(1) + '%');
-        card.style.setProperty('--my', (py * 100).toFixed(1) + '%');
-        card.style.transform =
-          'rotateX(' + ((py - .5) * -2 * MAX).toFixed(2) + 'deg)' +
-          ' rotateY(' + ((px - .5) * 2 * MAX).toFixed(2) + 'deg)' +
-          ' translateY(-10px) scale(1.015)';
-      });
-
-      card.addEventListener('pointerleave', function(){
-        card.classList.remove('is-tilting');
-        card.style.transform = '';               /* CSS eases it back flat */
-        rect = null;
-      });
-    });
-
-    /* Cached rects go stale when the page moves under the cursor */
-    window.addEventListener('scroll', function(){
-      var t = document.querySelector('.tilt3d.is-tilting');
-      if (t){ t.classList.remove('is-tilting'); t.style.transform = ''; }
-    }, {passive:true});
-  })();
-
-
-  /* ══ Stacked slides — depth as each panel is covered ══
-     Sticky alone makes the next panel slide over the last. This adds the part
-     that sells it: the covered panel scales back and dims, so the stack reads
-     as sheets settling on top of one another rather than a hard swap. */
-  (function(){
-    var slides = Array.prototype.slice.call(document.querySelectorAll('.stack .slide'));
-    if (!slides.length) return;
-
-    /* Mark the slide filling the viewport so its copy and mockup animate in.
-       This runs even under reduced motion — the CSS there resolves it to a
-       plain visible state rather than a transition. */
-    if ('IntersectionObserver' in window){
-      /* Opt into the entrance animation only once we can actually drive it.
-         Until this class lands the slides render plainly visible, so a JS
-         failure degrades to readable content rather than a blank section. */
-      var stackEl = document.querySelector('.stack');
-      if (stackEl) stackEl.classList.add('anim');
-
-      var delivered = false;
-      var seen = new IntersectionObserver(function(entries){
-        delivered = true;
-        entries.forEach(function(en){
-          en.target.classList.toggle('is-active', en.intersectionRatio > .45);
-        });
-      }, {threshold:[0, .45, .75]});
-      slides.forEach(function(s){ seen.observe(s); });
-
-      /* If the observer never reports — throttled tab, background render, an engine
-         that defers it — the slides would sit at opacity 0 forever. Reveal them. */
-      setTimeout(function(){
-        if (!delivered) slides.forEach(function(s){ s.classList.add('is-active'); });
-      }, 1500);
-    } else {
-      slides.forEach(function(s){ s.classList.add('is-active'); });
-    }
-
-    if (reduce) return;
-
-    /* Slow parallax on the visual — the only continuous motion in this section.
-       The panel drifts a little slower than the page, nothing more. */
-    var arts = slides.map(function(s){ return s.querySelector('.slide-art'); });
-    var pTick = false;
-    function parallax(){
-      pTick = false;
-      for (var i = 0; i < slides.length; i++){
-        if (!arts[i]) continue;
-        var r = slides[i].getBoundingClientRect();
-        if (r.bottom < 0 || r.top > window.innerHeight) continue;
-        var mid = (r.top + r.height / 2 - window.innerHeight / 2) / window.innerHeight;
-        arts[i].style.transform = 'translateY(' + (mid * -34).toFixed(1) + 'px)';
-      }
-    }
-    window.addEventListener('scroll', function(){
-      if (pTick) return;
-      pTick = true;
-      requestAnimationFrame(parallax);
-    }, {passive:true});
-    parallax();
-
-    var SCALE = .07, DIM = .30, ticking = false;
-
-    function apply(){
-      ticking = false;
-      for (var i = 0; i < slides.length; i++){
-        var veil = slides[i].querySelector('.slide-veil');
-        var next = slides[i + 1];
-        if (!next){                                  /* last panel is never covered */
-          slides[i].style.transform = '';
-          if (veil) veil.style.opacity = '0';
-          continue;
-        }
-        var here = slides[i].getBoundingClientRect();
-        var nx   = next.getBoundingClientRect();
-        /* how far the next panel has travelled across this one, 0 → 1 */
-        var p = 1 - Math.min(Math.max((nx.top - here.top) / Math.max(here.height, 1), 0), 1);
-        slides[i].style.transform = 'scale(' + (1 - p * SCALE).toFixed(4) + ')';
-        if (veil) veil.style.opacity = (p * DIM).toFixed(3);
-      }
-    }
-
-    function onScroll(){
-      if (ticking) return;
-      ticking = true;
-      requestAnimationFrame(apply);
-    }
-
-    window.addEventListener('scroll', onScroll, {passive:true});
-    window.addEventListener('resize', onScroll);
-    apply();
-  })();
-
 
   /* ══ WhatsApp enquiry system ══ */
   var waBase = 'https://wa.me/' + PLANORAH.whatsapp;
@@ -616,7 +82,6 @@ var PLANORAH = {
     fab.href = waBase + '?text=' + encodeURIComponent('Hello ' + PLANORAH.company + ', I have an enquiry.');
     fab.target = '_blank'; fab.rel = 'noopener';
   }
-
   document.querySelectorAll('[data-wa-mail]').forEach(function(a){
     a.href = 'mailto:' + PLANORAH.email;
     if (!a.textContent.trim()) a.textContent = PLANORAH.email;
@@ -674,13 +139,660 @@ var PLANORAH = {
     el.textContent = new Date().getFullYear();
   });
 
-  /* ── FAQ / accordion ── */
-  document.querySelectorAll('.qa').forEach(function(item){
-    var q = item.querySelector('.qa-q');
-    if (!q) return;
-    q.addEventListener('click', function(){
-      var open = item.classList.toggle('open');
-      q.setAttribute('aria-expanded', open ? 'true' : 'false');
+  /* ── The time in Ludhiana, in the footer ── */
+  (function(){
+    var el = document.getElementById('ldh-time');
+    if (!el) return;
+    var fmt = new Intl.DateTimeFormat('en-IN', {timeZone:'Asia/Kolkata', hour:'numeric', minute:'2-digit', hour12:true});
+    var day = new Intl.DateTimeFormat('en-IN', {timeZone:'Asia/Kolkata', weekday:'short', hour:'numeric', hour12:false});
+    function tick(){
+      el.textContent = fmt.format(new Date());
+      var parts = day.formatToParts(new Date()), wd = '', h = 0;
+      parts.forEach(function(p){ if (p.type === 'weekday') wd = p.value; if (p.type === 'hour') h = +p.value; });
+      var open = wd !== 'Sat' && wd !== 'Sun' && h >= 10 && h < 19;
+      var st = document.getElementById('ldh-open');
+      if (st) st.textContent = open ? 'In the studio now — replies within the hour' : 'Out of hours — we reply from 10am IST';
+    }
+    tick(); setInterval(tick, 30000);
+  })();
+
+
+  /* ══════════════════════════════════════════════
+     Screens: every device draws the same business
+     name, laid out the way it would be built for it.
+     ══════════════════════════════════════════════ */
+  var OR = '#FF5A0A', BK = '#050505', WH = '#FFFFFF', PA = '#EFEEEA', GR = '#D2D2CE', DK = '#1B1B1B';
+  var state = { name: 'Your business', screen: 'desktop' };
+  var listeners = [];
+  function setName(n){ state.name = (n || '').trim() || 'Your business'; listeners.forEach(function(f){ f(); }); }
+
+  function fitText(ctx, text, weight, maxW, maxPx){
+    var px = maxPx;
+    ctx.font = weight + ' ' + px + 'px "Inter Tight", sans-serif';
+    while (ctx.measureText(text).width > maxW && px > 10){ px -= 2; ctx.font = weight + ' ' + px + 'px "Inter Tight", sans-serif'; }
+    return px;
+  }
+  function box(ctx, x, y, w, h, c){ ctx.fillStyle = c; ctx.fillRect(x, y, w, h); }
+  function txt(ctx, s, x, y, px, weight, c, align){
+    ctx.fillStyle = c; ctx.textAlign = align || 'left'; ctx.textBaseline = 'alphabetic';
+    ctx.font = (weight || 500) + ' ' + px + 'px "Inter Tight", sans-serif'; ctx.fillText(s, x, y);
+  }
+
+  var DRAW = {
+    tv: function(ctx, W, H, name){
+      box(ctx, 0, 0, W, H, BK);
+      txt(ctx, name, 56, 78, fitText(ctx, name, 900, W * .34, 40), 900, WH);
+      ['Home', 'Live', 'My list', 'Search'].forEach(function(s, i){ txt(ctx, s, W * .5 + i * 150, 76, 26, 500, i ? '#9A9A97' : WH); });
+      box(ctx, 56, 120, W - 112, H * .42, OR);
+      txt(ctx, 'Tonight on', 96, 210, 30, 500, BK);
+      var px = fitText(ctx, name, 900, W * .62, 96);
+      txt(ctx, name, 92, 210 + px * .95, px, 900, BK);
+      box(ctx, 96, 120 + H * .42 - 104, 190, 64, BK); txt(ctx, 'Play', 136, 120 + H * .42 - 60, 30, 900, WH);
+      txt(ctx, 'Continue watching', 56, H * .42 + 196, 26, 500, WH);
+      for (var i = 0; i < 5; i++){
+        var x = 56 + i * ((W - 112) / 5), w = (W - 112) / 5 - 18;
+        box(ctx, x, H * .42 + 220, w, H * .2, i === 0 ? WH : DK);
+        if (i === 0){ box(ctx, x + 10, H * .42 + 230, w - 20, H * .2 - 20, OR); }
+        txt(ctx, 'Episode ' + (i + 4), x, H * .42 + 220 + H * .2 + 36, 22, 500, '#9A9A97');
+      }
+    },
+    desktop: function(ctx, W, H, name){
+      box(ctx, 0, 0, W, H, WH);
+      txt(ctx, name, 48, 64, fitText(ctx, name, 900, W * .3, 30), 900, BK);
+      ['Shop', 'Stores', 'About'].forEach(function(s, i){ txt(ctx, s, W * .52 + i * 110, 62, 22, 500, BK); });
+      box(ctx, W - 200, 30, 152, 48, OR); txt(ctx, 'Order now', W - 124, 62, 20, 500, BK, 'center');
+      var px = fitText(ctx, name, 900, W * .56, 120);
+      txt(ctx, name, 44, 150 + px * .9, px, 900, BK);
+      txt(ctx, 'Order online, pick up in store.', 48, 150 + px * .9 + 60, 26, 500, BK);
+      box(ctx, 48, 150 + px * .9 + 100, 220, 60, BK); txt(ctx, 'Browse the range', 158, 150 + px * .9 + 139, 20, 500, WH, 'center');
+      var gx = W * .64, gy = 120, gw = (W - gx - 48 - 12) / 2, gh = (H - gy - 48 - 12) / 2;
+      box(ctx, gx, gy, gw, gh, OR); box(ctx, gx + gw + 12, gy, gw, gh, BK);
+      box(ctx, gx, gy + gh + 12, gw, gh, BK); box(ctx, gx + gw + 12, gy + gh + 12, gw, gh, PA);
+      txt(ctx, 'Kitchen', gx + 18, gy + gh - 20, 22, 900, BK); txt(ctx, 'Home', gx + gw + 30, gy + gh - 20, 22, 900, WH);
+      txt(ctx, 'Outdoor', gx + 18, gy + 2 * gh - 8, 22, 900, WH); txt(ctx, 'Lighting', gx + gw + 30, gy + 2 * gh - 8, 22, 900, BK);
+      box(ctx, 0, H - 56, W, 56, PA); txt(ctx, 'Performance 98 · loads in 1.1s on 4G', 48, H - 20, 20, 500, BK);
+    },
+    tablet: function(ctx, W, H, name){
+      box(ctx, 0, 0, W, H, PA);
+      box(ctx, 0, 0, W, 110, BK);
+      txt(ctx, name, 40, 70, fitText(ctx, name, 900, W * .62, 38), 900, WH);
+      txt(ctx, 'Sales', W - 40, 68, 24, 500, OR, 'right');
+      var tw = (W - 80 - 24) / 3;
+      [['24', 'New leads', OR, BK], ['11', 'Quoted', BK, WH], ['₹4.2L', 'Won', WH, BK]].forEach(function(t, i){
+        var x = 40 + i * (tw + 12);
+        box(ctx, x, 140, tw, 170, t[2]); txt(ctx, t[0], x + 18, 220, 52, 900, t[3]); txt(ctx, t[1], x + 18, 286, 20, 500, t[3]);
+      });
+      txt(ctx, 'Won value, last six months', 40, 370, 22, 500, BK);
+      [38, 56, 44, 72, 61, 88].forEach(function(v, i){
+        var bw = (W - 80) / 6 - 12, bh = 260 * v / 100;
+        box(ctx, 40 + i * (bw + 12), 660 - bh, bw, bh, i === 5 ? OR : BK);
+      });
+      [['Verma Clinics', 'Won', '₹1,80,000'], ['Singh Logistics', 'Quoted', '₹95,000'], ['Kapoor Institute', 'New', '₹1,45,000'], ['Gill Foods', 'Won', '₹2,10,000']].forEach(function(r, i){
+        var y = 700 + i * 76;
+        box(ctx, 40, y, W - 80, 64, i % 2 ? PA : WH);
+        txt(ctx, r[0], 60, y + 41, 22, 500, BK); txt(ctx, r[1], W * .58, y + 41, 22, 500, r[1] === 'Won' ? OR : BK); txt(ctx, r[2], W - 60, y + 41, 22, 900, BK, 'right');
+      });
+    },
+    phone: function(ctx, W, H, name){
+      box(ctx, 0, 0, W, H, WH);
+      txt(ctx, '9:41', 44, 62, 26, 500, BK); txt(ctx, '5G', W - 44, 62, 24, 500, BK, 'right');
+      txt(ctx, name, 40, 170, fitText(ctx, name, 900, W - 80, 62), 900, BK);
+      txt(ctx, 'Your orders · 2 active', 40, 214, 24, 500, BK);
+      box(ctx, 40, 250, W - 80, 260, OR);
+      txt(ctx, 'Order #4821', 68, 310, 28, 900, BK);
+      txt(ctx, 'Out for delivery', 68, 352, 24, 500, BK);
+      txt(ctx, 'Arriving today, 6–8 pm', 68, 392, 24, 500, BK);
+      for (var i = 0; i < 4; i++) box(ctx, 68 + i * ((W - 136) / 4), 440, (W - 136) / 4 - 10, 14, i < 3 ? BK : WH);
+      [['Order #4790', '₹2,340'], ['Order #4772', '₹890'], ['Order #4751', '₹1,120'], ['Order #4730', '₹560']].forEach(function(r, i){
+        var y = 540 + i * 112;
+        box(ctx, 40, y, W - 80, 96, PA);
+        box(ctx, 60, y + 20, 56, 56, i % 2 ? BK : OR);
+        txt(ctx, r[0], 136, y + 58, 26, 500, BK); txt(ctx, r[1], W - 64, y + 58, 26, 900, BK, 'right');
+      });
+      box(ctx, 0, H - 120, W, 120, BK);
+      for (var j = 0; j < 4; j++) box(ctx, 60 + j * ((W - 120) / 4) + 28, H - 76, 36, 36, j ? '#5A5A57' : OR);
+    },
+    watch: function(ctx, W, H, name){
+      box(ctx, 0, 0, W, H, BK);
+      var d = new Date();
+      var t = new Intl.DateTimeFormat('en-IN', {timeZone:'Asia/Kolkata', hour:'2-digit', minute:'2-digit', hour12:false}).format(d);
+      txt(ctx, t, W / 2, 150, 120, 900, WH, 'center');
+      txt(ctx, name, W / 2, 230, fitText(ctx, name, 900, W - 80, 46), 900, OR, 'center');
+      box(ctx, 40, 290, W - 80, 220, DK);
+      txt(ctx, 'New order', 70, 350, 30, 500, WH);
+      txt(ctx, '₹2,340', 70, 420, 64, 900, WH);
+      box(ctx, 70, 448, W - 140, 40, OR); txt(ctx, 'Accept', W / 2, 477, 24, 900, BK, 'center');
+    }
+  };
+
+  var SPECS = {
+    tv:      { label: 'TV',      w: 3.2,  h: 1.85, d: .08, r: .05, bez: .05, tex: [1600, 925], stand: 'feet' },
+    desktop: { label: 'Desktop', w: 2.5,  h: 1.56, d: .1,  r: .07, bez: .07, tex: [1280, 800], stand: 'neck' },
+    tablet:  { label: 'Tablet',  w: 1.16, h: 1.56, d: .07, r: .09, bez: .07, tex: [820, 1140] },
+    phone:   { label: 'Phone',   w: .64,  h: 1.32, d: .075, r: .1, bez: .03, tex: [640, 1380] },
+    watch:   { label: 'Watch',   w: .54,  h: .64, d: .14, r: .14, bez: .05, tex: [500, 600], strap: true }
+  };
+
+  function makeCanvas(kind){
+    var c = document.createElement('canvas');
+    c.width = SPECS[kind].tex[0]; c.height = SPECS[kind].tex[1];
+    return c;
+  }
+  function paint(c, kind){ var ctx = c.getContext('2d'); ctx.clearRect(0, 0, c.width, c.height); DRAW[kind](ctx, c.width, c.height, state.name); }
+
+  /* ── Live control: the visitor's name and screen ── */
+  (function(){
+    var input = document.getElementById('live-name');
+    var word = document.getElementById('live-word');
+    var send = document.getElementById('live-send');
+    var segs = document.querySelectorAll('.seg button');
+    if (!input) return;
+    var words = { tv: 'on a TV', desktop: 'as a website', tablet: 'on a tablet', phone: 'on a phone', watch: 'on a watch' };
+    var asks = { tv: 'a TV app', desktop: 'a website', tablet: 'a tablet system', phone: 'a mobile app', watch: 'a watch app' };
+    function updateSend(){
+      if (!send) return;
+      var who = state.name === 'Your business' ? 'my business' : state.name;
+      send.href = waBase + '?text=' + encodeURIComponent('Hello ' + PLANORAH.company + ', I would like ' + asks[state.screen] + ' for ' + who + '. Can we talk?');
+      send.target = '_blank'; send.rel = 'noopener';
+    }
+    var outs = document.querySelectorAll('[data-live-name]');
+    input.addEventListener('input', function(){
+      setName(input.value); updateSend();
+      outs.forEach(function(o){ o.textContent = state.name; });
     });
-  });
+    segs.forEach(function(b){
+      b.addEventListener('click', function(){
+        segs.forEach(function(o){ o.setAttribute('aria-checked', o === b ? 'true' : 'false'); o.tabIndex = o === b ? 0 : -1; });
+        state.screen = b.getAttribute('data-screen');
+        if (word && word.textContent !== words[state.screen] + '.'){
+          word.classList.add('swap');
+          setTimeout(function(){ word.textContent = words[state.screen] + '.'; word.classList.remove('swap'); }, reduce ? 0 : 220);
+        }
+        listeners.forEach(function(f){ f(); });
+        updateSend();
+      });
+      b.addEventListener('keydown', function(e){
+        var list = Array.prototype.slice.call(segs), i = list.indexOf(b), n = null;
+        if (e.key === 'ArrowDown' || e.key === 'ArrowRight') n = list[(i + 1) % list.length];
+        if (e.key === 'ArrowUp' || e.key === 'ArrowLeft') n = list[(i - 1 + list.length) % list.length];
+        if (n){ e.preventDefault(); n.focus(); n.click(); }
+      });
+    });
+    updateSend();
+  })();
+
+  /* ── Flat fallback: the screens drawn in 2D when WebGL is missing ── */
+  function flat(canvasEl, kinds){
+    var ctx = canvasEl.getContext('2d');
+    function draw(){
+      var r = canvasEl.getBoundingClientRect(), dpr = Math.min(2, devicePixelRatio || 1);
+      canvasEl.width = r.width * dpr; canvasEl.height = r.height * dpr;
+      ctx.clearRect(0, 0, canvasEl.width, canvasEl.height);
+      var list = kinds(), n = list.length, gap = 16 * dpr, total = 0;
+      list.forEach(function(k){ total += SPECS[k].w; });
+      var scale = Math.min((canvasEl.width - gap * (n + 1)) / total, canvasEl.height * .8 / 1.85);
+      var x = gap;
+      list.forEach(function(k){
+        var s = SPECS[k], w = s.w * scale, h = s.h * scale, y = (canvasEl.height - h) / 2;
+        ctx.fillStyle = BK; ctx.fillRect(x, y, w, h);
+        var c = makeCanvas(k); paint(c, k);
+        var b = s.bez * scale; ctx.drawImage(c, x + b, y + b, w - 2 * b, h - 2 * b);
+        x += w + gap;
+      });
+    }
+    draw(); listeners.push(draw); window.addEventListener('resize', draw);
+  }
+
+  /* ══ three.js: devices built from rounded slabs ══ */
+  function hasGL(){
+    try { var c = document.createElement('canvas'); return !!(window.WebGLRenderingContext && (c.getContext('webgl') || c.getContext('experimental-webgl'))); }
+    catch(e){ return false; }
+  }
+
+  function buildDevice(THREE, kind, shellHex){
+    var s = SPECS[kind], g = new THREE.Group();
+    function rr(w, h, r){
+      var sh = new THREE.Shape(), x = -w / 2, y = -h / 2;
+      sh.moveTo(x + r, y); sh.lineTo(x + w - r, y); sh.quadraticCurveTo(x + w, y, x + w, y + r);
+      sh.lineTo(x + w, y + h - r); sh.quadraticCurveTo(x + w, y + h, x + w - r, y + h);
+      sh.lineTo(x + r, y + h); sh.quadraticCurveTo(x, y + h, x, y + h - r);
+      sh.lineTo(x, y + r); sh.quadraticCurveTo(x, y, x + r, y);
+      return sh;
+    }
+    var shellCol = new THREE.Color(shellHex); if (shellCol.convertSRGBToLinear) shellCol.convertSRGBToLinear();
+    var shellMat = new THREE.MeshStandardMaterial({ color: shellCol, roughness: .38, metalness: .25 });
+    var bodyGeo = new THREE.ExtrudeGeometry(rr(s.w, s.h, s.r), { depth: s.d, bevelEnabled: true, bevelThickness: .012, bevelSize: .012, bevelSegments: 3, curveSegments: 10 });
+    bodyGeo.translate(0, 0, -s.d / 2);
+    g.add(new THREE.Mesh(bodyGeo, shellMat));
+
+    var sw = s.w - 2 * s.bez, shh = s.h - 2 * s.bez;
+    var scrGeo = new THREE.ShapeGeometry(rr(sw, shh, Math.max(.01, s.r - s.bez * .6)), 10);
+    var pos = scrGeo.attributes.position, uv = scrGeo.attributes.uv;
+    for (var i = 0; i < pos.count; i++) uv.setXY(i, (pos.getX(i) + sw / 2) / sw, (pos.getY(i) + shh / 2) / shh);
+    var cv = makeCanvas(kind); paint(cv, kind);
+    var tex = new THREE.CanvasTexture(cv);
+    tex.anisotropy = 4;
+    if ('encoding' in tex && THREE.sRGBEncoding) tex.encoding = THREE.sRGBEncoding;
+    var scr = new THREE.Mesh(scrGeo, new THREE.MeshBasicMaterial({ map: tex, toneMapped: false }));
+    scr.position.z = s.d / 2 + .014;
+    g.add(scr);
+
+    if (s.stand === 'feet'){
+      [-1, 1].forEach(function(dir){
+        var leg = new THREE.Mesh(new THREE.BoxGeometry(.05, .28, .05), shellMat);
+        leg.position.set(dir * s.w * .36, -s.h / 2 - .1, 0); leg.rotation.z = dir * .35; g.add(leg);
+      });
+    } else if (s.stand === 'neck'){
+      var neck = new THREE.Mesh(new THREE.BoxGeometry(.16, .42, .06), shellMat); neck.position.set(0, -s.h / 2 - .19, -.06); g.add(neck);
+      var base = new THREE.Mesh(new THREE.BoxGeometry(.8, .04, .42), shellMat); base.position.set(0, -s.h / 2 - .4, 0); g.add(base);
+    }
+    if (s.strap){
+      [1, -1].forEach(function(dir){
+        var st = new THREE.Mesh(new THREE.BoxGeometry(s.w * .74, .5, .06), new THREE.MeshStandardMaterial({ color: 0x1D1D1D, roughness: .8 }));
+        st.position.set(0, dir * (s.h / 2 + .24), -.02); g.add(st);
+      });
+    }
+    g.userData = { kind: kind, canvas: cv, tex: tex, spec: s };
+    return g;
+  }
+
+  function lights(THREE, scene, rim){
+    scene.add(new THREE.AmbientLight(0xffffff, .55));
+    var key = new THREE.DirectionalLight(0xffffff, 1.1); key.position.set(3, 4, 6); scene.add(key);
+    var back = new THREE.DirectionalLight(rim, 2.2); back.position.set(-4, 2, -3); scene.add(back);
+    var side = new THREE.PointLight(rim, 1.6, 20); side.position.set(3.5, -1, 2); scene.add(side);
+  }
+
+  function makeRenderer(THREE, canvas){
+    var r = new THREE.WebGLRenderer({ canvas: canvas, antialias: true, alpha: true, powerPreference: 'high-performance' });
+    r.setPixelRatio(Math.min(2, window.devicePixelRatio || 1));
+    r.setClearColor(0x000000, 0);
+    if ('outputEncoding' in r && THREE.sRGBEncoding) r.outputEncoding = THREE.sRGBEncoding;
+    return r;
+  }
+
+  /* run a render loop only while its canvas is on screen */
+  function loop(canvas, frame){
+    var on = false, raf = 0;
+    function tick(t){ frame(t); if (on) raf = requestAnimationFrame(tick); }
+    if (reduce){ requestAnimationFrame(frame); return function(){ requestAnimationFrame(frame); }; }
+    new IntersectionObserver(function(en){
+      var v = en[0].isIntersecting;
+      if (v && !on){ on = true; raf = requestAnimationFrame(tick); }
+      if (!v){ on = false; cancelAnimationFrame(raf); }
+    }).observe(canvas);
+    return function(){ if (!on) requestAnimationFrame(frame); };
+  }
+
+  /* ── Hero: five screens float around one name ── */
+  function hero(THREE){
+    var canvas = document.getElementById('gl');
+    if (!canvas) return;
+    var stage = canvas.parentElement;
+    var renderer = makeRenderer(THREE, canvas);
+    var scene = new THREE.Scene(), cam = new THREE.PerspectiveCamera(30, 1, .1, 100);
+    cam.position.set(0, .2, 8);
+    lights(THREE, scene, 0xffffff);
+    var rig = new THREE.Group(); scene.add(rig);
+    var layout = [
+      ['tv',      0,    .55, -1.1,  .0,  -.06],
+      ['desktop', -2.25, -.05, -.2,  .32,  .04],
+      ['tablet',  2.3,  -.1, -.1, -.34, -.05],
+      ['phone',   1.25,  -.82, 1.25, -.18,  .08],
+      ['watch',  -1.2,  -.95, 1.5,   .26, -.1]
+    ];
+    var devs = layout.map(function(l, i){
+      var d = buildDevice(THREE, l[0], 0x0B0B0B);
+      d.position.set(l[1], l[2], l[3]); d.rotation.set(0, l[4], l[5]);
+      d.userData.base = { x: l[1], y: l[2], z: l[3], ry: l[4], rz: l[5], ph: i * 1.3 };
+      rig.add(d); return d;
+    });
+    listeners.push(function(){ devs.forEach(function(d){ paint(d.userData.canvas, d.userData.kind); d.userData.tex.needsUpdate = true; }); kick(); });
+
+    var mx = 0, my = 0, tx = 0, ty = 0;
+    window.addEventListener('pointermove', function(e){ tx = (e.clientX / innerWidth - .5); ty = (e.clientY / innerHeight - .5); }, {passive:true});
+
+    function size(){
+      var w = stage.clientWidth, h = stage.clientHeight;
+      renderer.setSize(w, h, false); cam.aspect = w / h;
+      var fit = w / h < 1.4 ? 1.4 / (w / h) : 1;
+      cam.position.z = 8 * Math.min(fit, 2.1);
+      cam.updateProjectionMatrix(); kick();
+    }
+    var kick = loop(canvas, function(t){
+      t = (t || 0) / 1000;
+      mx += (tx - mx) * .05; my += (ty - my) * .05;
+      var sc = Math.min(1, Math.max(0, window.scrollY / (innerHeight * .9)));
+      rig.rotation.y = mx * .35 + (reduce ? 0 : Math.sin(t * .25) * .06);
+      rig.rotation.x = my * .18 + sc * .25;
+      devs.forEach(function(d){
+        var b = d.userData.base, bob = reduce ? 0 : Math.sin(t * .9 + b.ph) * .06;
+        d.position.set(b.x * (1 + sc * .35), b.y + bob - sc * .4, b.z + sc * .6);
+        d.rotation.y = b.ry + (reduce ? 0 : Math.sin(t * .5 + b.ph) * .05);
+      });
+      renderer.render(scene, cam);
+    });
+    size(); window.addEventListener('resize', size);
+  }
+
+  /* ── Live: one device that turns into whichever screen is chosen ── */
+  function live(THREE){
+    var canvas = document.getElementById('gl2');
+    if (!canvas) return;
+    var holder = canvas.parentElement;
+    var renderer = makeRenderer(THREE, canvas);
+    var scene = new THREE.Scene(), cam = new THREE.PerspectiveCamera(28, 1, .1, 100);
+    cam.position.set(0, .1, 7);
+    lights(THREE, scene, 0xFF5A0A);
+    var spin = new THREE.Group(); scene.add(spin);
+    var cache = {}, cur = null, morph = 1, from = null;
+    var FIT = { tv: 1.0, desktop: 1.15, tablet: 1.3, phone: 1.5, watch: 2.4 };
+    function get(k){
+      if (!cache[k]){ cache[k] = buildDevice(THREE, k, 0x161616); }
+      return cache[k];
+    }
+    function show(k){
+      var next = get(k);
+      if (next === cur) return;
+      from = cur; cur = next; morph = reduce ? 1 : 0;
+      paint(cur.userData.canvas, k); cur.userData.tex.needsUpdate = true;
+      spin.add(cur); kick();
+    }
+    listeners.push(function(){
+      if (cur){ paint(cur.userData.canvas, cur.userData.kind); cur.userData.tex.needsUpdate = true; }
+      show(state.screen); kick();
+    });
+
+    var drag = false, lastX = 0, vel = 0, rot = -.35;
+    canvas.addEventListener('pointerdown', function(e){ drag = true; lastX = e.clientX; vel = 0; });
+    window.addEventListener('pointerup', function(){ drag = false; });
+    window.addEventListener('pointermove', function(e){
+      if (!drag) return;
+      var dx = e.clientX - lastX; lastX = e.clientX; vel = dx * .01; rot += vel; kick();
+    });
+
+    function size(){
+      var w = holder.clientWidth, h = holder.clientHeight;
+      renderer.setSize(w, h, false); cam.aspect = w / h; cam.updateProjectionMatrix(); kick();
+    }
+    var kick = loop(canvas, function(t){
+      t = (t || 0) / 1000;
+      if (!drag){ vel *= .94; rot += vel; if (!reduce) rot += (Math.sin(t * .4) * .35 - .1 - rot) * .01; }
+      spin.rotation.y = rot;
+      spin.rotation.x = reduce ? 0 : Math.sin(t * .6) * .04;
+      if (morph < 1) morph = Math.min(1, morph + .06);
+      var e = 1 - Math.pow(1 - morph, 3);
+      var portrait = cam.aspect < 1;
+      if (cur){
+        var s = FIT[cur.userData.kind] * (portrait ? .62 + cam.aspect * .3 : 1);
+        cur.scale.setScalar(s * (.6 + .4 * e));
+        cur.position.y = (1 - e) * -.6;
+        cur.visible = true;
+      }
+      if (from){
+        var fs = FIT[from.userData.kind] * (portrait ? .62 + cam.aspect * .3 : 1);
+        from.scale.setScalar(fs * (1 - e * .4));
+        from.position.y = e * .8;
+        from.visible = e < .5;
+        if (e >= 1){ spin.remove(from); from = null; }
+      }
+      renderer.render(scene, cam);
+    });
+    show(state.screen);
+    size(); window.addEventListener('resize', size);
+  }
+
+
+  /* ══ The light: an orange glow rising from below, with drifting lines ══ */
+  function glassAll(){
+    var list = Array.prototype.slice.call(document.querySelectorAll('canvas.glass'));
+    if (!list.length) return;
+    var VS = 'attribute vec2 p;void main(){gl_Position=vec4(p,0.,1.);}';
+    var FS = [
+      'precision mediump float;',
+      'uniform vec2 r;uniform float t;uniform vec2 mo;uniform float side;',
+      'float h(vec2 p){return fract(sin(dot(p,vec2(127.1,311.7)))*43758.5453);}',
+      'float blob(vec2 q,vec2 c,vec2 s){vec2 d=(q-c)/s;return exp(-dot(d,d));}',
+      'void main(){',
+      '  vec2 uv=gl_FragCoord.xy/r; float a=r.x/r.y; vec2 q=vec2(uv.x*a,uv.y);',
+      '  float sx=mix(1.,-1.,side); float cx=a*.5;',
+      '  vec3 c=vec3(0.);',
+      '  c+=vec3(.78,.12,.04)*blob(q,vec2(cx-sx*a*.24+.08*sin(t*.17),-.06),vec2(a*.26,.42))*1.05;',
+      '  c+=vec3(1.,.42,.12)*blob(q,vec2(cx+sx*a*.04+.10*cos(t*.13),-.12),vec2(a*.22,.36))*1.0;',
+      '  c+=vec3(.36,.46,.5)*blob(q,vec2(cx+sx*a*.3+.06*sin(t*.11),-.04),vec2(a*.2,.34))*.7;',
+      '  c+=vec3(.86,.72,.6)*blob(q,vec2(cx+sx*a*.46,-.1),vec2(a*.12,.22))*.55;',
+      '  c+=vec3(1.,.4,.1)*blob(q,vec2(mo.x*a,mo.y),vec2(.22,.22))*.18;',
+      '  float L=0.;',
+      '  for(int i=0;i<7;i++){',
+      '    float fi=float(i);',
+      '    float y=.30+fi*.018+.07*sin(uv.x*2.6+t*.22+fi*.55)+.03*sin(uv.x*7.1-t*.31+fi*1.3);',
+      '    float d=abs(uv.y-y)*r.y;',
+      '    L+=(.9/(1.+d*d*.9))*smoothstep(.0,.55,uv.x)*smoothstep(1.,.7,uv.x);',
+      '  }',
+      '  c+=vec3(1.,.62,.4)*L*.16;',
+      '  c+=(h(gl_FragCoord.xy+fract(t))-.5)*.03;',
+      '  gl_FragColor=vec4(c,1.);}'
+    ].join('\n');
+    list.forEach(function(cv, idx){
+      var gl = cv.getContext('webgl', { antialias: false, alpha: false, preserveDrawingBuffer: false });
+      if (!gl){ doc.classList.add('no-gl'); return; }
+      function sh(type, src){ var o = gl.createShader(type); gl.shaderSource(o, src); gl.compileShader(o); return o; }
+      var pr = gl.createProgram();
+      gl.attachShader(pr, sh(gl.VERTEX_SHADER, VS)); gl.attachShader(pr, sh(gl.FRAGMENT_SHADER, FS));
+      gl.linkProgram(pr);
+      if (!gl.getProgramParameter(pr, gl.LINK_STATUS)){ doc.classList.add('no-gl'); return; }
+      gl.useProgram(pr);
+      var buf = gl.createBuffer(); gl.bindBuffer(gl.ARRAY_BUFFER, buf);
+      gl.bufferData(gl.ARRAY_BUFFER, new Float32Array([-1,-1, 1,-1, -1,1, 1,1]), gl.STATIC_DRAW);
+      var loc = gl.getAttribLocation(pr, 'p'); gl.enableVertexAttribArray(loc); gl.vertexAttribPointer(loc, 2, gl.FLOAT, false, 0, 0);
+      var uR = gl.getUniformLocation(pr, 'r'), uT = gl.getUniformLocation(pr, 't'), uM = gl.getUniformLocation(pr, 'mo'), uS = gl.getUniformLocation(pr, 'side');
+      var side = cv.getAttribute('data-glass') === 'right' ? 1 : 0;
+      var host = cv.parentElement, mx = .5, my = .2, tx = mx, ty = my, scale = .5;
+      host.addEventListener('pointermove', function(e){
+        var b = cv.getBoundingClientRect(); tx = (e.clientX - b.left) / b.width; ty = 1 - (e.clientY - b.top) / b.height;
+      }, {passive:true});
+      function size(){
+        var w = cv.clientWidth, hh = cv.clientHeight, d = Math.min(1.25, window.devicePixelRatio || 1) * scale;
+        cv.width = Math.max(2, Math.round(w * d)); cv.height = Math.max(2, Math.round(hh * d));
+        gl.viewport(0, 0, cv.width, cv.height);
+      }
+      var t0 = performance.now() - idx * 4000;
+      function frame(now){
+        mx += (tx - mx) * .04; my += (ty - my) * .04;
+        gl.uniform2f(uR, cv.width, cv.height);
+        gl.uniform1f(uT, reduce ? 8 : ((now || 0) - t0) / 1000 + 6);
+        gl.uniform2f(uM, mx, my); gl.uniform1f(uS, side);
+        gl.drawArrays(gl.TRIANGLE_STRIP, 0, 4);
+      }
+      size(); window.addEventListener('resize', function(){ size(); frame(performance.now()); });
+      loop(cv, frame);
+    });
+  }
+
+  function start3D(){
+    var hasStage = document.getElementById('gl') || document.getElementById('gl2');
+    if (!hasStage) return;
+    if (!window.THREE || !hasGL()){
+      var g = document.getElementById('gl'), g2 = document.getElementById('gl2');
+      if (g) flat(g, function(){ return ['desktop', 'tv', 'tablet', 'phone', 'watch']; });
+      if (g2) flat(g2, function(){ return [state.screen]; });
+      return;
+    }
+    live(window.THREE);
+  }
+  /* repaint the screens once Inter Tight has loaded, so canvas text uses it */
+  if (document.fonts && document.fonts.ready){
+    document.fonts.load('700 40px "Inter Tight"').then(function(){ listeners.forEach(function(f){ f(); }); });
+  }
+  /* ══ Smooth scrolling ══ */
+  var lenis = null;
+  if (!reduce && window.Lenis){
+    lenis = new window.Lenis({ lerp: .075, smoothWheel: true, wheelMultiplier: .9, touchMultiplier: 1.2 });
+    lenis.on('scroll', stick);
+    (function raf(t){ lenis.raf(t); requestAnimationFrame(raf); })(performance.now());
+    document.addEventListener('click', function(e){
+      var a = e.target.closest && e.target.closest('a[href^="#"]');
+      if (!a) return;
+      var id = a.getAttribute('href');
+      if (id.length < 2) return;
+      var el = document.querySelector(id);
+      if (!el) return;
+      e.preventDefault();
+      lenis.scrollTo(el, { offset: id === '#main' ? 0 : -90, duration: 1.6, easing: function(t){ return 1 - Math.pow(1 - t, 4); } });
+      history.replaceState(null, '', id);
+    });
+  }
+  function onScroll(f){ if (lenis) lenis.on('scroll', f); else window.addEventListener('scroll', f, {passive:true}); f(); }
+  function scrollToY(y){ if (lenis) lenis.scrollTo(y, { duration: 1.4, easing: function(t){ return 1 - Math.pow(1 - t, 4); } }); else window.scrollTo({ top: y, behavior: reduce ? 'auto' : 'smooth' }); }
+
+  /* ══ Your name on every screen: wave lines driven by the scroll ══ */
+  (function(){
+    var sec = document.querySelector('.wave'), cv = sec && sec.querySelector('.waves');
+    if (!cv) return;
+    var ctx = cv.getContext('2d'), segs = Array.prototype.slice.call(sec.querySelectorAll('.seg button'));
+    var bar = sec.querySelector('.wave-bar'), idx = 0, prog = 0, sp = 0, w = 0, h = 0, dpr = 1;
+    /* one wave shape per screen: amplitude, frequency, twist, spread */
+    var SHAPES = [[.10, 1.2, 2.2, .20], [.16, 2.1, 3.4, .12], [.08, 1.6, 1.4, .28], [.13, .8, 4.2, .34], [.18, 2.8, 2.6, .10]];
+    var cur = SHAPES[0].slice(), mx = .5, tmx = .5;
+    function size(){
+      dpr = Math.min(1.25, window.devicePixelRatio || 1);
+      w = cv.clientWidth; h = cv.clientHeight;
+      cv.width = Math.round(w * dpr); cv.height = Math.round(h * dpr);
+    }
+    function draw(t){
+      var tg = SHAPES[idx];
+      for (var k = 0; k < 4; k++) cur[k] += (tg[k] - cur[k]) * (reduce ? 1 : .05);
+      mx += (tmx - mx) * .05;
+      sp += (prog - sp) * (reduce ? 1 : .08);
+      ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+      ctx.clearRect(0, 0, w, h);
+      ctx.globalCompositeOperation = 'lighter';
+      var N = 46, step = Math.max(8, w / 120), ph = (reduce ? 0 : t * .00018) + sp * 6;
+      for (var i = 0; i < N; i++){
+        var f = i / (N - 1);
+        ctx.beginPath();
+        for (var x = -step; x <= w + step; x += step){
+          var u = x / w, env = Math.pow(Math.sin(Math.PI * Math.min(1, Math.max(0, u))), .8);
+          var y = h * (.62 + (mx - .5) * .06)
+            + Math.sin(u * cur[1] * 6.283 + ph + f * cur[2]) * cur[0] * h
+            + Math.sin(u * cur[1] * 3.1 - ph * 1.3 + f * 1.7) * cur[0] * .45 * h
+            + (f - .5) * cur[3] * h * env;
+          if (x < 0) ctx.moveTo(x, y); else ctx.lineTo(x, y);
+        }
+        var a = .08 + .5 * Math.pow(1 - Math.abs(f - .5) * 2, 2);
+        ctx.strokeStyle = f < .5 ? 'rgba(255,' + Math.round(90 + 120 * f) + ',' + Math.round(20 + 60 * f) + ',' + a + ')' : 'rgba(255,' + Math.round(150 + 100 * (f - .5)) + ',' + Math.round(80 + 170 * (f - .5)) + ',' + a + ')';
+        ctx.lineWidth = 1;
+        ctx.stroke();
+      }
+      ctx.globalCompositeOperation = 'source-over';
+    }
+    var auto = false;
+    function update(){
+      var r = sec.getBoundingClientRect(), span = sec.offsetHeight - innerHeight;
+      prog = Math.min(1, Math.max(0, -r.top / span));
+      if (bar) bar.style.setProperty('--p', prog.toFixed(3));
+      var n = Math.min(segs.length - 1, Math.floor(prog * segs.length * .999));
+      if (n !== idx){ idx = n; auto = true; segs[n].click(); auto = false; }
+      if (reduce) draw(0);
+    }
+    segs.forEach(function(b, i){
+      b.addEventListener('click', function(){
+        idx = i;
+        if (auto) return;
+        var top = sec.getBoundingClientRect().top + window.scrollY, span = sec.offsetHeight - innerHeight;
+        scrollToY(top + span * (i + .5) / segs.length);
+      });
+    });
+    sec.addEventListener('pointermove', function(e){ tmx = e.clientX / innerWidth; }, {passive:true});
+    size(); window.addEventListener('resize', function(){ size(); draw(performance.now()); });
+    onScroll(update);
+    if (reduce){ draw(0); return; }
+    var on = false;
+    new IntersectionObserver(function(en){ on = en[0].isIntersecting; if (on) requestAnimationFrame(tick); }).observe(sec);
+    function tick(t){ draw(t); if (on) requestAnimationFrame(tick); }
+  })();
+
+  /* ══ Tabs (services) and the dock (industries) ══ */
+  (function(){
+    document.querySelectorAll('[role="tablist"]').forEach(function(list){
+      var tabs = Array.prototype.slice.call(list.querySelectorAll('[role="tab"]'));
+      function pick(t, focus){
+        tabs.forEach(function(o){
+          var on = o === t;
+          o.setAttribute('aria-selected', on ? 'true' : 'false'); o.tabIndex = on ? 0 : -1;
+          document.getElementById(o.getAttribute('aria-controls')).hidden = !on;
+        });
+        if (focus) t.focus();
+      }
+      tabs.forEach(function(t, i){
+        t.addEventListener('click', function(){ pick(t); });
+        t.addEventListener('keydown', function(e){
+          var n = e.key === 'ArrowRight' ? tabs[(i + 1) % tabs.length] : e.key === 'ArrowLeft' ? tabs[(i - 1 + tabs.length) % tabs.length] : null;
+          if (n){ e.preventDefault(); pick(n, true); }
+        });
+      });
+    });
+    var dock = document.querySelector('.dock');
+    if (dock){
+      var bs = Array.prototype.slice.call(dock.querySelectorAll('button'));
+      bs.forEach(function(b){
+        b.addEventListener('click', function(){
+          bs.forEach(function(o){
+            var on = o === b;
+            o.setAttribute('aria-pressed', on ? 'true' : 'false');
+            document.getElementById(o.getAttribute('aria-controls')).hidden = !on;
+          });
+        });
+      });
+    }
+  })();
+
+  /* ══ Hero: a dot on the curve under each tile, joined by a dotted stem ══ */
+  (function(){
+    var eq = document.querySelector('.eq'), path = eq && eq.querySelector('.eq-curve path');
+    if (!path) return;
+    var svg = path.ownerSVGElement, tiles = eq.querySelectorAll('.eq-t'), made = [];
+    function place(){
+      made.forEach(function(n){ n.remove(); }); made = [];
+      if (getComputedStyle(svg).display === 'none') return;
+      var box = eq.getBoundingClientRect(), sb = svg.getBoundingClientRect(), L = path.getTotalLength();
+      tiles.forEach(function(t, i){
+        var ic = t.querySelector('.cube-ic').getBoundingClientRect(), lab = t.querySelector('b').getBoundingClientRect();
+        var cx = ic.left + ic.width / 2, target = (cx - sb.left) / sb.width * 1000, lo = 0, hi = L, p;
+        for (var k = 0; k < 24; k++){ var mid = (lo + hi) / 2; p = path.getPointAtLength(mid); if (p.x < target) lo = mid; else hi = mid; }
+        var y = sb.top + p.y / 300 * sb.height - box.top, x = cx - box.left, top = lab.bottom - box.top + 10;
+        var stem = document.createElement('span'); stem.className = 'eq-stem';
+        stem.style.cssText = 'left:' + x + 'px;top:' + top + 'px;height:' + Math.max(0, y - top - 12) + 'px;--d:' + (i * .15) + 's';
+        var dot = document.createElement('span'); dot.className = 'eq-dot';
+        dot.style.cssText = 'left:' + x + 'px;top:' + y + 'px;--d:' + (i * .15 + .3) + 's';
+        eq.appendChild(stem); eq.appendChild(dot); made.push(stem, dot);
+      });
+    }
+    path.setAttribute('pathLength', '1');
+    place(); window.addEventListener('resize', place);
+    if (document.fonts && document.fonts.ready) document.fonts.ready.then(place);
+  })();
+
+  /* ══ Pictures drift against the scroll ══ */
+  (function(){
+    if (reduce) return;
+    var list = Array.prototype.slice.call(document.querySelectorAll('.ph-fig img, .case-pic img, .side figure img, .qh img, .legal-side img, .nums-pic img'));
+    list.forEach(function(img){ img.setAttribute('data-par', ''); img.style.transform = 'scale(1.12)'; });
+    if (!list.length) return;
+    var cur = list.map(function(){ return 0; });
+    (function tick(){
+      var vh = innerHeight;
+      list.forEach(function(img, i){
+        var r = img.getBoundingClientRect();
+        if (r.bottom < -200 || r.top > vh + 200) return;
+        var tg = (r.top + r.height / 2 - vh / 2) / vh * -6;
+        cur[i] += (tg - cur[i]) * .12;
+        img.style.transform = 'translate3d(0,' + cur[i].toFixed(3) + '%,0) scale(1.12)';
+      });
+      requestAnimationFrame(tick);
+    })();
+  })();
+
+  glassAll();
+  start3D();
 })();

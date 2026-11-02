@@ -71,8 +71,8 @@ for page in PAGES:
     if re.search(r'<style[\s>]', src):
         problems.append('%s: contains a <style> block' % page)
     scripts = re.findall(r'<script[^>]*>', src)
-    # 2 gtag tags on every page, + planorah.js, + three.js on the home page only
-    expected = 4 if page == 'index.html' else 3
+    # 2 gtag tags on every page, + Lenis (smooth scroll), + planorah.js
+    expected = 4
     if len(scripts) != expected:
         problems.append('%s: expected %d <script>, found %d' % (page, expected, len(scripts)))
     if 'G-6SPV5MMPMT' not in src:
