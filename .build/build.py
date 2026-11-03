@@ -56,6 +56,12 @@ NAV = [('services/index.html', 'Services'), ('work.html', 'Work'), ('process.htm
        ('about.html', 'About'), ('contact.html', 'Contact')]
 
 
+def ver(name):
+    """A short fingerprint of an asset, so browsers fetch it again whenever it changes."""
+    import hashlib
+    return hashlib.md5(open(os.path.join(ROOT, 'assets', name), 'rb').read()).hexdigest()[:8]
+
+
 def head(m, R, path):
     canon = SITE + ('' if path == 'index.html' else path.replace('index.html', ''))
     return f'''<!DOCTYPE html>
@@ -80,8 +86,8 @@ def head(m, R, path):
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Inter+Tight:wght@400;600&family=Instrument+Serif:ital@1&family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
 <link rel="icon" type="image/svg+xml" href="{R}assets/favicon.svg">
-<meta name="theme-color" content="#050505">
-<link rel="stylesheet" href="{R}assets/planorah.css">
+<meta name="theme-color" content="#07070A">
+<link rel="stylesheet" href="{R}assets/planorah.css?v={ver("planorah.css")}">
 </head>'''
 
 
@@ -115,7 +121,7 @@ def credits_for(body):
         return ''
     items = '; '.join(f'<a href="{c["page"]}" rel="noopener">{html.escape(c["title"])}</a> by {html.escape(c["creator"] or "unknown")}, {c["license"]}'
                       for c in used)
-    return f'<div class="ft-credits"><p>Pictures on this page, via Wikimedia Commons, shown in black and white: {items}.</p></div>'
+    return f'<div class="ft-credits"><p>Pictures on this page, via Wikimedia Commons: {items}.</p></div>'
 
 
 def footer(R, body):
@@ -166,7 +172,15 @@ def glass(body):
 def scripts(m, R):
     three = '<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>\n' if m.get('three') else ''
     lenis = '<script src="https://cdn.jsdelivr.net/npm/lenis@1.1.13/dist/lenis.min.js"></script>\n'
-    return f'{three}{lenis}<script src="{R}assets/planorah.js"></script>\n</body>\n</html>\n'
+    return f'{three}{lenis}<script src="{R}assets/planorah.js?v={ver("planorah.js")}"></script>\n</body>\n</html>\n'
+
+
+def clean_urls(text):
+    """Link to folders, never to index.html: '../index.html' -> '../', 'services/index.html#x' -> 'services/#x'."""
+    def fix(m):
+        url = m.group(1) + m.group(2) + (m.group(3) or '')
+        return 'href="' + (url if url and not url.startswith('#') else './' + url) + '"'
+    return re.sub(r'href="((?:\.\./)*)((?:services/)?)index\.html(#[^"]*)?"', fix, text)
 
 
 def page(path, meta, body):
@@ -177,6 +191,7 @@ def page(path, meta, body):
                 .replace('{MAP}', MAP).replace('{DIRECTIONS}', DIRECTIONS).replace('{MAPLINK}', MAPLINK))
     out = (head(meta, R, path) + '\n' + header(meta, R) + '\n<main id="main">\n' + body.strip() + '\n</main>\n'
            + footer(R, body) + scripts(meta, R))
+    out = clean_urls(out)
     with open(os.path.join(ROOT, path), 'w', encoding='utf-8', newline='\n') as f:
         f.write(out)
     print('built', path)

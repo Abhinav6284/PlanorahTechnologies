@@ -58,10 +58,10 @@ The `tel:` link and the number printed in the page sources are written into `.bu
   sits behind the home hero, the services list, the live device, the contact section, and every
   inner page's opening and closing sections (`<canvas class="glass" data-glass="left|right">`).
   Without WebGL the same light is drawn in CSS (`.no-gl .glassy`).
-- **Your name on every screen** (`live` in `assets/planorah.js`, three.js r128 from cdnjs, home
-  page only): one device that turns into a TV, desktop, tablet, phone or watch and draws the
-  visitor's business name on its screen. "Ask us to build it" opens WhatsApp with that name and
-  screen filled in.
+- **Your name on every screen** (home page, `.wave` in `assets/planorah.js`): a pinned section where the
+  scroll plays an example WhatsApp conversation with Planorah (website → phone → tablet → TV → watch). Beside
+  it one device takes the shape of each screen and its screen is built top to bottom over a blueprint grid.
+  The chat's compose bar is the business-name box; its send button opens WhatsApp with the message written.
 
 Both pause when off screen. Scrolling is smoothed with Lenis (loaded from jsDelivr). Motion stays on even
 when a visitor's device asks for reduced motion; set `respectReducedMotion: true` in `PLANORAH` at the top

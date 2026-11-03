@@ -20,21 +20,21 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Inter+Tight:wght@400;600&family=Instrument+Serif:ital@1&family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
 <link rel="icon" type="image/svg+xml" href="assets/favicon.svg">
-<meta name="theme-color" content="#050505">
-<link rel="stylesheet" href="assets/planorah.css">
+<meta name="theme-color" content="#07070A">
+<link rel="stylesheet" href="assets/planorah.css?v=280f65c4">
 </head>
 <body data-page="Home">
 <a class="skip" href="#main">Skip to content</a>
 <header class="hd" id="hd">
   <div class="hd-in">
-    <a class="wm" href="index.html" aria-label="Planorah Technologies, home"><img src="assets/favicon.svg" width="30" height="30" alt="">Planorah</a>
-    <nav class="hd-nav" aria-label="Primary"><a href="services/index.html">Services</a><a href="work.html">Work</a><a href="process.html">Process</a><a href="about.html">About</a><a href="contact.html">Contact</a></nav>
+    <a class="wm" href="./" aria-label="Planorah Technologies, home"><img src="assets/favicon.svg" width="30" height="30" alt="">Planorah</a>
+    <nav class="hd-nav" aria-label="Primary"><a href="services/">Services</a><a href="work.html">Work</a><a href="process.html">Process</a><a href="about.html">About</a><a href="contact.html">Contact</a></nav>
     <a class="btn btn-talk" href="contact.html">Let’s talk <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 6l6 6-6 6"/></svg></a>
     <button class="burger" id="burger" aria-expanded="false" aria-controls="mob">Menu</button>
   </div>
 </header>
 <nav class="mob" id="mob" aria-label="Menu">
-  <a href="services/index.html">Services</a><a href="work.html">Work</a><a href="process.html">Process</a><a href="about.html">About</a><a href="contact.html">Contact</a>
+  <a href="services/">Services</a><a href="work.html">Work</a><a href="process.html">Process</a><a href="about.html">About</a><a href="contact.html">Contact</a>
   <a class="btn" href="contact.html">Send your requirement</a>
 </nav>
 
@@ -72,26 +72,43 @@
 
 <section class="ch wave" id="try" data-field="bk">
   <div class="wave-pin">
-    <canvas class="waves" aria-hidden="true"></canvas>
     <div class="wave-in">
-      <p class="tag tag-dk">Your name on every screen</p>
-      <h2 class="wave-h"><span data-live-name>Your business</span>,<br><em id="live-word">as a website.</em></h2>
-      <div class="seg" role="radiogroup" aria-label="Choose a screen" data-ui>
-        <button type="button" role="radio" aria-checked="true" data-screen="desktop"><i>01</i>Website</button>
-        <button type="button" role="radio" aria-checked="false" tabindex="-1" data-screen="phone"><i>02</i>Phone</button>
-        <button type="button" role="radio" aria-checked="false" tabindex="-1" data-screen="tablet"><i>03</i>Tablet</button>
-        <button type="button" role="radio" aria-checked="false" tabindex="-1" data-screen="tv"><i>04</i>TV</button>
-        <button type="button" role="radio" aria-checked="false" tabindex="-1" data-screen="watch"><i>05</i>Watch</button>
-      </div>
-      <div class="wave-act">
-        <div class="live-name" data-ui>
-          <label for="live-name">Type your business name</label>
-          <input id="live-name" type="text" maxlength="24" placeholder="Sharma Retail" autocomplete="organization">
+      <div class="wl">
+        <h2 class="wave-h"><span data-live-name>Your business</span>,<br><em id="live-word">as a website.</em></h2>
+        <div class="chat">
+          <div class="chat-hd"><span class="chat-av" aria-hidden="true">P</span><span><b>Planorah Technologies</b><small class="chat-st">online</small></span></div>
+          <ol class="chat-body" aria-live="polite" aria-label="An example WhatsApp conversation with Planorah">
+            <li class="me" data-step="0">Hi! Can you build a website for <b data-live-shop>my shop</b>?<time></time></li>
+            <li class="them" data-step="0">Yes. Tell us what it needs to do and you’ll have a fixed quote within 48 hours.<time></time></li>
+            <li class="me" data-step="1">Could customers order from their phone too?<time></time></li>
+            <li class="them" data-step="1">Same catalogue, one app for iOS and Android. Payments by UPI.<time></time></li>
+            <li class="me" data-step="2">My staff use a tablet at the counter.<time></time></li>
+            <li class="them" data-step="2">Then the counter gets its own screen. Stock updates everywhere at once.<time></time></li>
+            <li class="me" data-step="3">And the TV in the shop window?<time></time></li>
+            <li class="them" data-step="3">Offers on the TV, changed from your phone in a minute.<time></time></li>
+            <li class="me" data-step="4">Even my watch?<time></time></li>
+            <li class="them" data-step="4">Even your watch — a buzz for every new order.<time></time></li>
+            <li class="typing" aria-hidden="true"><i></i><i></i><i></i></li>
+          </ol>
+          <div class="chat-compose" data-ui>
+            <label for="live-name" class="sr">Your business name</label>
+            <input id="live-name" name="business" type="text" maxlength="24" placeholder="Type your business name…" autocomplete="organization" spellcheck="false">
+            <a class="chat-send" id="live-send" href="contact.html">Send</a>
+          </div>
         </div>
-        <a class="btn" id="live-send" href="contact.html"><svg viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M12.04 2C6.58 2 2.13 6.45 2.13 11.91c0 1.75.46 3.45 1.32 4.95L2 22l5.25-1.38a9.9 9.9 0 004.79 1.22h.01c5.46 0 9.91-4.45 9.91-9.91 0-2.65-1.03-5.14-2.9-7.01A9.82 9.82 0 0012.04 2zm4.52 12.99c-.25-.12-1.47-.72-1.69-.81-.23-.08-.39-.12-.56.13-.16.24-.64.8-.78.97-.15.16-.29.18-.54.06-.25-.13-1.05-.39-1.99-1.23-.74-.66-1.23-1.47-1.38-1.72-.14-.25-.01-.38.11-.5.11-.11.25-.29.37-.44.13-.15.17-.25.25-.41.08-.17.04-.31-.02-.43-.06-.12-.56-1.34-.76-1.84-.2-.48-.4-.42-.56-.43h-.47c-.17 0-.43.06-.66.31-.22.25-.87.85-.87 2.07 0 1.22.89 2.4 1.01 2.56.12.17 1.75 2.67 4.23 3.74.59.26 1.05.41 1.41.52.59.19 1.13.16 1.56.1.48-.07 1.47-.6 1.68-1.18.21-.58.21-1.08.14-1.18-.06-.11-.22-.17-.47-.29z"/></svg> Ask us to build it</a>
+        <p class="chat-note">Type your name, then press send. It opens WhatsApp with the message written.</p>
+      </div>
+      <div class="wr">
+        <div class="dev-stage" aria-hidden="true"></div>
+        <div class="seg" role="radiogroup" aria-label="Choose a screen" data-ui>
+          <button type="button" role="radio" aria-checked="true" data-screen="desktop">Website</button>
+          <button type="button" role="radio" aria-checked="false" tabindex="-1" data-screen="phone">Phone</button>
+          <button type="button" role="radio" aria-checked="false" tabindex="-1" data-screen="tablet">Tablet</button>
+          <button type="button" role="radio" aria-checked="false" tabindex="-1" data-screen="tv">TV</button>
+          <button type="button" role="radio" aria-checked="false" tabindex="-1" data-screen="watch">Watch</button>
+        </div>
       </div>
     </div>
-    <div class="wave-bar" aria-hidden="true"><i></i></div>
   </div>
 </section>
 
@@ -139,38 +156,40 @@
     <p class="tag tag-dk" data-in>Selected work</p>
     <h2 data-in>Six industries, <em>one way of building.</em></h2>
   </div>
-  <div class="ip" id="i-retail" data-ind>
+  <div class="dock" role="tablist" aria-label="Choose an industry" data-in>
+    <span class="dock-ind" aria-hidden="true"></span>
+    <button type="button" role="tab" aria-selected="true" aria-controls="i-retail"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 8h14l-1 12H6L5 8z"/><path d="M9 8V6a3 3 0 0 1 6 0v2"/></svg><span>Retail</span><i class="dock-prog" aria-hidden="true"></i></button>
+    <button type="button" role="tab" aria-selected="false" aria-controls="i-health" tabindex="-1"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M10 3h4v7h7v4h-7v7h-4v-7H3v-4h7z"/></svg><span>Healthcare</span><i class="dock-prog" aria-hidden="true"></i></button>
+    <button type="button" role="tab" aria-selected="false" aria-controls="i-stream" tabindex="-1"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M10 8.5l5 3.5-5 3.5z"/></svg><span>Streaming</span><i class="dock-prog" aria-hidden="true"></i></button>
+    <button type="button" role="tab" aria-selected="false" aria-controls="i-log" tabindex="-1"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M2 6h11v10H2zM13 10h5l3 3v3h-8z"/><circle cx="6" cy="18" r="2"/><circle cx="17" cy="18" r="2"/></svg><span>Logistics</span><i class="dock-prog" aria-hidden="true"></i></button>
+    <button type="button" role="tab" aria-selected="false" aria-controls="i-edu" tabindex="-1"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M2 9l10-5 10 5-10 5z"/><path d="M6 11v5c3 2 9 2 12 0v-5"/></svg><span>Education</span><i class="dock-prog" aria-hidden="true"></i></button>
+    <button type="button" role="tab" aria-selected="false" aria-controls="i-hosp" tabindex="-1"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 8h12v6a5 5 0 0 1-5 5H9a5 5 0 0 1-5-5z"/><path d="M16 10h2a2 2 0 0 1 0 4h-2M8 3v2M12 3v2"/></svg><span>Hospitality</span><i class="dock-prog" aria-hidden="true"></i></button>
+  </div>
+  <div class="ip" id="i-retail" role="tabpanel" data-ind>
     <div class="ip-l"><span class="sq"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 8h14l-1 12H6L5 8z"/><path d="M9 8V6a3 3 0 0 1 6 0v2"/></svg></span><h3>Retail</h3><p>A 40-store chain kept its products in three places that all disagreed. We rebuilt the catalogue as one source and pushed it to the website, a staff app and the in-store kiosks.</p><a class="btn" href="work.html#retail">Read the case study <svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 6l6 6-6 6"/></svg></a></div>
-    <figure class="ip-r"><img src="assets/img/imam-bazaar-road-chinsurah-hooghly-2013-05.jpg" width="1600" height="1064" alt="A street of shops with painted signboards" loading="lazy"><div class="ov"><p class="ov-h">One catalogue, three screens</p><div><b>3</b><span>screens, one catalogue</span></div><div><b>40</b><span>stores live</span></div><p class="ov-f">Retail · 6 weeks</p></div></figure>
+    <figure class="ip-r"><img src="assets/img/cashier-handing-receipt.jpg" width="1600" height="1126" alt="A cashier handing a receipt to a customer across a shop counter" loading="lazy"><div class="ov"><p class="ov-h">One catalogue, three screens</p><div><b>3</b><span>screens, one catalogue</span></div><div><b>40</b><span>stores live</span></div><p class="ov-f">Retail · 6 weeks</p></div></figure>
   </div>
-  <div class="ip" id="i-health" data-ind hidden>
+  <div class="ip" id="i-health" role="tabpanel" data-ind hidden>
     <div class="ip-l"><span class="sq"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M10 3h4v7h7v4h-7v7h-4v-7H3v-4h7z"/></svg></span><h3>Healthcare</h3><p>Six clinics shared a paper diary and three receptionists phoning each other. Now every chair in the group is on one screen, with WhatsApp reminders the evening before.</p><a class="btn" href="work.html#healthcare">Read the case study <svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 6l6 6-6 6"/></svg></a></div>
-    <figure class="ip-r"><img src="assets/img/clock-tower-ludhiana-10-39-17-473000.jpg" width="1920" height="2560" alt="The clock tower of Ludhiana above a busy street" loading="lazy"><div class="ov"><p class="ov-h">Bookings that stopped double-booking</p><div><b>6</b><span>clinics on one system</span></div><div><b>0</b><span>double bookings since launch</span></div><p class="ov-f">Healthcare · 5 weeks</p></div></figure>
+    <figure class="ip-r"><img src="assets/img/doctor-reviews-patient-information-on-tablet-in.jpg" width="1600" height="1067" alt="A doctor reviewing patient details on a tablet at her desk" loading="lazy"><div class="ov"><p class="ov-h">Bookings that stopped double-booking</p><div><b>6</b><span>clinics on one system</span></div><div><b>0</b><span>double bookings since launch</span></div><p class="ov-f">Healthcare · 5 weeks</p></div></figure>
   </div>
-  <div class="ip" id="i-stream" data-ind hidden>
+  <div class="ip" id="i-stream" role="tabpanel" data-ind hidden>
     <div class="ip-l"><span class="sq"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M10 8.5l5 3.5-5 3.5z"/></svg></span><h3>Streaming</h3><p>A regional streaming service could only be watched on a phone. We shipped Apple TV, Android TV and LG webOS apps from one player core — all approved on the first round.</p><a class="btn" href="work.html#streaming">Read the case study <svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 6l6 6-6 6"/></svg></a></div>
-    <figure class="ip-r"><img src="assets/img/rabbit-ear-dipole-antenna-rooftop-elevated.jpg" width="1600" height="2133" alt="A television antenna on a brick chimney" loading="lazy"><div class="ov"><p class="ov-h">One player, every living room</p><div><b>3</b><span>TV platforms live</span></div><div><b>1</b><span>shared player core</span></div><p class="ov-f">Streaming · 9 weeks</p></div></figure>
+    <figure class="ip-r"><img src="assets/img/lg-smart-tv-web-browser.jpg" width="1600" height="1005" alt="An LG smart TV running an app, with its on-screen keyboard open" loading="lazy"><div class="ov"><p class="ov-h">One player, every living room</p><div><b>3</b><span>TV platforms live</span></div><div><b>1</b><span>shared player core</span></div><p class="ov-f">Streaming · 9 weeks</p></div></figure>
   </div>
-  <div class="ip" id="i-log" data-ind hidden>
+  <div class="ip" id="i-log" role="tabpanel" data-ind hidden>
     <div class="ip-l"><span class="sq"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M2 6h11v10H2zM13 10h5l3 3v3h-8z"/><circle cx="6" cy="18" r="2"/><circle cx="17" cy="18" r="2"/></svg></span><h3>Logistics</h3><p>The delivery run moved off paper: drivers get their stops on a phone, the office sees every vehicle live, and proof of delivery comes back as a photo instead of a signature on a slip.</p><a class="btn" href="work.html#logistics">Read the case study <svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 6l6 6-6 6"/></svg></a></div>
-    <figure class="ip-r"><img src="assets/img/motor-vehicles-motor-trucks-in-use-national.jpg" width="932" height="678" alt="Delivery trucks in a company garage, 1918" loading="lazy"><div class="ov"><p class="ov-h">The delivery run, off paper</p><div><b>120</b><span>drivers using it daily</span></div><div><b>18</b><span>vehicles tracked live</span></div><p class="ov-f">Logistics · 7 weeks</p></div></figure>
+    <figure class="ip-r"><img src="assets/img/delivery-driver-delivering-takeout.jpg" width="1600" height="1067" alt="Illustration of an order placed on a phone and a rider out for delivery" loading="lazy"><div class="ov"><p class="ov-h">The delivery run, off paper</p><div><b>120</b><span>drivers using it daily</span></div><div><b>18</b><span>vehicles tracked live</span></div><p class="ov-f">Logistics · 7 weeks</p></div></figure>
   </div>
-  <div class="ip" id="i-edu" data-ind hidden>
+  <div class="ip" id="i-edu" role="tabpanel" data-ind hidden>
     <div class="ip-l"><span class="sq"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M2 9l10-5 10 5-10 5z"/><path d="M6 11v5c3 2 9 2 12 0v-5"/></svg></span><h3>Education</h3><p>Admissions went from scattered enquiry forms to one pipeline — every applicant tracked from first question to enrolled, with the counsellors working from the same list.</p><a class="btn" href="work.html#education">Read the case study <svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 6l6 6-6 6"/></svg></a></div>
-    <figure class="ip-r"><img src="assets/img/ntm-tele-t-2767-ti-silent-700.jpg" width="1920" height="1332" alt="A Texas Instruments Silent 700 data terminal" loading="lazy"><div class="ov"><p class="ov-h">Admissions, enquiry to enrolled</p><div><b>1,800</b><span>applications in one intake</span></div><div><b>4</b><span>courses on one pipeline</span></div><p class="ov-f">Education · 6 weeks</p></div></figure>
+    <figure class="ip-r"><img src="assets/img/student-with-computer.jpg" width="1600" height="1200" alt="A student working on a laptop in a classroom" loading="lazy"><div class="ov"><p class="ov-h">Admissions, enquiry to enrolled</p><div><b>1,800</b><span>applications in one intake</span></div><div><b>4</b><span>courses on one pipeline</span></div><p class="ov-f">Education · 6 weeks</p></div></figure>
   </div>
-  <div class="ip" id="i-hosp" data-ind hidden>
+  <div class="ip" id="i-hosp" role="tabpanel" data-ind hidden>
     <div class="ip-l"><span class="sq"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 8h12v6a5 5 0 0 1-5 5H9a5 5 0 0 1-5-5z"/><path d="M16 10h2a2 2 0 0 1 0 4h-2M8 3v2M12 3v2"/></svg></span><h3>Hospitality</h3><p>Direct ordering for a group of outlets, one menu edited in one place, and a Google listing for each outlet so hungry people find the right door on Maps.</p><a class="btn" href="work.html#hospitality">Read the case study <svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 6l6 6-6 6"/></svg></a></div>
-    <figure class="ip-r"><img src="assets/img/wheat-in-punjab-india.jpg" width="1600" height="1065" alt="Ears of wheat in a field in Punjab" loading="lazy"><div class="ov"><p class="ov-h">Ordering direct, and found on Maps</p><div><b>5</b><span>outlets on one menu</span></div><div><b>20 min</b><span>from edit to live everywhere</span></div><p class="ov-f">Hospitality · 4 weeks</p></div></figure>
+    <figure class="ip-r"><img src="assets/img/wendy-s-in-bilton-kingston-upon-hull.jpg" width="1600" height="1067" alt="Self-ordering touchscreen kiosks along the wall of a restaurant" loading="lazy"><div class="ov"><p class="ov-h">Ordering direct, and found on Maps</p><div><b>5</b><span>outlets on one menu</span></div><div><b>20 min</b><span>from edit to live everywhere</span></div><p class="ov-f">Hospitality · 4 weeks</p></div></figure>
   </div>
-  <div class="dock" role="group" aria-label="Choose an industry" data-in>
-    <button type="button" aria-pressed="true" aria-controls="i-retail" aria-label="Retail"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 8h14l-1 12H6L5 8z"/><path d="M9 8V6a3 3 0 0 1 6 0v2"/></svg></button>
-    <button type="button" aria-pressed="false" aria-controls="i-health" aria-label="Healthcare"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M10 3h4v7h7v4h-7v7h-4v-7H3v-4h7z"/></svg></button>
-    <button type="button" aria-pressed="false" aria-controls="i-stream" aria-label="Streaming"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M10 8.5l5 3.5-5 3.5z"/></svg></button>
-    <button type="button" aria-pressed="false" aria-controls="i-log" aria-label="Logistics"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M2 6h11v10H2zM13 10h5l3 3v3h-8z"/><circle cx="6" cy="18" r="2"/><circle cx="17" cy="18" r="2"/></svg></button>
-    <button type="button" aria-pressed="false" aria-controls="i-edu" aria-label="Education"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M2 9l10-5 10 5-10 5z"/><path d="M6 11v5c3 2 9 2 12 0v-5"/></svg></button>
-    <button type="button" aria-pressed="false" aria-controls="i-hosp" aria-label="Hospitality"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 8h12v6a5 5 0 0 1-5 5H9a5 5 0 0 1-5-5z"/><path d="M16 10h2a2 2 0 0 1 0 4h-2M8 3v2M12 3v2"/></svg></button>
-  </div>
+  
 </section>
 
 <section class="ch proc" id="process" data-field="wh" data-in-group>
@@ -249,11 +268,11 @@
     <span>© <span id="yr">2026</span> Planorah Technologies · <a href="privacy.html">Privacy</a> · <a href="terms.html">Terms</a></span>
     <a href="#main">Back to top</a>
   </div>
-  <div class="ft-credits"><p>Pictures on this page, via Wikimedia Commons, shown in black and white: <a href="https://commons.wikimedia.org/wiki/File:Clock_tower_Ludhiana_10_39_17_473000.jpeg" rel="noopener">Clock tower Ludhiana 10 39 17 473000</a> by Deepu.dhaipai, CC BY-SA 4.0; <a href="https://commons.wikimedia.org/wiki/File:NTM_TELE.T-2767_-_TI_Silent_700.jpg" rel="noopener">NTM TELE.T-2767 - TI Silent 700</a> by Norsk Teknisk Museum, CC BY-SA 4.0; <a href="https://commons.wikimedia.org/wiki/File:Wheat_in_Punjab,_India.jpg" rel="noopener">Wheat in Punjab, India</a> by Satpal Dandiwal, CC BY-SA 4.0; <a href="https://commons.wikimedia.org/wiki/File:Imam_Bazaar_Road_-_Chinsurah_-_Hooghly_-_2013-05-19_7863.JPG" rel="noopener">Imam Bazaar Road - Chinsurah - Hooghly - 2013-05-19 7863</a> by Biswarup Ganguly, CC BY 3.0; <a href="https://commons.wikimedia.org/wiki/File:Rabbit_ear_dipole_antenna_rooftop_elevated.jpg" rel="noopener">Rabbit ear dipole antenna rooftop elevated</a> by B137, CC0; <a href="https://commons.wikimedia.org/wiki/File:Motor_Vehicles_-_Motor_Trucks_-_In_Use_-_National_India_Rubber_Company%27s_garage,_showing_one_of_our_delivery_trucks_and_a_fire_truck_owned_by_the_town_of_Bristol,_R.I._and_maintained_and_operated_free_of_charge_b(...)_-_NARA_-_45504905.jpg" rel="noopener">Motor Vehicles - Motor Trucks - In Use - National India Rubber Company&#x27;s garage, showing one of our delivery trucks and a fire truck owned by the town of Bristol, R.I. and maintained and operated free of charge by this company</a> by Unknown author Unknown author or not provided, public domain.</p></div>
+  <div class="ft-credits"><p>Pictures on this page, via Wikimedia Commons: <a href="https://commons.wikimedia.org/wiki/File:Cashier_handing_receipt.jpg" rel="noopener">Cashier handing receipt</a> by Tessa Bury, CC BY 4.0; <a href="https://commons.wikimedia.org/wiki/File:Doctor_reviews_patient_information_on_tablet_in_an_office_setting.jpg" rel="noopener">Doctor reviews patient information on tablet in an office setting</a> by Shixart1985, CC BY 2.0; <a href="https://commons.wikimedia.org/wiki/File:LG_Smart_TV_web_browser.jpg" rel="noopener">LG Smart TV web browser</a> by AussieLegend, public domain; <a href="https://commons.wikimedia.org/wiki/File:Delivery_Driver_Delivering_Takeout.jpg" rel="noopener">Delivery Driver Delivering Takeout</a> by Meanwell Packaging, CC BY 2.0; <a href="https://commons.wikimedia.org/wiki/File:Student_with_computer.JPG" rel="noopener">Student with computer</a> by Courtcourtwest, CC BY-SA 4.0; <a href="https://commons.wikimedia.org/wiki/File:Wendy%27s_in_Bilton,_Kingston_upon_Hull_Apr24_Interior_Ordering_Tablets.jpg" rel="noopener">Wendy&#x27;s in Bilton, Kingston upon Hull Apr24 Interior Ordering Tablets</a> by Hullian111, CC BY-SA 4.0.</p></div>
 </footer>
 
 <a class="fab" id="fab" href="#" aria-label="Chat with Planorah on WhatsApp"><svg viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M12.04 2C6.58 2 2.13 6.45 2.13 11.91c0 1.75.46 3.45 1.32 4.95L2 22l5.25-1.38a9.9 9.9 0 004.79 1.22h.01c5.46 0 9.91-4.45 9.91-9.91 0-2.65-1.03-5.14-2.9-7.01A9.82 9.82 0 0012.04 2zm4.52 12.99c-.25-.12-1.47-.72-1.69-.81-.23-.08-.39-.12-.56.13-.16.24-.64.8-.78.97-.15.16-.29.18-.54.06-.25-.13-1.05-.39-1.99-1.23-.74-.66-1.23-1.47-1.38-1.72-.14-.25-.01-.38.11-.5.11-.11.25-.29.37-.44.13-.15.17-.25.25-.41.08-.17.04-.31-.02-.43-.06-.12-.56-1.34-.76-1.84-.2-.48-.4-.42-.56-.43h-.47c-.17 0-.43.06-.66.31-.22.25-.87.85-.87 2.07 0 1.22.89 2.4 1.01 2.56.12.17 1.75 2.67 4.23 3.74.59.26 1.05.41 1.41.52.59.19 1.13.16 1.56.1.48-.07 1.47-.6 1.68-1.18.21-.58.21-1.08.14-1.18-.06-.11-.22-.17-.47-.29z"/></svg></a>
 <script src="https://cdn.jsdelivr.net/npm/lenis@1.1.13/dist/lenis.min.js"></script>
-<script src="assets/planorah.js"></script>
+<script src="assets/planorah.js?v=d8c45147"></script>
 </body>
 </html>

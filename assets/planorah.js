@@ -168,14 +168,14 @@ var PLANORAH = {
 
   function fitText(ctx, text, weight, maxW, maxPx){
     var px = maxPx;
-    ctx.font = weight + ' ' + px + 'px "Inter Tight", sans-serif';
-    while (ctx.measureText(text).width > maxW && px > 10){ px -= 2; ctx.font = weight + ' ' + px + 'px "Inter Tight", sans-serif'; }
+    ctx.font = weight + ' ' + px + 'px Poppins, sans-serif';
+    while (ctx.measureText(text).width > maxW && px > 10){ px -= 2; ctx.font = weight + ' ' + px + 'px Poppins, sans-serif'; }
     return px;
   }
   function box(ctx, x, y, w, h, c){ ctx.fillStyle = c; ctx.fillRect(x, y, w, h); }
   function txt(ctx, s, x, y, px, weight, c, align){
     ctx.fillStyle = c; ctx.textAlign = align || 'left'; ctx.textBaseline = 'alphabetic';
-    ctx.font = (weight || 500) + ' ' + px + 'px "Inter Tight", sans-serif'; ctx.fillText(s, x, y);
+    ctx.font = (weight || 500) + ' ' + px + 'px Poppins, sans-serif'; ctx.fillText(s, x, y);
   }
 
   var DRAW = {
@@ -287,6 +287,15 @@ var PLANORAH = {
     var send = document.getElementById('live-send');
     var segs = document.querySelectorAll('.seg button');
     if (!input) return;
+    /* each letter is its own span so the words can rise in one after another */
+    function setWord(text){
+      if (!word) return;
+      word.setAttribute('aria-label', text);
+      word.innerHTML = text.split('').map(function(ch, i){
+        return '<span aria-hidden="true" style="--c:' + i + '">' + (ch === ' ' ? '&nbsp;' : ch) + '</span>';
+      }).join('');
+    }
+    if (word) setWord(word.textContent.trim());
     var words = { tv: 'on a TV', desktop: 'as a website', tablet: 'on a tablet', phone: 'on a phone', watch: 'on a watch' };
     var asks = { tv: 'a TV app', desktop: 'a website', tablet: 'a tablet system', phone: 'a mobile app', watch: 'a watch app' };
     function updateSend(){
@@ -304,10 +313,7 @@ var PLANORAH = {
       b.addEventListener('click', function(){
         segs.forEach(function(o){ o.setAttribute('aria-checked', o === b ? 'true' : 'false'); o.tabIndex = o === b ? 0 : -1; });
         state.screen = b.getAttribute('data-screen');
-        if (word && word.textContent !== words[state.screen] + '.'){
-          word.classList.add('swap');
-          setTimeout(function(){ word.textContent = words[state.screen] + '.'; word.classList.remove('swap'); }, reduce ? 0 : 220);
-        }
+        if (word && word.getAttribute('aria-label') !== words[state.screen] + '.') setWord(words[state.screen] + '.');
         listeners.forEach(function(f){ f(); });
         updateSend();
       });
@@ -620,9 +626,9 @@ var PLANORAH = {
     }
     live(window.THREE);
   }
-  /* repaint the screens once Inter Tight has loaded, so canvas text uses it */
+  /* repaint the screens once Poppins has loaded, so canvas text uses it */
   if (document.fonts && document.fonts.ready){
-    document.fonts.load('700 40px "Inter Tight"').then(function(){ listeners.forEach(function(f){ f(); }); });
+    document.fonts.load('700 40px Poppins').then(function(){ listeners.forEach(function(f){ f(); }); });
   }
   /* ══ Smooth scrolling ══ */
   var lenis = null;
@@ -645,71 +651,128 @@ var PLANORAH = {
   function onScroll(f){ if (lenis) lenis.on('scroll', f); else window.addEventListener('scroll', f, {passive:true}); f(); }
   function scrollToY(y){ if (lenis) lenis.scrollTo(y, { duration: 1.4, easing: function(t){ return 1 - Math.pow(1 - t, 4); } }); else window.scrollTo({ top: y, behavior: reduce ? 'auto' : 'smooth' }); }
 
-  /* ══ Your name on every screen: wave lines driven by the scroll ══ */
+  /* ══ Your name on every screen: the scroll plays a WhatsApp conversation ══ */
   (function(){
-    var sec = document.querySelector('.wave'), cv = sec && sec.querySelector('.waves');
-    if (!cv) return;
-    var ctx = cv.getContext('2d'), segs = Array.prototype.slice.call(sec.querySelectorAll('.seg button'));
-    var bar = sec.querySelector('.wave-bar'), idx = 0, prog = 0, sp = 0, w = 0, h = 0, dpr = 1;
-    /* one wave shape per screen: amplitude, frequency, twist, spread */
-    var SHAPES = [[.10, 1.2, 2.2, .20], [.16, 2.1, 3.4, .12], [.08, 1.6, 1.4, .28], [.13, .8, 4.2, .34], [.18, 2.8, 2.6, .10]];
-    var cur = SHAPES[0].slice(), mx = .5, tmx = .5;
-    function size(){
-      dpr = Math.min(1.25, window.devicePixelRatio || 1);
-      w = cv.clientWidth; h = cv.clientHeight;
-      cv.width = Math.round(w * dpr); cv.height = Math.round(h * dpr);
-    }
-    function draw(t){
-      var tg = SHAPES[idx];
-      for (var k = 0; k < 4; k++) cur[k] += (tg[k] - cur[k]) * (reduce ? 1 : .05);
-      mx += (tmx - mx) * .05;
-      sp += (prog - sp) * (reduce ? 1 : .08);
-      ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
-      ctx.clearRect(0, 0, w, h);
-      ctx.globalCompositeOperation = 'lighter';
-      var N = 46, step = Math.max(8, w / 120), ph = (reduce ? 0 : t * .00018) + sp * 6;
-      for (var i = 0; i < N; i++){
-        var f = i / (N - 1);
-        ctx.beginPath();
-        for (var x = -step; x <= w + step; x += step){
-          var u = x / w, env = Math.pow(Math.sin(Math.PI * Math.min(1, Math.max(0, u))), .8);
-          var y = h * (.62 + (mx - .5) * .06)
-            + Math.sin(u * cur[1] * 6.283 + ph + f * cur[2]) * cur[0] * h
-            + Math.sin(u * cur[1] * 3.1 - ph * 1.3 + f * 1.7) * cur[0] * .45 * h
-            + (f - .5) * cur[3] * h * env;
-          if (x < 0) ctx.moveTo(x, y); else ctx.lineTo(x, y);
-        }
-        var a = .08 + .5 * Math.pow(1 - Math.abs(f - .5) * 2, 2);
-        ctx.strokeStyle = f < .5 ? 'rgba(255,' + Math.round(90 + 120 * f) + ',' + Math.round(20 + 60 * f) + ',' + a + ')' : 'rgba(255,' + Math.round(150 + 100 * (f - .5)) + ',' + Math.round(80 + 170 * (f - .5)) + ',' + a + ')';
-        ctx.lineWidth = 1;
-        ctx.stroke();
+    var sec = document.querySelector('.wave'), chat = sec && sec.querySelector('.chat');
+    if (!chat) return;
+    var segs = Array.prototype.slice.call(sec.querySelectorAll('.seg button'));
+    var items = Array.prototype.slice.call(chat.querySelectorAll('.chat-body li[data-step]'));
+    var typing = chat.querySelector('.typing'), status = chat.querySelector('.chat-st');
+    var idx = -1, timer = 0, auto = false;
+
+    /* times in Ludhiana, two minutes apart, ending a few minutes ago */
+    var fmt = new Intl.DateTimeFormat('en-IN', { timeZone: 'Asia/Kolkata', hour: 'numeric', minute: '2-digit', hour12: true });
+    var start = Date.now() - 12 * 60000;
+    items.forEach(function(li, i){ li.querySelector('time').textContent = fmt.format(new Date(start + i * 60000)).toLowerCase(); });
+
+    /* the shop's name in the messages: "my shop" until the visitor types one */
+    var shops = chat.querySelectorAll('[data-live-shop]');
+    listeners.push(function(){
+      var n = state.name === 'Your business' ? 'my shop' : state.name;
+      shops.forEach(function(s){ s.textContent = n; });
+    });
+
+    function show(n){
+      if (n === idx) return;
+      var forward = n > idx;
+      idx = n;
+      clearTimeout(timer);
+      typing.classList.remove('shown'); chat.classList.remove('typing-now'); status.textContent = 'online';
+      items.forEach(function(li){
+        var st = +li.getAttribute('data-step'), mine = li.classList.contains('me');
+        var on = st < n || (st === n && mine);
+        li.classList.toggle('shown', on);
+      });
+      /* the reply to the newest message: "typing…" first, then the answer */
+      var reply = items.filter(function(li){ return +li.getAttribute('data-step') === n && li.classList.contains('them'); })[0];
+      var asked = items.filter(function(li){ return +li.getAttribute('data-step') === n && li.classList.contains('me'); })[0];
+      function answer(){
+        typing.classList.remove('shown'); chat.classList.remove('typing-now'); status.textContent = 'online';
+        reply.classList.add('shown');
       }
-      ctx.globalCompositeOperation = 'source-over';
+      if (reduce || !forward){ answer(); return; }
+      timer = setTimeout(function(){
+        typing.classList.add('shown'); chat.classList.add('typing-now'); status.textContent = 'typing…';
+        timer = setTimeout(answer, 1100);
+      }, 450);
     }
-    var auto = false;
+
     function update(){
-      var r = sec.getBoundingClientRect(), span = sec.offsetHeight - innerHeight;
-      prog = Math.min(1, Math.max(0, -r.top / span));
-      if (bar) bar.style.setProperty('--p', prog.toFixed(3));
-      var n = Math.min(segs.length - 1, Math.floor(prog * segs.length * .999));
-      if (n !== idx){ idx = n; auto = true; segs[n].click(); auto = false; }
-      if (reduce) draw(0);
+      var r = sec.getBoundingClientRect(), span = Math.max(1, sec.offsetHeight - innerHeight);
+      var p = Math.min(1, Math.max(0, -r.top / span));
+      var n = Math.min(segs.length - 1, Math.floor(p * segs.length * .999));
+      if (n !== idx){ show(n); auto = true; segs[n].click(); auto = false; }
     }
     segs.forEach(function(b, i){
       b.addEventListener('click', function(){
-        idx = i;
         if (auto) return;
+        show(i);
         var top = sec.getBoundingClientRect().top + window.scrollY, span = sec.offsetHeight - innerHeight;
         scrollToY(top + span * (i + .5) / segs.length);
       });
     });
-    sec.addEventListener('pointermove', function(e){ tmx = e.clientX / innerWidth; }, {passive:true});
-    size(); window.addEventListener('resize', function(){ size(); draw(performance.now()); });
+    show(0);
     onScroll(update);
-    if (reduce){ draw(0); return; }
-    var on = false;
-    new IntersectionObserver(function(en){ on = en[0].isIntersecting; if (on) requestAnimationFrame(tick); }).observe(sec);
-    function tick(t){ draw(t); if (on) requestAnimationFrame(tick); }
+  })();
+
+  /* ══ The screen beside the chat: a real interface for each step, carrying the visitor's name ══ */
+  (function(){
+    var stage = document.querySelector('.dev-stage');
+    if (!stage) return;
+    var SHOP = 'assets/img/cashier-handing-receipt.jpg';
+    function esc(s){ return s.replace(/[&<>"]/g, function(c){ return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]; }); }
+    function slug(s){ return (s.toLowerCase().replace(/[^a-z0-9]+/g, '') || 'yourbusiness') + '.in'; }
+    var price = new Intl.NumberFormat('en-IN', { style: 'currency', currency: 'INR', maximumFractionDigits: 0 });
+    var SCREENS = {
+      desktop: { cls: 'sc-web', w: 560, h: 370, html: function(n){ return '' +
+        '<div class="x-bar"><span class="x-dots"><i></i><i></i><i></i></span><span class="url">' + esc(slug(n)) + '</span></div>' +
+        '<nav><b>' + esc(n) + '</b><span>Shop</span><span>Stores</span><span>About</span><span class="btn-s">Order on WhatsApp</span></nav>' +
+        '<div class="x-hero"><div><h4>Everything for your home, in one place.</h4><p>Open 10am to 9pm in Ludhiana. Delivery the same day.</p><span class="btn-s">Browse the shop</span></div><i class="x-pic" style="background-image:url(' + SHOP + ')"></i></div>' +
+        '<div class="x-row"><div><i></i><b>Steel cookware set</b><span>' + price.format(2340) + '</span></div><div><i></i><b>Wall clock</b><span>' + price.format(899) + '</span></div><div><i></i><b>Bedsheet, double</b><span>' + price.format(1250) + '</span></div></div>'; } },
+      phone: { cls: 'sc-phone', w: 236, h: 480, html: function(n){ return '' +
+        '<div class="st"><span>9:41</span><span>5G</span></div><h4>' + esc(n) + '</h4><div class="srch">Search products…</div>' +
+        '<div class="chips"><span>All</span><span>Kitchen</span><span>Home</span></div>' +
+        '<div class="it"><i></i><div><b>Steel cookware set</b><span>In stock</span></div><b>' + price.format(2340) + '</b></div>' +
+        '<div class="it"><i></i><div><b>Wall clock</b><span>2 left</span></div><b>' + price.format(899) + '</b></div>' +
+        '<div class="it"><i></i><div><b>Bedsheet, double</b><span>In stock</span></div><b>' + price.format(1250) + '</b></div>' +
+        '<div class="pay">Pay with UPI</div>'; } },
+      tablet: { cls: 'sc-tab', w: 500, h: 350, html: function(n){ return '' +
+        '<div class="ord"><header><b>' + esc(n) + '</b><span>Counter 1</span></header>' +
+        '<div class="ln"><b>Steel cookware set</b><span>1 × ' + price.format(2340) + '</span></div>' +
+        '<div class="ln"><b>Wall clock</b><span>1 × ' + price.format(899) + '</span></div>' +
+        '<div class="ln"><b>Bedsheet, double</b><span>2 × ' + price.format(1250) + '</span></div>' +
+        '<div class="tot"><b>Total</b><b>' + price.format(5739) + '</b></div></div>' +
+        '<div class="pad"><span>1</span><span>2</span><span>3</span><span>4</span><span>5</span><span>6</span><span>7</span><span>8</span><span>9</span><span>UPI</span><span>0</span><span>Card</span><span class="btn-s">Charge ' + price.format(5739) + '</span></div>'; } },
+      tv: { cls: 'sc-tv', w: 620, h: 350, html: function(n){ return '' +
+        '<header><b>' + esc(n) + '</b><span>In the shop window</span></header>' +
+        '<div class="ban"><div><h4>This week’s offers</h4><p>Changed from the owner’s phone a minute ago.</p></div><i class="x-pic" style="background-image:url(' + SHOP + ')"></i></div>' +
+        '<div class="tiles"><span><b>20% off</b>Cookware</span><span><b>' + price.format(899) + '</b>Wall clocks</span><span><b>2 for 1</b>Bedsheets</span><span><b>Free</b>Delivery</span></div>'; } },
+      watch: { cls: 'sc-watch', w: 190, h: 226, html: function(n){ return '' +
+        '<span class="t">' + new Intl.DateTimeFormat('en-IN', { timeZone: 'Asia/Kolkata', hour: 'numeric', minute: '2-digit', hour12: true }).format(new Date()).toLowerCase() + '</span>' +
+        '<b>New order</b><span class="x-n">' + esc(n) + '</span><span class="amt">' + price.format(2340) + '</span><span class="btn-s">Accept</span>'; } }
+    };
+    var kind = null, el = null;
+    function make(k){
+      var d = document.createElement('div'), sp = SCREENS[k];
+      d.className = 'sc ' + sp.cls;
+      d.innerHTML = '<div class="sc-in">' + sp.html(state.name) + '</div><i class="sc-scan"></i>';
+      return d;
+    }
+    /* scale each screen to fit the space it has */
+    function fit(d, k){
+      var sp = SCREENS[k], box = stage.getBoundingClientRect();
+      d.style.setProperty('--k', Math.min(1.15, box.width * .96 / sp.w, box.height * .94 / sp.h).toFixed(3));
+    }
+    function show(next){
+      if (next === kind){ if (el) el.querySelector('.sc-in').innerHTML = SCREENS[kind].html(state.name); return; }
+      var old = el;
+      kind = next; el = make(next); fit(el, next); stage.appendChild(el);
+      if (old){ old.classList.remove('on'); setTimeout(function(){ old.remove(); }, 700); }
+      requestAnimationFrame(function(){ requestAnimationFrame(function(){ el.classList.add('on'); }); });
+    }
+    listeners.push(function(){ show(state.screen); });
+    show(state.screen);
+    window.addEventListener('resize', function(){ if (el) fit(el, kind); });
   })();
 
   /* ══ Tabs (services) and the dock (industries) ══ */
@@ -732,18 +795,42 @@ var PLANORAH = {
         });
       });
     });
+    /* the industry tabs: a sliding highlight, and they play on their own until someone picks one */
     var dock = document.querySelector('.dock');
     if (dock){
-      var bs = Array.prototype.slice.call(dock.querySelectorAll('button'));
+      var ind = dock.querySelector('.dock-ind'), bs = Array.prototype.slice.call(dock.querySelectorAll('[role="tab"]'));
+      var DUR = 6000, timer = 0, stopped = reduce, hover = false;
+      function slide(){
+        var on = dock.querySelector('[aria-selected="true"]');
+        ind.style.width = on.offsetWidth + 'px';
+        ind.style.transform = 'translateX(' + on.offsetLeft + 'px)';
+        if (dock.scrollWidth > dock.clientWidth) dock.scrollTo({ left: on.offsetLeft - 40, behavior: reduce ? 'auto' : 'smooth' });
+      }
+      function restart(){
+        clearTimeout(timer);
+        dock.classList.remove('playing'); void dock.offsetWidth;
+        if (stopped) return;
+        dock.style.setProperty('--dur', DUR + 'ms');
+        dock.classList.add('playing');
+        if (hover) return;
+        timer = setTimeout(function(){
+          var i = bs.findIndex(function(b){ return b.getAttribute('aria-selected') === 'true'; });
+          bs[(i + 1) % bs.length].dispatchEvent(new CustomEvent('autopick'));
+        }, DUR);
+      }
       bs.forEach(function(b){
-        b.addEventListener('click', function(){
-          bs.forEach(function(o){
-            var on = o === b;
-            o.setAttribute('aria-pressed', on ? 'true' : 'false');
-            document.getElementById(o.getAttribute('aria-controls')).hidden = !on;
-          });
-        });
+        b.addEventListener('click', function(e){ if (e.isTrusted){ stopped = true; } slide(); restart(); });
+        b.addEventListener('keydown', function(){ stopped = true; setTimeout(function(){ slide(); restart(); }); });
+        b.addEventListener('autopick', function(){ b.click(); });
       });
+      dock.parentElement.addEventListener('focusin', function(){ stopped = true; clearTimeout(timer); dock.classList.remove('playing'); });
+      dock.parentElement.addEventListener('mouseenter', function(){ hover = true; clearTimeout(timer); dock.classList.add('paused'); });
+      dock.parentElement.addEventListener('mouseleave', function(){ hover = false; dock.classList.remove('paused'); restart(); });
+      window.addEventListener('resize', slide);
+      if (document.fonts && document.fonts.ready) document.fonts.ready.then(slide);
+      slide();
+      /* only start playing once the section is on screen */
+      new IntersectionObserver(function(en, ob){ if (en[0].isIntersecting){ restart(); ob.disconnect(); } }, { threshold: .4 }).observe(dock.parentElement);
     }
   })();
 

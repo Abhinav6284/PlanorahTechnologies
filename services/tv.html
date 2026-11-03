@@ -20,28 +20,28 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Inter+Tight:wght@400;600&family=Instrument+Serif:ital@1&family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
 <link rel="icon" type="image/svg+xml" href="../assets/favicon.svg">
-<meta name="theme-color" content="#050505">
-<link rel="stylesheet" href="../assets/planorah.css">
+<meta name="theme-color" content="#07070A">
+<link rel="stylesheet" href="../assets/planorah.css?v=280f65c4">
 </head>
 <body data-page="TV">
 <a class="skip" href="#main">Skip to content</a>
 <header class="hd" id="hd">
   <div class="hd-in">
-    <a class="wm" href="../index.html" aria-label="Planorah Technologies, home"><img src="../assets/favicon.svg" width="30" height="30" alt="">Planorah</a>
-    <nav class="hd-nav" aria-label="Primary"><a href="../services/index.html">Services</a><a href="../work.html">Work</a><a href="../process.html">Process</a><a href="../about.html">About</a><a href="../contact.html">Contact</a></nav>
+    <a class="wm" href="../" aria-label="Planorah Technologies, home"><img src="../assets/favicon.svg" width="30" height="30" alt="">Planorah</a>
+    <nav class="hd-nav" aria-label="Primary"><a href="../services/">Services</a><a href="../work.html">Work</a><a href="../process.html">Process</a><a href="../about.html">About</a><a href="../contact.html">Contact</a></nav>
     <a class="btn btn-talk" href="../contact.html">Let’s talk <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 6l6 6-6 6"/></svg></a>
     <button class="burger" id="burger" aria-expanded="false" aria-controls="mob">Menu</button>
   </div>
 </header>
 <nav class="mob" id="mob" aria-label="Menu">
-  <a href="../services/index.html">Services</a><a href="../work.html">Work</a><a href="../process.html">Process</a><a href="../about.html">About</a><a href="../contact.html">Contact</a>
+  <a href="../services/">Services</a><a href="../work.html">Work</a><a href="../process.html">Process</a><a href="../about.html">About</a><a href="../contact.html">Contact</a>
   <a class="btn" href="../contact.html">Send your requirement</a>
 </nav>
 
 <main id="main">
 <section class="glassy ch ph" data-field="or" data-in-group>
   <canvas class="glass" data-glass="left" aria-hidden="true"></canvas>
-  <nav class="crumb" aria-label="Breadcrumb" data-in><a href="../index.html">Home</a><span aria-hidden="true">/</span><a href="index.html">Services</a><span aria-hidden="true">/</span><span aria-current="page">TV apps</span></nav>
+  <nav class="crumb" aria-label="Breadcrumb" data-in><a href="../">Home</a><span aria-hidden="true">/</span><a href="./">Services</a><span aria-hidden="true">/</span><span aria-current="page">TV apps</span></nav>
   <h1 data-in>Apps for the ten-foot screen.</h1>
   <div class="ph-body" data-in>
     <p class="lead">Television is not a bigger phone. The only input is a D-pad remote, the viewer is three metres away, and every store reviews the app by hand. We build for those constraints from the first screen.</p>
@@ -54,7 +54,7 @@
   <div class="split">
     <h2 class="sh" data-in>What we build</h2>
     <div class="prose" data-in><p>A television app has one input: four directions and an OK button, held by someone sitting across the room. Every screen has to answer two questions at all times — where is the focus now, and where does it go when the viewer presses right. We design that as a real spatial navigation map before any layout work, because a focus ring that gets stuck in a corner or skips a row is the fault viewers notice in the first ten seconds. Type is sized to read from three metres, contrast is raised, and the safe area is respected so nothing important lands on the edge that older sets crop.</p><p>Video is the other half of the work. We handle adaptive bitrate streaming over HLS and DASH, resume points, subtitle and audio track switching, and DRM where the content licence requires it — FairPlay on tvOS, Widevine on Android TV and Fire TV, PlayReady on Samsung and LG. All of it is tested on the hardware people actually own, which is usually a set bought four or five years ago with a slow processor and a fraction of the memory in a current phone. An app that feels instant on a development machine and takes eight seconds to open a catalogue on a real television has not been finished.</p><p>TV is a genuinely different discipline from mobile, and treating it as a resized phone app is the most common way these projects fail. There is no touch and no hover, so nothing can depend on a gesture, a long press or a tooltip. Store review is stricter and slower: Apple, Google, Amazon, Samsung and LG each put a person in front of a real remote to check focus behaviour, the back button, playback controls and recovery from a dropped connection. Samsung and LG go further and run the build on their own certified device pool. We build against those checklists from week one instead of meeting them for the first time at submission.</p></div>
-    <aside class="side" data-in><figure><img class="ph-mono" src="../assets/img/bush-tv62-television-set-uk-1956.jpg" width="1920" height="1440" alt="A 1956 Bush television set in a brown bakelite cabinet on a workbench" loading="lazy"><figcaption>A Bush TV62 television set, UK, 1956.</figcaption></figure></aside>
+    <aside class="side" data-in><figure><img class="ph-mono" src="../assets/img/smart-tv-on-lg.jpg" width="1600" height="1200" alt="An LG smart TV showing a web app on its screen" loading="lazy"><figcaption>A web app on a smart TV.</figcaption></figure></aside>
   </div>
 </section>
 
@@ -72,7 +72,7 @@
 
 <section class="ch" data-field="or" data-in-group>
   <div class="kinds-h"><h2 data-in>Three kinds of screen in the room.</h2><p data-in>Not every television app is a streaming service. The remote and the viewing distance are the same; what changes is who is watching and why the screen is on.</p></div>
-  <div class="kinds"><div class="kind" data-in><h3>Streaming &amp; video</h3><p>Catalogue browsing, continue-watching, live channels and pay-per-view events. Adaptive streaming, DRM and playback analytics are wired in together, so you can see what people finish and exactly where they drop out.</p><p class="uses">HLS and DASH, DRM, live, analytics</p><img class="ph-mono" src="../assets/img/rabbit-ear-dipole-antenna-rooftop-elevated.jpg" width="1600" height="2133" alt="A television antenna on a brick chimney against a blue sky" loading="lazy"></div><div class="kind" data-in><h3>Catalogue &amp; retail TV</h3><p>Product ranges, showreels, menus and property listings on the big screen, driven by the same catalogue your website already uses. One update, every screen, and no second content team keeping the television in sync by hand.</p><p class="uses">Catalogue sync, search, multi-language</p><img class="ph-mono" src="../assets/img/imam-bazaar-road-chinsurah-hooghly-2013-05.jpg" width="1600" height="1064" alt="A street of shops with painted signboards in Chinsurah, West Bengal" loading="lazy"></div><div class="kind" data-in><h3>Signage &amp; kiosk screens</h3><p>Menu boards, waiting-room displays and in-store screens that run unattended for months. Scheduled playlists, updates pushed from a browser, and a device that restarts into the right app on its own after a power cut.</p><p class="uses">Playlists, remote update, auto-recovery</p><img class="ph-mono" src="../assets/img/static-viewed-on-a-cathode-ray-tube.jpg" width="1920" height="1922" alt="Close-up of static on a cathode-ray tube television" loading="lazy"></div></div>
+  <div class="kinds"><div class="kind" data-in><h3>Streaming &amp; video</h3><p>Catalogue browsing, continue-watching, live channels and pay-per-view events. Adaptive streaming, DRM and playback analytics are wired in together, so you can see what people finish and exactly where they drop out.</p><p class="uses">HLS and DASH, DRM, live, analytics</p><img class="ph-mono" src="../assets/img/lg-smart-tv-web-browser.jpg" width="1600" height="1005" alt="An LG smart TV running an app, with its on-screen keyboard open" loading="lazy"></div><div class="kind" data-in><h3>Catalogue &amp; retail TV</h3><p>Product ranges, showreels, menus and property listings on the big screen, driven by the same catalogue your website already uses. One update, every screen, and no second content team keeping the television in sync by hand.</p><p class="uses">Catalogue sync, search, multi-language</p><img class="ph-mono" src="../assets/img/cashier-handing-receipt.jpg" width="1600" height="1126" alt="A cashier handing a receipt to a customer across a shop counter" loading="lazy"></div><div class="kind" data-in><h3>Signage &amp; kiosk screens</h3><p>Menu boards, waiting-room displays and in-store screens that run unattended for months. Scheduled playlists, updates pushed from a browser, and a device that restarts into the right app on its own after a power cut.</p><p class="uses">Playlists, remote update, auto-recovery</p><img class="ph-mono" src="../assets/img/fediverse-smartphone-apps-photo-by-elena-rossini.jpg" width="1600" height="1067" alt="A hand holding a phone showing a folder of apps" loading="lazy"></div></div>
 </section>
 
 <section class="ch" data-field="wh" data-in-group>
@@ -120,11 +120,11 @@
     <span>© <span id="yr">2026</span> Planorah Technologies · <a href="../privacy.html">Privacy</a> · <a href="../terms.html">Terms</a></span>
     <a href="#main">Back to top</a>
   </div>
-  <div class="ft-credits"><p>Pictures on this page, via Wikimedia Commons, shown in black and white: <a href="https://commons.wikimedia.org/wiki/File:Bush_TV62_television_set,_UK,_1956.jpg" rel="noopener">Bush TV62 television set, UK, 1956</a> by electromechanic812291, CC BY 2.0; <a href="https://commons.wikimedia.org/wiki/File:Static_viewed_on_a_cathode_ray_tube_television_from_close_up.jpg" rel="noopener">Static viewed on a cathode ray tube television from close up</a> by Boreal11, CC0; <a href="https://commons.wikimedia.org/wiki/File:Analog_TV_noise.ogv" rel="noopener">Analog TV noise</a> by JussiClone, CC BY-SA 3.0; <a href="https://commons.wikimedia.org/wiki/File:Imam_Bazaar_Road_-_Chinsurah_-_Hooghly_-_2013-05-19_7863.JPG" rel="noopener">Imam Bazaar Road - Chinsurah - Hooghly - 2013-05-19 7863</a> by Biswarup Ganguly, CC BY 3.0; <a href="https://commons.wikimedia.org/wiki/File:Rabbit_ear_dipole_antenna_rooftop_elevated.jpg" rel="noopener">Rabbit ear dipole antenna rooftop elevated</a> by B137, CC0.</p></div>
+  <div class="ft-credits"><p>Pictures on this page, via Wikimedia Commons: <a href="https://commons.wikimedia.org/wiki/File:Analog_TV_noise.ogv" rel="noopener">Analog TV noise</a> by JussiClone, CC BY-SA 3.0; <a href="https://commons.wikimedia.org/wiki/File:Cashier_handing_receipt.jpg" rel="noopener">Cashier handing receipt</a> by Tessa Bury, CC BY 4.0; <a href="https://commons.wikimedia.org/wiki/File:Smart_TV_on_LG.jpg" rel="noopener">Smart TV on LG</a> by НАндреев, CC BY-SA 4.0; <a href="https://commons.wikimedia.org/wiki/File:LG_Smart_TV_web_browser.jpg" rel="noopener">LG Smart TV web browser</a> by AussieLegend, public domain; <a href="https://commons.wikimedia.org/wiki/File:Fediverse_smartphone_apps_(photo_by_Elena_Rossini).jpg" rel="noopener">Fediverse smartphone apps (photo by Elena Rossini)</a> by Elexfedi, CC BY-SA 4.0.</p></div>
 </footer>
 
 <a class="fab" id="fab" href="#" aria-label="Chat with Planorah on WhatsApp"><svg viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M12.04 2C6.58 2 2.13 6.45 2.13 11.91c0 1.75.46 3.45 1.32 4.95L2 22l5.25-1.38a9.9 9.9 0 004.79 1.22h.01c5.46 0 9.91-4.45 9.91-9.91 0-2.65-1.03-5.14-2.9-7.01A9.82 9.82 0 0012.04 2zm4.52 12.99c-.25-.12-1.47-.72-1.69-.81-.23-.08-.39-.12-.56.13-.16.24-.64.8-.78.97-.15.16-.29.18-.54.06-.25-.13-1.05-.39-1.99-1.23-.74-.66-1.23-1.47-1.38-1.72-.14-.25-.01-.38.11-.5.11-.11.25-.29.37-.44.13-.15.17-.25.25-.41.08-.17.04-.31-.02-.43-.06-.12-.56-1.34-.76-1.84-.2-.48-.4-.42-.56-.43h-.47c-.17 0-.43.06-.66.31-.22.25-.87.85-.87 2.07 0 1.22.89 2.4 1.01 2.56.12.17 1.75 2.67 4.23 3.74.59.26 1.05.41 1.41.52.59.19 1.13.16 1.56.1.48-.07 1.47-.6 1.68-1.18.21-.58.21-1.08.14-1.18-.06-.11-.22-.17-.47-.29z"/></svg></a>
 <script src="https://cdn.jsdelivr.net/npm/lenis@1.1.13/dist/lenis.min.js"></script>
-<script src="../assets/planorah.js"></script>
+<script src="../assets/planorah.js?v=d8c45147"></script>
 </body>
 </html>
