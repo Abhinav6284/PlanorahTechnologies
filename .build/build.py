@@ -48,6 +48,8 @@ ICONS = {
     'code': '<path d="M8 8l-4 4 4 4M16 8l4 4-4 4M13.5 6l-3 12"/>',
     'rocket': '<path d="M12 3c4 2 6 6 5 11l-2 3H9l-2-3C6 9 8 5 12 3z"/><circle cx="12" cy="10" r="1.8"/><path d="M9.5 17L8 21M14.5 17L16 21"/>',
     'chev': '<path d="M9 6l6 6-6 6"/>',
+    'ne': '<path d="M7 17L17 7M9 7h8v8"/>',
+    'send': '<path d="M4 12l16-8-6 16-2.5-6.5z"/>',
 }
 def icons(body):
     return re.sub(r'\{I:(\w+)\}', lambda m: '<svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">' + ICONS[m.group(1)] + '</svg>', body)
@@ -84,9 +86,9 @@ def head(m, R, path):
 <link rel="canonical" href="{canon}" />
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Inter+Tight:wght@400;600&family=Instrument+Serif:ital@1&family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Instrument+Sans:wght@400;500;600;700&family=Instrument+Serif:ital@0;1&display=swap" rel="stylesheet">
 <link rel="icon" type="image/svg+xml" href="{R}assets/favicon.svg">
-<meta name="theme-color" content="#07070A">
+<meta name="theme-color" content="#2D3142">
 <link rel="stylesheet" href="{R}assets/planorah.css?v={ver("planorah.css")}">
 </head>'''
 
@@ -99,7 +101,7 @@ def header(m, R):
   <div class="hd-in">
     <a class="wm" href="{R}index.html" aria-label="Planorah Technologies, home"><img src="{R}assets/favicon.svg" width="30" height="30" alt="">Planorah</a>
     <nav class="hd-nav" aria-label="Primary">{links}</nav>
-    <a class="btn btn-talk" href="{R}contact.html">Let’s talk <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 6l6 6-6 6"/></svg></a>
+    <a class="btn btn-talk" href="{R}contact.html">Send your requirement <span class="arr"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 17L17 7M9 7h8v8"/></svg></span></a>
     <button class="burger" id="burger" aria-expanded="false" aria-controls="mob">Menu</button>
   </div>
 </header>
@@ -160,12 +162,7 @@ def footer(R, body):
 
 
 def glass(body):
-    """Put the fluted-glass light behind each page's opening and closing sections."""
-    def add(m, side):
-        canvas = '<canvas class="glass" data-glass="' + side + '" aria-hidden="true"></canvas>'
-        return m.group(0).replace('class="', 'class="glassy ', 1) + '\n  ' + canvas
-    body = re.sub(r'<section class="ch ph[^"]*"[^>]*>', lambda m: add(m, 'left'), body)
-    body = re.sub(r'<section class="ch close[^"]*"[^>]*>', lambda m: add(m, 'right'), body)
+    """The pages are drawn without the old glow behind their opening and closing sections."""
     return body
 
 
