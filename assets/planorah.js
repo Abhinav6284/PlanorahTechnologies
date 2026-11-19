@@ -2,7 +2,7 @@
    EDIT THIS — your WhatsApp number and email
    ══════════════════════════════════════════════ */
 var PLANORAH = {
-  whatsapp : "916284219729",         // country code + number, digits only
+  whatsapp : "917710223342",         // country code + number, digits only
   email    : "planorahtechnologies@gmail.com",
   company  : "Planorah Technologies",
   /* true = switch motion off for visitors whose device asks for reduced motion */
