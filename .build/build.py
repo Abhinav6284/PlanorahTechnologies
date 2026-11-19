@@ -136,7 +136,7 @@ def footer(R, body):
       <p class="ft-big">Have something to build? <a href="{R}contact.html">Send your requirement</a></p>
       <div class="ft-places">
         <a href="mailto:{EMAIL}">{EMAIL}</a>
-        <a href="#" data-wa-link>WhatsApp <span data-wa-num>+91 62842 19729</span></a>
+        <a href="#" data-wa-link>WhatsApp <span data-wa-num>+91 77102 23342</span></a>
         <a href="{INSTAGRAM}" target="_blank" rel="noopener">@planorahtechnologies</a>
         <address>{ADDRESS}</address>
       </div>
