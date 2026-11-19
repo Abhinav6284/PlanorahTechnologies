@@ -21,7 +21,7 @@
 <link href="https://fonts.googleapis.com/css2?family=Instrument+Sans:wght@400;500;600;700&family=Instrument+Serif:ital@0;1&display=swap" rel="stylesheet">
 <link rel="icon" type="image/svg+xml" href="assets/favicon.svg">
 <meta name="theme-color" content="#2D3142">
-<link rel="stylesheet" href="assets/planorah.css?v=8d366c5a">
+<link rel="stylesheet" href="assets/planorah.css?v=fd0fed8f">
 </head>
 <body data-page="Home">
 <a class="skip" href="#main">Skip to content</a>
@@ -43,19 +43,28 @@
   <img class="hx-pic" src="assets/img/programmers.jpg" width="1600" height="1067" alt="Two developers working through code together on a laptop" fetchpriority="high">
   <div class="hx-in">
     <h1 data-in>Software made simple, built for every screen.</h1>
-    <form class="ask" id="ask" data-in>
-      <p class="ask-q">What do you need built?</p>
-      <div class="ask-opts" role="radiogroup" aria-label="What do you need built?">
-        <button type="button" role="radio" aria-checked="false" data-need="a website"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="4" width="18" height="16" rx="2"/><path d="M3 9h18M7 6.5h.01M10 6.5h.01"/></svg><span>A website</span><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 17L17 7M9 7h8v8"/></svg></button>
-        <button type="button" role="radio" aria-checked="true" data-need="a mobile app"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="7" y="2" width="10" height="20" rx="2.5"/><path d="M11 18h2"/></svg><span>A mobile app</span><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 17L17 7M9 7h8v8"/></svg></button>
-        <button type="button" role="radio" aria-checked="false" data-need="a TV app"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="2" y="4" width="20" height="13" rx="2"/><path d="M8 21h8M12 17v4"/></svg><span>A TV app</span><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 17L17 7M9 7h8v8"/></svg></button>
-        <button type="button" role="radio" aria-checked="false" data-need="a CRM or custom software"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 20V11M10 20V5M16 20v-6M21 20H3"/></svg><span>CRM or custom software</span><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 17L17 7M9 7h8v8"/></svg></button>
+    <form class="ask" id="ask" novalidate data-in>
+      <div class="ask-h">
+        <h2>Send your requirement</h2>
+        <p>A fixed quote within 48 hours. No forms to chase, no sales calls.</p>
       </div>
-      <label class="ask-bar">
-        <span class="sr">Describe it in one line</span>
-        <input id="ask-text" type="text" name="need" maxlength="140" placeholder="Describe it in one line…" autocomplete="off">
-        <button type="submit" class="ask-go" aria-label="Send on WhatsApp"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 12l16-8-6 16-2.5-6.5z"/></svg></button>
-      </label>
+      <div class="ask-f" id="ask-f-name">
+        <label for="ask-name">Your name</label>
+        <input id="ask-name" name="name" type="text" autocomplete="name" placeholder="Rahul Sharma" spellcheck="false">
+        <p class="ask-err" id="ask-e-name" aria-live="polite"></p>
+      </div>
+      <div class="ask-f" id="ask-f-phone">
+        <label for="ask-phone">WhatsApp number</label>
+        <input id="ask-phone" name="phone" type="tel" inputmode="tel" autocomplete="tel" placeholder="+91 98765 43210">
+        <p class="ask-err" id="ask-e-phone" aria-live="polite"></p>
+      </div>
+      <div class="ask-f" id="ask-f-need">
+        <label for="ask-need">What do you need built?</label>
+        <textarea id="ask-need" name="need" rows="3" maxlength="600" placeholder="A few lines is enough — what it should do, who will use it, and by when…"></textarea>
+        <p class="ask-err" id="ask-e-need" aria-live="polite"></p>
+      </div>
+      <button type="submit" class="btn ask-send"><svg viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M12.04 2C6.58 2 2.13 6.45 2.13 11.91c0 1.75.46 3.45 1.32 4.95L2 22l5.25-1.38a9.9 9.9 0 004.79 1.22h.01c5.46 0 9.91-4.45 9.91-9.91 0-2.65-1.03-5.14-2.9-7.01A9.82 9.82 0 0012.04 2zm4.52 12.99c-.25-.12-1.47-.72-1.69-.81-.23-.08-.39-.12-.56.13-.16.24-.64.8-.78.97-.15.16-.29.18-.54.06-.25-.13-1.05-.39-1.99-1.23-.74-.66-1.23-1.47-1.38-1.72-.14-.25-.01-.38.11-.5.11-.11.25-.29.37-.44.13-.15.17-.25.25-.41.08-.17.04-.31-.02-.43-.06-.12-.56-1.34-.76-1.84-.2-.48-.4-.42-.56-.43h-.47c-.17 0-.43.06-.66.31-.22.25-.87.85-.87 2.07 0 1.22.89 2.4 1.01 2.56.12.17 1.75 2.67 4.23 3.74.59.26 1.05.41 1.41.52.59.19 1.13.16 1.56.1.48-.07 1.47-.6 1.68-1.18.21-.58.21-1.08.14-1.18-.06-.11-.22-.17-.47-.29z"/></svg> Send requirement on WhatsApp</button>
+      <p class="ask-note">Opens WhatsApp with your message written. We usually reply within the hour.</p>
     </form>
     <p class="hx-say" data-in>Websites, mobile apps, TV apps and CRM systems from one studio in Ludhiana. A fixed quote in 48 hours, everything handed over at launch.</p>
     <a class="hx-proof" href="work.html" data-in>
@@ -198,6 +207,6 @@
 
 <a class="fab" id="fab" href="#" aria-label="Chat with Planorah on WhatsApp"><svg viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M12.04 2C6.58 2 2.13 6.45 2.13 11.91c0 1.75.46 3.45 1.32 4.95L2 22l5.25-1.38a9.9 9.9 0 004.79 1.22h.01c5.46 0 9.91-4.45 9.91-9.91 0-2.65-1.03-5.14-2.9-7.01A9.82 9.82 0 0012.04 2zm4.52 12.99c-.25-.12-1.47-.72-1.69-.81-.23-.08-.39-.12-.56.13-.16.24-.64.8-.78.97-.15.16-.29.18-.54.06-.25-.13-1.05-.39-1.99-1.23-.74-.66-1.23-1.47-1.38-1.72-.14-.25-.01-.38.11-.5.11-.11.25-.29.37-.44.13-.15.17-.25.25-.41.08-.17.04-.31-.02-.43-.06-.12-.56-1.34-.76-1.84-.2-.48-.4-.42-.56-.43h-.47c-.17 0-.43.06-.66.31-.22.25-.87.85-.87 2.07 0 1.22.89 2.4 1.01 2.56.12.17 1.75 2.67 4.23 3.74.59.26 1.05.41 1.41.52.59.19 1.13.16 1.56.1.48-.07 1.47-.6 1.68-1.18.21-.58.21-1.08.14-1.18-.06-.11-.22-.17-.47-.29z"/></svg></a>
 <script src="https://cdn.jsdelivr.net/npm/lenis@1.1.13/dist/lenis.min.js"></script>
-<script src="assets/planorah.js?v=faf22340"></script>
+<script src="assets/planorah.js?v=771da522"></script>
 </body>
 </html>

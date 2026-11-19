@@ -3,19 +3,28 @@
   <img class="hx-pic" src="assets/img/programmers.jpg" width="1600" height="1067" alt="Two developers working through code together on a laptop" fetchpriority="high">
   <div class="hx-in">
     <h1 data-in>Software made simple, built for every screen.</h1>
-    <form class="ask" id="ask" data-in>
-      <p class="ask-q">What do you need built?</p>
-      <div class="ask-opts" role="radiogroup" aria-label="What do you need built?">
-        <button type="button" role="radio" aria-checked="false" data-need="a website">{I:web}<span>A website</span>{I:ne}</button>
-        <button type="button" role="radio" aria-checked="true" data-need="a mobile app">{I:phone}<span>A mobile app</span>{I:ne}</button>
-        <button type="button" role="radio" aria-checked="false" data-need="a TV app">{I:tv}<span>A TV app</span>{I:ne}</button>
-        <button type="button" role="radio" aria-checked="false" data-need="a CRM or custom software">{I:crm}<span>CRM or custom software</span>{I:ne}</button>
+    <form class="ask" id="ask" novalidate data-in>
+      <div class="ask-h">
+        <h2>Send your requirement</h2>
+        <p>A fixed quote within 48 hours. No forms to chase, no sales calls.</p>
       </div>
-      <label class="ask-bar">
-        <span class="sr">Describe it in one line</span>
-        <input id="ask-text" type="text" name="need" maxlength="140" placeholder="Describe it in one line…" autocomplete="off">
-        <button type="submit" class="ask-go" aria-label="Send on WhatsApp">{I:send}</button>
-      </label>
+      <div class="ask-f" id="ask-f-name">
+        <label for="ask-name">Your name</label>
+        <input id="ask-name" name="name" type="text" autocomplete="name" placeholder="Rahul Sharma" spellcheck="false">
+        <p class="ask-err" id="ask-e-name" aria-live="polite"></p>
+      </div>
+      <div class="ask-f" id="ask-f-phone">
+        <label for="ask-phone">WhatsApp number</label>
+        <input id="ask-phone" name="phone" type="tel" inputmode="tel" autocomplete="tel" placeholder="+91 98765 43210">
+        <p class="ask-err" id="ask-e-phone" aria-live="polite"></p>
+      </div>
+      <div class="ask-f" id="ask-f-need">
+        <label for="ask-need">What do you need built?</label>
+        <textarea id="ask-need" name="need" rows="3" maxlength="600" placeholder="A few lines is enough — what it should do, who will use it, and by when…"></textarea>
+        <p class="ask-err" id="ask-e-need" aria-live="polite"></p>
+      </div>
+      <button type="submit" class="btn ask-send">{WA} Send requirement on WhatsApp</button>
+      <p class="ask-note">Opens WhatsApp with your message written. We usually reply within the hour.</p>
     </form>
     <p class="hx-say" data-in>Websites, mobile apps, TV apps and CRM systems from one studio in Ludhiana. A fixed quote in 48 hours, everything handed over at launch.</p>
     <a class="hx-proof" href="work.html" data-in>
