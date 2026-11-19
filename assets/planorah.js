@@ -161,7 +161,7 @@ var PLANORAH = {
      Screens: every device draws the same business
      name, laid out the way it would be built for it.
      ══════════════════════════════════════════════ */
-  var OR = '#FF5A0A', BK = '#050505', WH = '#FFFFFF', PA = '#EFEEEA', GR = '#D2D2CE', DK = '#1B1B1B';
+  var OR = '#EF8354', BK = '#2D3142', WH = '#FFFFFF', PA = '#F3F4F4', GR = '#BFC0C0', DK = '#383D52';
   var state = { name: 'Your business', screen: 'desktop' };
   var listeners = [];
   function setName(n){ state.name = (n || '').trim() || 'Your business'; listeners.forEach(function(f){ f(); }); }
@@ -182,7 +182,7 @@ var PLANORAH = {
     tv: function(ctx, W, H, name){
       box(ctx, 0, 0, W, H, BK);
       txt(ctx, name, 56, 78, fitText(ctx, name, 900, W * .34, 40), 900, WH);
-      ['Home', 'Live', 'My list', 'Search'].forEach(function(s, i){ txt(ctx, s, W * .5 + i * 150, 76, 26, 500, i ? '#9A9A97' : WH); });
+      ['Home', 'Live', 'My list', 'Search'].forEach(function(s, i){ txt(ctx, s, W * .5 + i * 150, 76, 26, 500, i ? '#BFC0C0' : WH); });
       box(ctx, 56, 120, W - 112, H * .42, OR);
       txt(ctx, 'Tonight on', 96, 210, 30, 500, BK);
       var px = fitText(ctx, name, 900, W * .62, 96);
@@ -193,7 +193,7 @@ var PLANORAH = {
         var x = 56 + i * ((W - 112) / 5), w = (W - 112) / 5 - 18;
         box(ctx, x, H * .42 + 220, w, H * .2, i === 0 ? WH : DK);
         if (i === 0){ box(ctx, x + 10, H * .42 + 230, w - 20, H * .2 - 20, OR); }
-        txt(ctx, 'Episode ' + (i + 4), x, H * .42 + 220 + H * .2 + 36, 22, 500, '#9A9A97');
+        txt(ctx, 'Episode ' + (i + 4), x, H * .42 + 220 + H * .2 + 36, 22, 500, '#BFC0C0');
       }
     },
     desktop: function(ctx, W, H, name){
@@ -250,7 +250,7 @@ var PLANORAH = {
         txt(ctx, r[0], 136, y + 58, 26, 500, BK); txt(ctx, r[1], W - 64, y + 58, 26, 900, BK, 'right');
       });
       box(ctx, 0, H - 120, W, 120, BK);
-      for (var j = 0; j < 4; j++) box(ctx, 60 + j * ((W - 120) / 4) + 28, H - 76, 36, 36, j ? '#5A5A57' : OR);
+      for (var j = 0; j < 4; j++) box(ctx, 60 + j * ((W - 120) / 4) + 28, H - 76, 36, 36, j ? '#4F5D75' : OR);
     },
     watch: function(ctx, W, H, name){
       box(ctx, 0, 0, W, H, BK);
@@ -394,7 +394,7 @@ var PLANORAH = {
     }
     if (s.strap){
       [1, -1].forEach(function(dir){
-        var st = new THREE.Mesh(new THREE.BoxGeometry(s.w * .74, .5, .06), new THREE.MeshStandardMaterial({ color: 0x1D1D1D, roughness: .8 }));
+        var st = new THREE.Mesh(new THREE.BoxGeometry(s.w * .74, .5, .06), new THREE.MeshStandardMaterial({ color: 0x242734, roughness: .8 }));
         st.position.set(0, dir * (s.h / 2 + .24), -.02); g.add(st);
       });
     }
@@ -448,7 +448,7 @@ var PLANORAH = {
       ['watch',  -1.2,  -.95, 1.5,   .26, -.1]
     ];
     var devs = layout.map(function(l, i){
-      var d = buildDevice(THREE, l[0], 0x0B0B0B);
+      var d = buildDevice(THREE, l[0], 0x2D3142);
       d.position.set(l[1], l[2], l[3]); d.rotation.set(0, l[4], l[5]);
       d.userData.base = { x: l[1], y: l[2], z: l[3], ry: l[4], rz: l[5], ph: i * 1.3 };
       rig.add(d); return d;
@@ -489,12 +489,12 @@ var PLANORAH = {
     var renderer = makeRenderer(THREE, canvas);
     var scene = new THREE.Scene(), cam = new THREE.PerspectiveCamera(28, 1, .1, 100);
     cam.position.set(0, .1, 7);
-    lights(THREE, scene, 0xFF5A0A);
+    lights(THREE, scene, 0xEF8354);
     var spin = new THREE.Group(); scene.add(spin);
     var cache = {}, cur = null, morph = 1, from = null;
     var FIT = { tv: 1.0, desktop: 1.15, tablet: 1.3, phone: 1.5, watch: 2.4 };
     function get(k){
-      if (!cache[k]){ cache[k] = buildDevice(THREE, k, 0x161616); }
+      if (!cache[k]){ cache[k] = buildDevice(THREE, k, 0x2D3142); }
       return cache[k];
     }
     function show(k){
@@ -562,12 +562,12 @@ var PLANORAH = {
       'void main(){',
       '  vec2 uv=gl_FragCoord.xy/r; float a=r.x/r.y; vec2 q=vec2(uv.x*a,uv.y);',
       '  float sx=mix(1.,-1.,side); float cx=a*.5;',
-      '  vec3 c=vec3(0.);',
-      '  c+=vec3(.78,.12,.04)*blob(q,vec2(cx-sx*a*.24+.08*sin(t*.17),-.06),vec2(a*.26,.42))*1.05;',
-      '  c+=vec3(1.,.42,.12)*blob(q,vec2(cx+sx*a*.04+.10*cos(t*.13),-.12),vec2(a*.22,.36))*1.0;',
-      '  c+=vec3(.36,.46,.5)*blob(q,vec2(cx+sx*a*.3+.06*sin(t*.11),-.04),vec2(a*.2,.34))*.7;',
-      '  c+=vec3(.86,.72,.6)*blob(q,vec2(cx+sx*a*.46,-.1),vec2(a*.12,.22))*.55;',
-      '  c+=vec3(1.,.4,.1)*blob(q,vec2(mo.x*a,mo.y),vec2(.22,.22))*.18;',
+      '  vec3 c=vec3(.176,.192,.259);',
+      '  c+=vec3(.62,.27,.17)*blob(q,vec2(cx-sx*a*.24+.08*sin(t*.17),-.06),vec2(a*.26,.42))*.8;',
+      '  c+=vec3(.94,.51,.33)*blob(q,vec2(cx+sx*a*.04+.10*cos(t*.13),-.12),vec2(a*.22,.36))*.72;',
+      '  c+=vec3(.31,.36,.46)*blob(q,vec2(cx+sx*a*.3+.06*sin(t*.11),-.04),vec2(a*.2,.34))*.7;',
+      '  c+=vec3(.75,.75,.75)*blob(q,vec2(cx+sx*a*.46,-.1),vec2(a*.12,.22))*.55;',
+      '  c+=vec3(.94,.51,.33)*blob(q,vec2(mo.x*a,mo.y),vec2(.22,.22))*.18;',
       '  float L=0.;',
       '  for(int i=0;i<7;i++){',
       '    float fi=float(i);',
@@ -575,7 +575,7 @@ var PLANORAH = {
       '    float d=abs(uv.y-y)*r.y;',
       '    L+=(.9/(1.+d*d*.9))*smoothstep(.0,.55,uv.x)*smoothstep(1.,.7,uv.x);',
       '  }',
-      '  c+=vec3(1.,.62,.4)*L*.16;',
+      '  c+=vec3(.96,.69,.58)*L*.16;',
       '  c+=(h(gl_FragCoord.xy+fract(t))-.5)*.03;',
       '  gl_FragColor=vec4(c,1.);}'
     ].join('\n');
@@ -630,6 +630,32 @@ var PLANORAH = {
   if (document.fonts && document.fonts.ready){
     document.fonts.load('700 40px Poppins').then(function(){ listeners.forEach(function(f){ f(); }); });
   }
+  /* ══ Hero: "What do you need built?" opens WhatsApp with the answer written ══ */
+  (function(){
+    var form = document.getElementById('ask');
+    if (!form) return;
+    var opts = Array.prototype.slice.call(form.querySelectorAll('[data-need]')), text = document.getElementById('ask-text');
+    function pick(b, focus){
+      opts.forEach(function(o){ var on = o === b; o.setAttribute('aria-checked', on ? 'true' : 'false'); o.tabIndex = on ? 0 : -1; });
+      if (focus) b.focus();
+    }
+    opts.forEach(function(b, i){
+      b.tabIndex = b.getAttribute('aria-checked') === 'true' ? 0 : -1;
+      b.addEventListener('click', function(){ pick(b); text.focus(); });
+      b.addEventListener('keydown', function(e){
+        var n = e.key === 'ArrowDown' || e.key === 'ArrowRight' ? opts[(i + 1) % opts.length] : e.key === 'ArrowUp' || e.key === 'ArrowLeft' ? opts[(i - 1 + opts.length) % opts.length] : null;
+        if (n){ e.preventDefault(); pick(n, true); }
+      });
+    });
+    form.addEventListener('submit', function(e){
+      e.preventDefault();
+      var need = (form.querySelector('[aria-checked="true"]') || opts[0]).getAttribute('data-need');
+      var line = text.value.trim();
+      var msg = 'Hello ' + PLANORAH.company + ', I need ' + need + '.' + (line ? ' ' + line : '') + ' Can we talk?';
+      window.open(waBase + '?text=' + encodeURIComponent(msg), '_blank', 'noopener');
+    });
+  })();
+
   /* ══ Smooth scrolling ══ */
   var lenis = null;
   if (!reduce && window.Lenis){
