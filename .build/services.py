@@ -6,7 +6,8 @@ def esc(s):
 
 
 def render(d):
-    meta = {"title": d['title'], "desc": d['desc'], "page": d['page'], "field": "or"}
+    meta = {"title": d['title'], "desc": d['desc'], "page": d['page'], "field": "or",
+            "service": {"name": d['seo_name'], "price": dict(d['glance']).get('Starting from', '')}}
     hero = d['hero']
     if hero.get('video'):
         media = (f'<video class="ph-mono" autoplay muted loop playsinline preload="metadata" poster="{{R}}assets/img/{hero["poster"]}" '
@@ -131,8 +132,9 @@ def pic(key, alt, cap):
 SERVICES = [
   dict(
     slug='websites', page='Websites', crumb='Websites', quote='Website',
-    title='Websites &amp; landing pages — Planorah Technologies',
-    desc='Fast, mobile-first websites with a CMS your own team can edit. Search, speed and analytics built in. Fixed quote, 3–5 weeks, handed over in full.',
+    seo_name='Website design &amp; development',
+    title='Website Design &amp; Development in Ludhiana, Punjab | Planorah',
+    desc='Fast, mobile-first websites and online stores for businesses in Ludhiana and across Punjab. SEO built in, editable by your team, fixed quote in 48 hours.',
     h1='Websites that load fast and stay yours.',
     lede='Marketing sites, online stores and campaign pages — mobile-first, editable by your own team, and wired to search and analytics before they go live.',
     cta='Get a fixed quote', second=('../work.html', 'See recent work'),
@@ -174,8 +176,9 @@ SERVICES = [
   ),
   dict(
     slug='crm', page='CRM', crumb='CRM &amp; custom software', quote='CRM',
-    title='CRM &amp; custom software — Planorah Technologies',
-    desc='Leads, quotations, billing, stock and reporting in one system built around how your team already works. Fixed quote, role-based access, full handover.',
+    seo_name='CRM &amp; custom software development',
+    title='CRM &amp; Custom Software Development in Ludhiana, Punjab | Planorah',
+    desc='Custom CRM, billing, inventory and business software for Punjab companies — built around how your team works, with your Excel and Tally data moved in.',
     h1='Software shaped around your process.',
     lede='Leads, quotations, billing, stock and reporting in one system built to match how your team already works — not a rented template you bend the business around.',
     cta='Get a fixed quote', second=('../work.html', 'See recent work'),
@@ -217,8 +220,9 @@ SERVICES = [
   ),
   dict(
     slug='mobile', page='Mobile', crumb='Mobile apps', quote='Mobile',
-    title='Mobile apps for iOS &amp; Android — Planorah Technologies',
-    desc='One codebase, both app stores. Design, native modules, push, payments, signing and store release handled — then the accounts and source handed to you.',
+    seo_name='Android &amp; iOS app development',
+    title='Android &amp; iOS App Development in Ludhiana, Punjab | Planorah',
+    desc='Mobile app developers in Ludhiana building Android and iOS apps for Punjab businesses: offline-ready, UPI payments, Play Store and App Store release handled.',
     h1='One codebase, both app stores.',
     lede='We design, build and release apps for iPhone and Android from a single codebase — dropping to native code where the hardware demands it, handling signing and store submission ourselves, and handing you the accounts and the source at the end.',
     cta='Get a fixed quote', second=('#included', 'What is included'),
@@ -260,8 +264,9 @@ SERVICES = [
   ),
   dict(
     slug='tv', page='TV', crumb='TV apps', quote='TV',
-    title='TV apps for tvOS, Android TV &amp; webOS — Planorah Technologies',
-    desc='Apps for the ten-foot screen: focus model, large type, video playback, DRM and certification on tvOS, Android TV, Fire TV, LG webOS and Samsung Tizen.',
+    seo_name='TV app development',
+    title='TV App Development: Android TV, tvOS &amp; webOS | Planorah',
+    desc='Smart TV app development from Ludhiana, Punjab: Android TV, Apple TV (tvOS), LG webOS, Samsung Tizen and Fire TV apps built for the remote, approved first time.',
     h1='Apps for the ten-foot screen.',
     lede='Television is not a bigger phone. The only input is a D-pad remote, the viewer is three metres away, and every store reviews the app by hand. We build for those constraints from the first screen.',
     cta='Get a fixed quote', second=('#included', 'What is included'),
@@ -303,8 +308,9 @@ SERVICES = [
   ),
   dict(
     slug='google', page='Google', crumb='Google presence', quote='Google',
-    title='Google Business Profile, Search &amp; Workspace — Planorah Technologies',
-    desc='Business Profile created and verified, the map pin on your real door, Search Console and Analytics 4 connected, and Workspace email on your own domain.',
+    seo_name='Google Business Profile &amp; local SEO',
+    title='Google Business Profile &amp; Local SEO, Ludhiana | Planorah',
+    desc='Get found on Google Maps and Search across Punjab: Business Profile set up and verified, local SEO, Search Console, Analytics 4 and Workspace email on your domain.',
     h1='Your business, correct on Google.',
     lede='We create and verify your Business Profile, put the map pin on the door customers actually walk through, connect Search Console and Analytics 4, and move your email to Google Workspace on your own domain.',
     cta='Get a quote on WhatsApp', second=('../work.html', 'See our work'),
@@ -346,8 +352,9 @@ SERVICES = [
   ),
   dict(
     slug='integrations', page='Integrations', crumb='Integrations', quote='Integrations',
-    title='Integrations &amp; automation — Planorah Technologies',
-    desc='Payment gateways, WhatsApp Business API, Tally, Zoho Books and ERP connected properly, with retries and alerts — so an order is entered once.',
+    seo_name='Software integrations &amp; automation',
+    title='Software Integration &amp; Automation in Punjab | Planorah',
+    desc='Connect Razorpay, UPI, WhatsApp Business API, Tally, Zoho Books and Google Sheets so orders are entered once — integration and automation from Ludhiana, Punjab.',
     h1='The same data, entered once.',
     lede='We connect the systems you already pay for — payment gateway, WhatsApp, accounting, ERP — so an order becomes a payment, a message and a ledger entry without anyone retyping it. And when a connection fails, it raises an alert instead of going quiet.',
     cta='Get a quote on WhatsApp', second=('../process.html', 'How we work'),

@@ -11,6 +11,7 @@ floating WhatsApp button and the credit line for every picture the page uses.
 """
 import json, os, re, html
 import services
+import seo
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 SRC = os.path.join(ROOT, '.build', 'pages')
@@ -54,8 +55,11 @@ ICONS = {
 def icons(body):
     return re.sub(r'\{I:(\w+)\}', lambda m: '<svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">' + ICONS[m.group(1)] + '</svg>', body)
 
+WA_NUM = re.search(r'whatsapp\s*:\s*"(\d+)"', open(os.path.join(ROOT, 'assets', 'planorah.js'), encoding='utf-8').read()).group(1)
+WA_URL = 'https://wa.me/' + WA_NUM
+
 NAV = [('services/index.html', 'Services'), ('work.html', 'Work'), ('process.html', 'Process'),
-       ('about.html', 'About'), ('contact.html', 'Contact')]
+       ('about.html', 'About'), ('blog/index.html', 'Blog'), ('contact.html', 'Contact')]
 
 
 def ver(name):
@@ -64,10 +68,10 @@ def ver(name):
     return hashlib.md5(open(os.path.join(ROOT, 'assets', name), 'rb').read()).hexdigest()[:8]
 
 
-def head(m, R, path):
+def head(m, R, path, body=''):
     canon = SITE + ('' if path == 'index.html' else path.replace('index.html', ''))
     return f'''<!DOCTYPE html>
-<html lang="en">
+<html lang="en-IN">
 <head>
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
@@ -82,7 +86,8 @@ def head(m, R, path):
 </script>
 
 <title>{m["title"]}</title>
-<meta name="description" content="{html.escape(m["desc"])}" />
+<meta name="description" content="{html.escape(html.unescape(m["desc"]))}" />
+{seo.head_tags(m, path, body)}
 <link rel="canonical" href="{canon}" />
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -129,7 +134,7 @@ def credits_for(body):
 def footer(R, body):
     svc = [('services/websites.html', 'Websites'), ('services/crm.html', 'CRM'), ('services/mobile.html', 'Mobile apps'),
            ('services/tv.html', 'TV apps'), ('services/google.html', 'Google'), ('services/integrations.html', 'Integrations')]
-    co = [('work.html', 'Work'), ('process.html', 'Process'), ('about.html', 'About'), ('faq.html', 'FAQ'), ('contact.html', 'Contact')]
+    co = [('work.html', 'Work'), ('process.html', 'Process'), ('about.html', 'About'), ('punjab.html', 'Across Punjab'), ('blog/index.html', 'Blog'), ('faq.html', 'FAQ'), ('contact.html', 'Contact')]
     col = lambda items: ''.join(f'<li><a href="{R}{h}">{t}</a></li>' for h, t in items)
     return f'''
 <footer class="ft">
@@ -177,24 +182,31 @@ def clean_urls(text):
     def fix(m):
         url = m.group(1) + m.group(2) + (m.group(3) or '')
         return 'href="' + (url if url and not url.startswith('#') else './' + url) + '"'
-    return re.sub(r'href="((?:\.\./)*)((?:services/)?)index\.html(#[^"]*)?"', fix, text)
+    return re.sub(r'href="((?:\.\./)*)((?:services/|blog/)?)index\.html(#[^"]*)?"', fix, text)
 
 
 def page(path, meta, body):
     R = '../' * path.count('/')
+    if meta.get('article'):   # word count for the article's structured data
+        meta['article']['words'] = len(re.sub(r'<[^>]+>|\{[^}]*\}', ' ', body).split())
     body = icons(glass(body))
     body = (body.replace('{R}', R).replace('{WA}', WA).replace('{ARROW}', ARROW)
                 .replace('{ADDRESS}', ADDRESS).replace('{INSTAGRAM}', INSTAGRAM).replace('{EMAIL}', EMAIL)
                 .replace('{MAP}', MAP).replace('{DIRECTIONS}', DIRECTIONS).replace('{MAPLINK}', MAPLINK))
-    out = (head(meta, R, path) + '\n' + header(meta, R) + '\n<main id="main">\n' + body.strip() + '\n</main>\n'
+    out = (head(meta, R, path, body) + '\n' + header(meta, R) + '\n<main id="main">\n' + body.strip() + '\n</main>\n'
            + footer(R, body) + scripts(meta, R))
     out = clean_urls(out)
+    # real WhatsApp addresses in the HTML, so the links work and can be crawled before any script runs
+    out = out.replace('href="#" data-wa-link', 'href="' + WA_URL + '" target="_blank" rel="noopener" data-wa-link')
+    out = out.replace('class="fab" id="fab" href="#"', 'class="fab" id="fab" href="' + WA_URL + '" target="_blank" rel="noopener"')
+    os.makedirs(os.path.dirname(os.path.join(ROOT, path)), exist_ok=True)
     with open(os.path.join(ROOT, path), 'w', encoding='utf-8', newline='\n') as f:
         f.write(out)
     print('built', path)
 
 
 def main():
+    built = []
     for name in sorted(os.listdir(SRC)):
         if not name.endswith('.html'):
             continue
@@ -203,9 +215,16 @@ def main():
         meta = json.loads(m.group(1))
         path = meta.get('path', name)
         page(path, meta, src[m.end():])
+        if not meta.get('noindex'):
+            built.append(path)
     for d in services.SERVICES:
         meta, body = services.render(d)
         page('services/' + d['slug'] + '.html', meta, body)
+        built.append('services/' + d['slug'] + '.html')
+    order = lambda p: (p != 'index.html', not p.startswith('services/'), p)
+    with open(os.path.join(ROOT, 'sitemap.xml'), 'w', encoding='utf-8', newline='\n') as f:
+        f.write(seo.sitemap(sorted(built, key=order)))
+    print('built sitemap.xml with', len(built), 'pages')
 
 
 if __name__ == '__main__':

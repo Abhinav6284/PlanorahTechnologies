@@ -1,12 +1,12 @@
 #!/usr/bin/env python3
 """Validate the built site: internal links, duplicate ids, required form ids, stray CSS classes."""
-import re, os, glob, sys
+import json, re, os, glob, sys
 from html.parser import HTMLParser
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 os.chdir(ROOT)
 
-PAGES = sorted(set(glob.glob('*.html') + glob.glob('services/*.html')) - {'planaro-v3.html'})
+PAGES = sorted(set(glob.glob('*.html') + glob.glob('services/*.html') + glob.glob('blog/*.html')) - {'planaro-v3.html'})
 CSS = open('assets/planorah.css', encoding='utf-8').read()
 CSS_CLASSES = set(re.findall(r'\.([a-zA-Z][\w-]*)', CSS))
 
@@ -70,9 +70,18 @@ for page in PAGES:
     # nobody should inline styles or scripts on interior pages
     if re.search(r'<style[\s>]', src):
         problems.append('%s: contains a <style> block' % page)
-    scripts = re.findall(r'<script[^>]*>', src)
+    scripts = [t for t in re.findall(r'<script[^>]*>', src) if 'application/ld+json' not in t]
     # 2 gtag tags on every page, + Lenis (smooth scroll), + planorah.js
     expected = 4
+    # plus exactly one block of structured data (built by .build/seo.py), and it must be valid JSON
+    ld = re.findall(r'<script type="application/ld\+json">(.*?)</script>', src, re.S)
+    if len(ld) != 1:
+        problems.append('%s: expected 1 structured-data block, found %d' % (page, len(ld)))
+    else:
+        try:
+            json.loads(ld[0])
+        except ValueError as err:
+            problems.append('%s: structured data is not valid JSON (%s)' % (page, err))
     if len(scripts) != expected:
         problems.append('%s: expected %d <script>, found %d' % (page, expected, len(scripts)))
     if 'G-6SPV5MMPMT' not in src:
