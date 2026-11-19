@@ -42,7 +42,7 @@ of `assets/planorah.js`:
 
 ```js
 var PLANORAH = {
-  whatsapp : "916284219729",                    // country code + number, digits only
+  whatsapp : "917710223342",                    // country code + number, digits only
   email    : "planorahtechnologies@gmail.com",
   company  : "Planorah Technologies"
 };
@@ -89,7 +89,7 @@ Point the host's 404 handler at `404.html`.
 
 ## Before going live
 
-- [ ] Confirm the phone number: the card says +91 77102 23342, the site uses +91 62842 19729 for WhatsApp
+- [x] Confirm the phone number: +91 77102 23342
 - [ ] Set the real Google Place ID in the "Write a review" link on `contact.html`
 - [ ] **Replace the six case studies on `work.html`** — they are illustrative, written before real projects were supplied
 - [ ] **Check `12` projects shipped** and `2–5` team size against reality
