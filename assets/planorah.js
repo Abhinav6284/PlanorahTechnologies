@@ -630,28 +630,34 @@ var PLANORAH = {
   if (document.fonts && document.fonts.ready){
     document.fonts.load('700 40px Poppins').then(function(){ listeners.forEach(function(f){ f(); }); });
   }
-  /* ══ Hero: "What do you need built?" opens WhatsApp with the answer written ══ */
+  /* ══ Hero: the requirement form, sent as a WhatsApp message ══ */
   (function(){
     var form = document.getElementById('ask');
     if (!form) return;
-    var opts = Array.prototype.slice.call(form.querySelectorAll('[data-need]')), text = document.getElementById('ask-text');
-    function pick(b, focus){
-      opts.forEach(function(o){ var on = o === b; o.setAttribute('aria-checked', on ? 'true' : 'false'); o.tabIndex = on ? 0 : -1; });
-      if (focus) b.focus();
+    var F = {
+      name:  { el: document.getElementById('ask-name'),  msg: 'Add your name so we know who we are replying to.' },
+      phone: { el: document.getElementById('ask-phone'), msg: 'Add a WhatsApp number with at least 10 digits.' },
+      need:  { el: document.getElementById('ask-need'),  msg: 'Tell us in a few words what you need built.' }
+    };
+    function bad(key, on){
+      var box = document.getElementById('ask-f-' + key), err = document.getElementById('ask-e-' + key);
+      box.classList.toggle('err', on);
+      err.textContent = on ? F[key].msg : '';
+      F[key].el.setAttribute('aria-invalid', on ? 'true' : 'false');
+      if (on) F[key].el.setAttribute('aria-describedby', 'ask-e-' + key); else F[key].el.removeAttribute('aria-describedby');
+      return on;
     }
-    opts.forEach(function(b, i){
-      b.tabIndex = b.getAttribute('aria-checked') === 'true' ? 0 : -1;
-      b.addEventListener('click', function(){ pick(b); text.focus(); });
-      b.addEventListener('keydown', function(e){
-        var n = e.key === 'ArrowDown' || e.key === 'ArrowRight' ? opts[(i + 1) % opts.length] : e.key === 'ArrowUp' || e.key === 'ArrowLeft' ? opts[(i - 1 + opts.length) % opts.length] : null;
-        if (n){ e.preventDefault(); pick(n, true); }
-      });
-    });
+    Object.keys(F).forEach(function(k){ F[k].el.addEventListener('input', function(){ if (F[k].el.getAttribute('aria-invalid') === 'true') bad(k, false); }); });
     form.addEventListener('submit', function(e){
       e.preventDefault();
-      var need = (form.querySelector('[aria-checked="true"]') || opts[0]).getAttribute('data-need');
-      var line = text.value.trim();
-      var msg = 'Hello ' + PLANORAH.company + ', I need ' + need + '.' + (line ? ' ' + line : '') + ' Can we talk?';
+      var name = F.name.el.value.trim(), phone = F.phone.el.value.trim(), need = F.need.el.value.trim();
+      var wrong = [];
+      if (bad('name', !name)) wrong.push('name');
+      if (bad('phone', phone.replace(/\D/g, '').length < 10)) wrong.push('phone');
+      if (bad('need', need.length < 3)) wrong.push('need');
+      if (wrong.length){ F[wrong[0]].el.focus(); return; }
+      var msg = 'Hello ' + PLANORAH.company + ', I would like a quote.\n\n' +
+        'Name: ' + name + '\nWhatsApp: ' + phone + '\n\nWhat I need built:\n' + need;
       window.open(waBase + '?text=' + encodeURIComponent(msg), '_blank', 'noopener');
     });
   })();
