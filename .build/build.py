@@ -12,6 +12,7 @@ floating WhatsApp button and the credit line for every picture the page uses.
 import json, os, re, html
 import services
 import seo
+import images
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 SRC = os.path.join(ROOT, '.build', 'pages')
@@ -91,7 +92,8 @@ def head(m, R, path, body=''):
 <link rel="canonical" href="{canon}" />
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Instrument+Sans:wght@400;500;600;700&family=Instrument+Serif:ital@0;1&display=swap" rel="stylesheet">
+<link rel="preload" href="https://fonts.googleapis.com/css2?family=Instrument+Sans:wght@400..700&family=Instrument+Serif:ital@0;1&display=swap" as="style" onload="this.onload=null;this.rel='stylesheet'">
+<noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Instrument+Sans:wght@400..700&family=Instrument+Serif:ital@0;1&display=swap"></noscript>
 <link rel="icon" type="image/svg+xml" href="{R}assets/favicon.svg">
 <meta name="theme-color" content="#2D3142">
 <link rel="stylesheet" href="{R}assets/planorah.css?v={ver("planorah.css")}">
@@ -154,7 +156,7 @@ def footer(R, body):
       <div><p class="ft-h">Ludhiana now</p><p id="ldh-time">IST</p><p class="small soft" id="ldh-open">Mon–Fri, 10am–7pm IST</p></div>
     </div>
   </div>
-  <div class="ft-name" aria-hidden="true">Planorah<sup>+</sup></div>
+  <div class="ft-name" aria-hidden="true"><sup>+</sup></div>
   <div class="ft-legal">
     <span>© <span id="yr">2026</span> Planorah Technologies · <a href="{R}privacy.html">Privacy</a> · <a href="{R}terms.html">Terms</a></span>
     <a href="#main">Back to top</a>
@@ -199,6 +201,7 @@ def page(path, meta, body):
     # real WhatsApp addresses in the HTML, so the links work and can be crawled before any script runs
     out = out.replace('href="#" data-wa-link', 'href="' + WA_URL + '" target="_blank" rel="noopener" data-wa-link')
     out = out.replace('class="fab" id="fab" href="#"', 'class="fab" id="fab" href="' + WA_URL + '" target="_blank" rel="noopener"')
+    out = images.preload_first(images.responsive(out, ROOT))
     os.makedirs(os.path.dirname(os.path.join(ROOT, path)), exist_ok=True)
     with open(os.path.join(ROOT, path), 'w', encoding='utf-8', newline='\n') as f:
         f.write(out)

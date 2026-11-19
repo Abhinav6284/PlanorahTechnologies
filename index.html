@@ -35,10 +35,12 @@
 <link rel="canonical" href="https://www.planorahtechnologies.com/" />
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Instrument+Sans:wght@400;500;600;700&family=Instrument+Serif:ital@0;1&display=swap" rel="stylesheet">
+<link rel="preload" href="https://fonts.googleapis.com/css2?family=Instrument+Sans:wght@400..700&family=Instrument+Serif:ital@0;1&display=swap" as="style" onload="this.onload=null;this.rel='stylesheet'">
+<noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Instrument+Sans:wght@400..700&family=Instrument+Serif:ital@0;1&display=swap"></noscript>
 <link rel="icon" type="image/svg+xml" href="assets/favicon.svg">
 <meta name="theme-color" content="#2D3142">
-<link rel="stylesheet" href="assets/planorah.css?v=19288125">
+<link rel="stylesheet" href="assets/planorah.css?v=fc7cde05">
+<link rel="preload" as="image" imagesrcset="assets/img/programmers-480.webp 480w, assets/img/programmers-800.webp 800w, assets/img/programmers-1200.webp 1200w, assets/img/programmers.jpg 1600w" imagesizes="100vw" fetchpriority="high">
 </head>
 <body data-page="Home">
 <a class="skip" href="#main">Skip to content</a>
@@ -57,7 +59,7 @@
 
 <main id="main">
 <section class="hx" data-in-group>
-  <img class="hx-pic" src="assets/img/programmers.jpg" width="1600" height="1067" alt="Two developers working through code together on a laptop" fetchpriority="high">
+  <img class="hx-pic" src="assets/img/programmers.jpg" width="1600" height="1067" alt="Two developers working through code together on a laptop" fetchpriority="high" srcset="assets/img/programmers-480.webp 480w, assets/img/programmers-800.webp 800w, assets/img/programmers-1200.webp 1200w, assets/img/programmers.jpg 1600w" sizes="100vw">
   <div class="hx-in">
     <h1 data-in>Software made simple, built for every screen.</h1>
     <form class="ask" id="ask" novalidate data-in>
@@ -85,7 +87,7 @@
     </form>
     <p class="hx-say" data-in>Website, app and software development for businesses across Punjab, from one studio in Ludhiana. A fixed quote in 48 hours, everything handed over at launch.</p>
     <a class="hx-proof" href="work.html" data-in>
-      <span class="stack"><img src="assets/img/cashier-handing-receipt.jpg" width="1600" height="1126" alt=""><img src="assets/img/lg-smart-tv-web-browser.jpg" width="1600" height="1005" alt=""><img src="assets/img/doctor-reviews-patient-information-on-tablet-in.jpg" width="1600" height="1067" alt=""></span>
+      <span class="stack"><img data-thumb loading="lazy" src="assets/img/cashier-handing-receipt.jpg" width="1600" height="1126" alt="" srcset="assets/img/cashier-handing-receipt-480.webp 480w, assets/img/cashier-handing-receipt-800.webp 800w, assets/img/cashier-handing-receipt-1200.webp 1200w, assets/img/cashier-handing-receipt.jpg 1600w" sizes="40px"><img data-thumb loading="lazy" src="assets/img/lg-smart-tv-web-browser.jpg" width="1600" height="1005" alt="" srcset="assets/img/lg-smart-tv-web-browser-480.webp 480w, assets/img/lg-smart-tv-web-browser-800.webp 800w, assets/img/lg-smart-tv-web-browser-1200.webp 1200w, assets/img/lg-smart-tv-web-browser.jpg 1600w" sizes="40px"><img data-thumb loading="lazy" src="assets/img/doctor-reviews-patient-information-on-tablet-in.jpg" width="1600" height="1067" alt="" srcset="assets/img/doctor-reviews-patient-information-on-tablet-in-480.webp 480w, assets/img/doctor-reviews-patient-information-on-tablet-in-800.webp 800w, assets/img/doctor-reviews-patient-information-on-tablet-in-1200.webp 1200w, assets/img/doctor-reviews-patient-information-on-tablet-in.jpg 1600w" sizes="40px"></span>
       <b>12 projects shipped</b>
       <span class="hx-proof-t">Retail, healthcare, streaming, logistics, education and hospitality — each with a fixed quote and a full handover.</span>
     </a>
@@ -100,7 +102,7 @@
     <a class="btn btn-dark" href="about.html" data-in>About the studio <span class="arr"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 17L17 7M9 7h8v8"/></svg></span></a>
   </div>
   <figure class="intro-pic" data-in>
-    <img src="assets/img/software-developer-at-work.jpg" width="1600" height="1200" alt="A software developer at work on a laptop in an office" loading="lazy">
+    <img src="assets/img/software-developer-at-work.jpg" width="1600" height="1200" alt="A software developer at work on a laptop in an office" loading="lazy" srcset="assets/img/software-developer-at-work-480.webp 480w, assets/img/software-developer-at-work-800.webp 800w, assets/img/software-developer-at-work-1200.webp 1200w, assets/img/software-developer-at-work.jpg 1600w" sizes="(max-width: 760px) 100vw, (max-width: 1240px) 50vw, 640px">
     <div class="chips">
       <span><b>12</b>Projects shipped</span>
       <span><b>7</b>Platforms</span>
@@ -115,12 +117,12 @@
     <p data-in>Each service starts with a fixed quote and ends with the code, the hosting and every account in your name.</p>
   </div>
   <div class="collage">
-    <a class="pc pc-1" href="services/websites.html" data-in><img src="assets/img/programmer-writing-code-with-unit-tests.jpg" width="1404" height="936" alt="A programmer writing and testing code at a desktop computer" loading="lazy"><span class="pill">Explore <i><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 17L17 7M9 7h8v8"/></svg></i></span><span class="cap">Websites &amp; landing pages</span></a>
-    <a class="pc pc-2" href="services/mobile.html" data-in><img src="assets/img/smartphone-with-navigation-map-app.jpg" width="1600" height="1200" alt="A hand holding a smartphone with a map app open" loading="lazy"><span class="pill">Explore <i><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 17L17 7M9 7h8v8"/></svg></i></span><span class="cap">Web &amp; mobile apps</span></a>
-    <a class="pc pc-3" href="services/crm.html" data-in><img src="assets/img/cashier-handing-receipt.jpg" width="1600" height="1126" alt="A cashier handing a receipt to a customer across a shop counter" loading="lazy"><span class="pill">Explore <i><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 17L17 7M9 7h8v8"/></svg></i></span><span class="cap">CRM &amp; custom software</span></a>
-    <a class="pc pc-4" href="services/tv.html" data-in><img src="assets/img/lg-smart-tv-web-browser.jpg" width="1600" height="1005" alt="An LG smart TV running an app, with its on-screen keyboard open" loading="lazy"><span class="pill">Explore <i><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 17L17 7M9 7h8v8"/></svg></i></span><span class="cap">TV &amp; living-room apps</span></a>
-    <a class="pc pc-5" href="services/integrations.html" data-in><img src="assets/img/lacuca-card-reader-payment-terminal-at-supermarket.jpg" width="1600" height="1205" alt="A card payment terminal at a supermarket checkout" loading="lazy"><span class="pill">Explore <i><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 17L17 7M9 7h8v8"/></svg></i></span><span class="cap">Integrations &amp; automation</span></a>
-    <a class="pc pc-6" href="services/google.html" data-in><img src="assets/img/ludhiana-skyline.jpg" width="1600" height="1096" alt="Rooftops of Ludhiana under a cloudy sky" loading="lazy"><span class="pill">Explore <i><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 17L17 7M9 7h8v8"/></svg></i></span><span class="cap">Google presence</span></a>
+    <a class="pc pc-1" href="services/websites.html" data-in><img src="assets/img/programmer-writing-code-with-unit-tests.jpg" width="1404" height="936" alt="A programmer writing and testing code at a desktop computer" loading="lazy" srcset="assets/img/programmer-writing-code-with-unit-tests-480.webp 480w, assets/img/programmer-writing-code-with-unit-tests-800.webp 800w, assets/img/programmer-writing-code-with-unit-tests-1200.webp 1200w, assets/img/programmer-writing-code-with-unit-tests.jpg 1404w" sizes="(max-width: 760px) 100vw, (max-width: 1240px) 50vw, 640px"><span class="pill">Explore <i><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 17L17 7M9 7h8v8"/></svg></i></span><span class="cap">Websites &amp; landing pages</span></a>
+    <a class="pc pc-2" href="services/mobile.html" data-in><img src="assets/img/smartphone-with-navigation-map-app.jpg" width="1600" height="1200" alt="A hand holding a smartphone with a map app open" loading="lazy" srcset="assets/img/smartphone-with-navigation-map-app-480.webp 480w, assets/img/smartphone-with-navigation-map-app-800.webp 800w, assets/img/smartphone-with-navigation-map-app-1200.webp 1200w, assets/img/smartphone-with-navigation-map-app.jpg 1600w" sizes="(max-width: 760px) 100vw, (max-width: 1240px) 50vw, 640px"><span class="pill">Explore <i><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 17L17 7M9 7h8v8"/></svg></i></span><span class="cap">Web &amp; mobile apps</span></a>
+    <a class="pc pc-3" href="services/crm.html" data-in><img src="assets/img/cashier-handing-receipt.jpg" width="1600" height="1126" alt="A cashier handing a receipt to a customer across a shop counter" loading="lazy" srcset="assets/img/cashier-handing-receipt-480.webp 480w, assets/img/cashier-handing-receipt-800.webp 800w, assets/img/cashier-handing-receipt-1200.webp 1200w, assets/img/cashier-handing-receipt.jpg 1600w" sizes="(max-width: 760px) 100vw, (max-width: 1240px) 50vw, 640px"><span class="pill">Explore <i><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 17L17 7M9 7h8v8"/></svg></i></span><span class="cap">CRM &amp; custom software</span></a>
+    <a class="pc pc-4" href="services/tv.html" data-in><img src="assets/img/lg-smart-tv-web-browser.jpg" width="1600" height="1005" alt="An LG smart TV running an app, with its on-screen keyboard open" loading="lazy" srcset="assets/img/lg-smart-tv-web-browser-480.webp 480w, assets/img/lg-smart-tv-web-browser-800.webp 800w, assets/img/lg-smart-tv-web-browser-1200.webp 1200w, assets/img/lg-smart-tv-web-browser.jpg 1600w" sizes="(max-width: 760px) 100vw, (max-width: 1240px) 50vw, 640px"><span class="pill">Explore <i><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 17L17 7M9 7h8v8"/></svg></i></span><span class="cap">TV &amp; living-room apps</span></a>
+    <a class="pc pc-5" href="services/integrations.html" data-in><img src="assets/img/lacuca-card-reader-payment-terminal-at-supermarket.jpg" width="1600" height="1205" alt="A card payment terminal at a supermarket checkout" loading="lazy" srcset="assets/img/lacuca-card-reader-payment-terminal-at-supermarket-480.webp 480w, assets/img/lacuca-card-reader-payment-terminal-at-supermarket-800.webp 800w, assets/img/lacuca-card-reader-payment-terminal-at-supermarket-1200.webp 1200w, assets/img/lacuca-card-reader-payment-terminal-at-supermarket.jpg 1600w" sizes="(max-width: 760px) 100vw, (max-width: 1240px) 50vw, 640px"><span class="pill">Explore <i><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 17L17 7M9 7h8v8"/></svg></i></span><span class="cap">Integrations &amp; automation</span></a>
+    <a class="pc pc-6" href="services/google.html" data-in><img src="assets/img/ludhiana-skyline.jpg" width="1600" height="1096" alt="Rooftops of Ludhiana under a cloudy sky" loading="lazy" srcset="assets/img/ludhiana-skyline-480.webp 480w, assets/img/ludhiana-skyline-800.webp 800w, assets/img/ludhiana-skyline-1200.webp 1200w, assets/img/ludhiana-skyline.jpg 1600w" sizes="(max-width: 760px) 100vw, (max-width: 1240px) 50vw, 640px"><span class="pill">Explore <i><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 17L17 7M9 7h8v8"/></svg></i></span><span class="cap">Google presence</span></a>
   </div>
 </section>
 
@@ -128,14 +130,14 @@
   <svg class="blob" viewBox="0 0 400 400" aria-hidden="true"><circle cx="120" cy="120" r="92"/><circle cx="280" cy="120" r="92"/><circle cx="200" cy="270" r="92"/><rect x="120" y="96" width="160" height="48"/><rect x="146" y="150" width="48" height="140" transform="rotate(-30 170 220)"/><rect x="206" y="150" width="48" height="140" transform="rotate(30 230 220)"/></svg>
   <h2 data-in>A small team, a fixed price, and everything in your name.</h2>
   <div class="dark-row">
-    <figure data-in><img src="assets/img/programmers.jpg" width="1600" height="1067" alt="Two developers working through code together" loading="lazy"><figcaption>The people who scope it build it</figcaption></figure>
-    <figure data-in><img src="assets/img/fediverse-smartphone-apps-photo-by-elena-rossini.jpg" width="1600" height="1067" alt="A hand holding a phone showing a folder of apps" loading="lazy"><figcaption>A live build on your phone, every week</figcaption></figure>
-    <figure data-in><img src="assets/img/delivery-driver-delivering-takeout.jpg" width="1600" height="1067" alt="Illustration of an order placed on a phone and a rider out for delivery" loading="lazy"><figcaption>Launched, and 30 days of fixes on us</figcaption></figure>
+    <figure data-in><img src="assets/img/programmers.jpg" width="1600" height="1067" alt="Two developers working through code together" loading="lazy" srcset="assets/img/programmers-480.webp 480w, assets/img/programmers-800.webp 800w, assets/img/programmers-1200.webp 1200w, assets/img/programmers.jpg 1600w" sizes="(max-width: 760px) 100vw, (max-width: 1240px) 50vw, 640px"><figcaption>The people who scope it build it</figcaption></figure>
+    <figure data-in><img src="assets/img/fediverse-smartphone-apps-photo-by-elena-rossini.jpg" width="1600" height="1067" alt="A hand holding a phone showing a folder of apps" loading="lazy" srcset="assets/img/fediverse-smartphone-apps-photo-by-elena-rossini-480.webp 480w, assets/img/fediverse-smartphone-apps-photo-by-elena-rossini-800.webp 800w, assets/img/fediverse-smartphone-apps-photo-by-elena-rossini-1200.webp 1200w, assets/img/fediverse-smartphone-apps-photo-by-elena-rossini.jpg 1600w" sizes="(max-width: 760px) 100vw, (max-width: 1240px) 50vw, 640px"><figcaption>A live build on your phone, every week</figcaption></figure>
+    <figure data-in><img src="assets/img/delivery-driver-delivering-takeout.jpg" width="1600" height="1067" alt="Illustration of an order placed on a phone and a rider out for delivery" loading="lazy" srcset="assets/img/delivery-driver-delivering-takeout-480.webp 480w, assets/img/delivery-driver-delivering-takeout-800.webp 800w, assets/img/delivery-driver-delivering-takeout-1200.webp 1200w, assets/img/delivery-driver-delivering-takeout.jpg 1600w" sizes="(max-width: 760px) 100vw, (max-width: 1240px) 50vw, 640px"><figcaption>Launched, and 30 days of fixes on us</figcaption></figure>
   </div>
 </section>
 
 <section class="pn steps-pn" id="process" data-in-group>
-  <figure class="steps-pic" data-in><img src="assets/img/student-with-computer.jpg" width="1600" height="1200" alt="A person working through a build on a laptop" loading="lazy"></figure>
+  <figure class="steps-pic" data-in><img src="assets/img/student-with-computer.jpg" width="1600" height="1200" alt="A person working through a build on a laptop" loading="lazy" srcset="assets/img/student-with-computer-480.webp 480w, assets/img/student-with-computer-800.webp 800w, assets/img/student-with-computer-1200.webp 1200w, assets/img/student-with-computer.jpg 1600w" sizes="(max-width: 760px) 100vw, (max-width: 1240px) 50vw, 640px"></figure>
   <div class="steps-t">
     <h2 data-in>Four simple steps from message to launch.</h2>
     <p data-in>You know the scope, the price and the launch date before we write a line of code.</p>
@@ -189,8 +191,8 @@
     <p data-in>Straight answers before you pay anyone. <a class="lnk" href="blog/">All guides <svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 17L17 7M9 7h8v8"/></svg></a></p>
   </div>
   <div class="posts">
-    <a class="post-card" href="blog/website-cost-ludhiana-punjab.html" data-in><img src="assets/img/programmer-writing-code-with-unit-tests.jpg" width="1404" height="936" alt="A developer writing and testing code at a desktop computer" loading="lazy"><div><p class="meta">Websites · 7 min read</p><h3>How much does a website cost in Ludhiana and Punjab?</h3><span class="go">Read the guide <svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 17L17 7M9 7h8v8"/></svg></span></div></a>
-    <a class="post-card" href="blog/google-maps-business-profile-punjab.html" data-in><img src="assets/img/smartphone-with-navigation-map-app.jpg" width="1600" height="1200" alt="A hand holding a smartphone with a map app open" loading="lazy"><div><p class="meta">Google presence · 8 min read</p><h3>How to get your business on Google Maps in Punjab</h3><span class="go">Read the guide <svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 17L17 7M9 7h8v8"/></svg></span></div></a>
+    <a class="post-card" href="blog/website-cost-ludhiana-punjab.html" data-in><img src="assets/img/programmer-writing-code-with-unit-tests.jpg" width="1404" height="936" alt="A developer writing and testing code at a desktop computer" loading="lazy" srcset="assets/img/programmer-writing-code-with-unit-tests-480.webp 480w, assets/img/programmer-writing-code-with-unit-tests-800.webp 800w, assets/img/programmer-writing-code-with-unit-tests-1200.webp 1200w, assets/img/programmer-writing-code-with-unit-tests.jpg 1404w" sizes="(max-width: 760px) 100vw, (max-width: 1240px) 50vw, 640px"><div><p class="meta">Websites · 7 min read</p><h3>How much does a website cost in Ludhiana and Punjab?</h3><span class="go">Read the guide <svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 17L17 7M9 7h8v8"/></svg></span></div></a>
+    <a class="post-card" href="blog/google-maps-business-profile-punjab.html" data-in><img src="assets/img/smartphone-with-navigation-map-app.jpg" width="1600" height="1200" alt="A hand holding a smartphone with a map app open" loading="lazy" srcset="assets/img/smartphone-with-navigation-map-app-480.webp 480w, assets/img/smartphone-with-navigation-map-app-800.webp 800w, assets/img/smartphone-with-navigation-map-app-1200.webp 1200w, assets/img/smartphone-with-navigation-map-app.jpg 1600w" sizes="(max-width: 760px) 100vw, (max-width: 1240px) 50vw, 640px"><div><p class="meta">Google presence · 8 min read</p><h3>How to get your business on Google Maps in Punjab</h3><span class="go">Read the guide <svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 17L17 7M9 7h8v8"/></svg></span></div></a>
   </div>
 </section>
 
@@ -206,7 +208,7 @@
 </section>
 
 <section class="pn cta" id="contact" data-in-group>
-  <img class="cta-pic" src="assets/img/ludhiana-skyline.jpg" width="1600" height="1096" alt="" loading="lazy">
+  <img class="cta-pic" src="assets/img/ludhiana-skyline.jpg" width="1600" height="1096" alt="" loading="lazy" srcset="assets/img/ludhiana-skyline-480.webp 480w, assets/img/ludhiana-skyline-800.webp 800w, assets/img/ludhiana-skyline-1200.webp 1200w, assets/img/ludhiana-skyline.jpg 1600w" sizes="100vw">
   <div class="cta-in">
     <h2 data-in>Tell us what needs building.</h2>
     <p data-in>A paragraph about the problem is enough. Reply within the hour on WhatsApp, a fixed quote within 48.</p>
@@ -236,7 +238,7 @@
       <div><p class="ft-h">Ludhiana now</p><p id="ldh-time">IST</p><p class="small soft" id="ldh-open">Mon–Fri, 10am–7pm IST</p></div>
     </div>
   </div>
-  <div class="ft-name" aria-hidden="true">Planorah<sup>+</sup></div>
+  <div class="ft-name" aria-hidden="true"><sup>+</sup></div>
   <div class="ft-legal">
     <span>© <span id="yr">2026</span> Planorah Technologies · <a href="privacy.html">Privacy</a> · <a href="terms.html">Terms</a></span>
     <a href="#main">Back to top</a>
@@ -246,6 +248,6 @@
 
 <a class="fab" id="fab" href="https://wa.me/917710223342" target="_blank" rel="noopener" aria-label="Chat with Planorah on WhatsApp"><svg viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M12.04 2C6.58 2 2.13 6.45 2.13 11.91c0 1.75.46 3.45 1.32 4.95L2 22l5.25-1.38a9.9 9.9 0 004.79 1.22h.01c5.46 0 9.91-4.45 9.91-9.91 0-2.65-1.03-5.14-2.9-7.01A9.82 9.82 0 0012.04 2zm4.52 12.99c-.25-.12-1.47-.72-1.69-.81-.23-.08-.39-.12-.56.13-.16.24-.64.8-.78.97-.15.16-.29.18-.54.06-.25-.13-1.05-.39-1.99-1.23-.74-.66-1.23-1.47-1.38-1.72-.14-.25-.01-.38.11-.5.11-.11.25-.29.37-.44.13-.15.17-.25.25-.41.08-.17.04-.31-.02-.43-.06-.12-.56-1.34-.76-1.84-.2-.48-.4-.42-.56-.43h-.47c-.17 0-.43.06-.66.31-.22.25-.87.85-.87 2.07 0 1.22.89 2.4 1.01 2.56.12.17 1.75 2.67 4.23 3.74.59.26 1.05.41 1.41.52.59.19 1.13.16 1.56.1.48-.07 1.47-.6 1.68-1.18.21-.58.21-1.08.14-1.18-.06-.11-.22-.17-.47-.29z"/></svg></a>
 <script src="https://cdn.jsdelivr.net/npm/lenis@1.1.13/dist/lenis.min.js"></script>
-<script src="assets/planorah.js?v=771da522"></script>
+<script src="assets/planorah.js?v=038839d7"></script>
 </body>
 </html>
