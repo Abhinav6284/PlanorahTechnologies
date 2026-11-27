@@ -114,8 +114,9 @@ main { display: grid; gap: var(--g); padding: var(--g) var(--g) 0; }
 .hd { position: fixed; z-index: 50; top: calc(var(--g) + 14px); left: calc(var(--g) + 18px); right: calc(var(--g) + 18px); height: var(--hd); color: #fff; pointer-events: none; }
 .hd-in { height: 100%; display: flex; align-items: center; gap: 16px; }
 .hd-in > * { pointer-events: auto; }
-.wm { display: inline-flex; align-items: center; gap: 10px; min-height: 48px; min-width: 48px; justify-content: center; padding: 0 11px; border-radius: 999px; font-weight: 600; font-size: 1.125rem; letter-spacing: -0.02em; text-decoration: none; transition: background-color .35s, color .35s; }
-.wm img { width: auto; height: 32px; }
+.wm { display: inline-flex; align-items: center; gap: 10px; min-height: 48px; padding: 0 4px; font-weight: 600; font-size: 1.125rem; letter-spacing: -0.02em; text-decoration: none; transition: color .35s; }
+.wm img { width: 36px; height: 36px; object-fit: contain; border-radius: 0; }
+.hd.stuck .wm { color: var(--dk); }
 .hd-nav { display: flex; align-items: center; gap: 4px; margin: 0 auto; padding: 5px; border-radius: 999px; background: rgba(255, 255, 255, .14); border: 1px solid rgba(255, 255, 255, .2); -webkit-backdrop-filter: blur(16px); backdrop-filter: blur(16px); transition: background-color .35s, border-color .35s; }
 .hd-nav a { padding: 9px 16px; border-radius: 999px; font-size: .9375rem; font-weight: 500; text-decoration: none; transition: background-color .25s, color .25s; }
 .hd-nav a:hover { background: rgba(255, 255, 255, .16); }
@@ -124,7 +125,7 @@ main { display: grid; gap: var(--g); padding: var(--g) var(--g) 0; }
 .btn-talk .arr { width: 36px; height: 36px; }
 .btn-talk:hover { background: rgba(255, 255, 255, .24); }
 /* once the page moves, the three parts sit on white */
-.hd.stuck .wm, .hd.stuck .hd-nav, .hd.stuck .btn-talk { background: rgba(255, 255, 255, .92); color: var(--dk); border-color: rgba(45, 49, 66, .08); box-shadow: 0 10px 30px -18px rgba(23, 25, 34, .45); /* floats over the page: taste-skill-ignore */ }
+.hd.stuck .hd-nav, .hd.stuck .btn-talk { background: rgba(255, 255, 255, .92); color: var(--dk); border-color: rgba(45, 49, 66, .08); box-shadow: 0 10px 30px -18px rgba(23, 25, 34, .45); /* floats over the page: taste-skill-ignore */ }
 .hd.stuck .hd-nav a:hover { background: var(--alt); }
 .hd.stuck .hd-nav a[aria-current] { background: var(--dk); color: #fff; }
 .hd.stuck .btn-talk .arr { background: var(--or); }
@@ -137,7 +138,6 @@ main { display: grid; gap: var(--g); padding: var(--g) var(--g) 0; }
 @media (max-width: 960px) {
   .hd-nav, .hd .btn-talk { display: none; }
   .burger { display: inline-flex; align-items: center; }
-  .hd .wm { background: rgba(255, 255, 255, .92); color: var(--dk); }
 }
 
 /* ══ Home ══════════════════════════════════════════════════════ */
