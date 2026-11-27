@@ -170,7 +170,7 @@ def head_tags(meta, path, body):
 <meta name="twitter:title" content="{e(title)}" />
 <meta name="twitter:description" content="{e(desc)}" />
 <meta name="twitter:image" content="{SITE + meta['article']['image'] if meta.get('article') else OG_IMAGE}" />{article_time(meta)}
-<link rel="apple-touch-icon" href="{LOGO}" />
+<link rel="apple-touch-icon" href="{SITE}assets/apple-touch-icon.png" />
 <script type="application/ld+json">{data}</script>'''
 
 

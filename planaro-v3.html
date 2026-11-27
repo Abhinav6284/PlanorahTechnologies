@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+<link rel="icon" type="image/png" sizes="32x32" href="assets/favicon-32.png">
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <title>Planorah Technologies — Websites, Apps &amp; Custom Software</title>
@@ -87,10 +88,7 @@ h3{font-size:clamp(19px,1.7vw,23px); letter-spacing:-.015em; line-height:1.15}
 .nav.stuck{background:rgba(243,242,238,.86); backdrop-filter:blur(16px); -webkit-backdrop-filter:blur(16px); border-bottom-color:var(--line)}
 .nav-in{display:flex; align-items:center; gap:32px; height:80px}
 .logo{display:flex; align-items:center; gap:11px; font-family:var(--f-dis); font-weight:700; font-size:19px; letter-spacing:-.02em}
-.logo .mk{width:32px; height:32px; border-radius:10px; flex:none; position:relative; background:var(--violet); overflow:hidden;
-  box-shadow:0 6px 14px -6px rgba(98,72,245,.8)}
-.logo .mk::before{content:""; position:absolute; inset:6px 6px auto 6px; height:9px; border-radius:3px; background:#fff}
-.logo .mk::after{content:""; position:absolute; left:6px; bottom:6px; width:12px; height:9px; border-radius:3px; background:var(--sun)}
+.logo .mk{width:auto; height:32px; flex:none}
 .nav-links{display:flex; gap:30px; margin-left:auto}
 .nav-links a{font-size:15px; font-weight:500; color:var(--ink-60); transition:color .25s}
 .nav-links a:hover{color:var(--ink)}
@@ -328,7 +326,7 @@ h3{font-size:clamp(19px,1.7vw,23px); letter-spacing:-.015em; line-height:1.15}
 <!-- ════ NAV ════ -->
 <header class="nav" id="nav">
   <div class="wrap nav-in">
-    <a class="logo" href="#top"><span class="mk"></span>Planorah</a>
+    <a class="logo" href="#top"><img class="mk" src="assets/logo-mark.png" width="26" height="32" alt="">Planorah</a>
     <nav class="nav-links" aria-label="Primary">
       <a href="#services">Services</a>
       <a href="#platforms">Platforms</a>
@@ -639,7 +637,7 @@ h3{font-size:clamp(19px,1.7vw,23px); letter-spacing:-.015em; line-height:1.15}
   <div class="wrap">
     <div class="foot-in">
       <div>
-        <a class="logo" href="#top"><span class="mk"></span>Planorah Technologies</a>
+        <a class="logo" href="#top"><img class="mk" src="assets/logo-mark.png" width="26" height="32" alt="">Planorah Technologies</a>
         <p>Websites, apps and custom software — built once, built properly, handed over completely.</p>
       </div>
       <div><h5>Services</h5><ul>

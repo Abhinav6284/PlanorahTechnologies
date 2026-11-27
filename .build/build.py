@@ -94,7 +94,8 @@ def head(m, R, path, body=''):
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="preload" href="https://fonts.googleapis.com/css2?family=Instrument+Sans:wght@400..700&family=Instrument+Serif:ital@0;1&display=swap" as="style" onload="this.onload=null;this.rel='stylesheet'">
 <noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Instrument+Sans:wght@400..700&family=Instrument+Serif:ital@0;1&display=swap"></noscript>
-<link rel="icon" type="image/svg+xml" href="{R}assets/favicon.svg">
+<link rel="icon" type="image/png" sizes="32x32" href="{R}assets/favicon-32.png">
+<link rel="icon" type="image/png" sizes="192x192" href="{R}assets/favicon-192.png">
 <meta name="theme-color" content="#2D3142">
 <link rel="stylesheet" href="{R}assets/planorah.css?v={ver("planorah.css")}">
 </head>'''
@@ -106,7 +107,7 @@ def header(m, R):
 <a class="skip" href="#main">Skip to content</a>
 <header class="hd" id="hd">
   <div class="hd-in">
-    <a class="wm" href="{R}index.html" aria-label="Planorah Technologies, home"><img src="{R}assets/favicon.svg" width="30" height="30" alt="">Planorah</a>
+    <a class="wm" href="{R}index.html" aria-label="Planorah Technologies, home"><img src="{R}assets/logo-mark.png" width="26" height="32" alt="">Planorah</a>
     <nav class="hd-nav" aria-label="Primary">{links}</nav>
     <a class="btn btn-talk" href="{R}contact.html">Send your requirement <span class="arr"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 17L17 7M9 7h8v8"/></svg></span></a>
     <button class="burger" id="burger" aria-expanded="false" aria-controls="mob">Menu</button>
