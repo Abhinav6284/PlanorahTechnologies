@@ -107,7 +107,7 @@ def header(m, R):
 <a class="skip" href="#main">Skip to content</a>
 <header class="hd" id="hd">
   <div class="hd-in">
-    <a class="wm" href="{R}index.html" aria-label="Planorah Technologies, home"><img src="{R}assets/logo-mark.png" width="26" height="32" alt="">Planorah</a>
+    <a class="wm" href="{R}index.html" aria-label="Planorah Technologies, home"><img src="{R}assets/logo-mark.png" width="26" height="32" alt=""></a>
     <nav class="hd-nav" aria-label="Primary">{links}</nav>
     <a class="btn btn-talk" href="{R}contact.html">Send your requirement <span class="arr"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 17L17 7M9 7h8v8"/></svg></span></a>
     <button class="burger" id="burger" aria-expanded="false" aria-controls="mob">Menu</button>
